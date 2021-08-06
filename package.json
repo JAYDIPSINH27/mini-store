@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/clever-developer-club/mini-store/issues"
   },
-  "homepage": "https://github.com/clever-developer-club/mini-store#readme"
+  "homepage": "https://github.com/clever-developer-club/mini-store#readme",
+  "dependencies": {
+    "concurrently": "^6.2.0"
+  }
 }
