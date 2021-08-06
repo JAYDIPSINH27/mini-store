@@ -47,9 +47,10 @@ const StoreSchema = mongoose.Schema({
     },
     products : [
         {
-            productId : {
+            productid : {
                 type : mongoose.Schema.Types.ObjectId,
-                ref : 'Product'
+                ref : 'Product',
+                required : "Product Id not specified."
             },
             price : {
                 type : Number,

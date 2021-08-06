@@ -26,7 +26,7 @@ const Login = () => {
   const submitButton = async (event) => {
     event.preventDefault();
     await axios
-      .post("/auth-user/signin", {
+      .post("/auth/signin", {
         email: email,
         password: password,
       })

@@ -18,7 +18,7 @@ const ForgotPassword = () => {
   const submitButton = async (event) => {
     event.preventDefault();
     await axios
-      .post("/auth-user/forgot-password", {
+      .post("/auth/forgot-password", {
         email: email,
       })
       .then((res) => {
