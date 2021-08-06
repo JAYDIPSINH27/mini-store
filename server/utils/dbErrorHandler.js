@@ -30,6 +30,8 @@ const getError = (err) => {
         }
     }
 
+    console.log(message)
+
     return message
 }
 

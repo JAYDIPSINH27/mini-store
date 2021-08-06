@@ -28,7 +28,7 @@ const Register = () => {
       toast.error("Both password must be same");
     } else {
       await axios
-        .post("/auth-user/signup", {
+        .post("/auth/signup", {
           email: email,
           password: password,
         })

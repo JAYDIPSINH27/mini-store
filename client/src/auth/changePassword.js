@@ -33,7 +33,7 @@ const ChangePassword = () => {
   const submitButton = async (event) => {
     event.preventDefault();
     await axios
-      .post(`/auth-user/change-password/${token}`, {
+      .post(`/auth/change-password/${token}`, {
         password: password,
         cpassword: confirmPassword,
       })

@@ -1,21 +1,29 @@
 //.
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
-require('dotenv').config();
-const port = 5000 ||  process.env.PORT
-const mongo_url = "mongodb+srv://vraj291:test123@bugtracker.x1kzp.mongodb.net/test?retryWrites=true&w=majority" || process.env.MONGO_URL
-const router = require('./routes/authRoutes');
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
+
+const authRouter = require('./routes/authRoutes');
 const storeRouter = require('./routes/store.router')
+const productRouter = require('./routes/product.router')
+const categoryRouter = require('./routes/category.router')
+
+const port = process.env.PORT || 5000
+const mongo_url = process.env.MONGO_URL
+
+const app = express();
 
 mongoose.connect(mongo_url,{useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 app.use(cookieParser());
-app.use('/auth-user',router);
-app.use('/store',storeRouter)
+
+app.use('/api/auth',authRouter)
+app.use('/api',storeRouter)
+app.use('/api',productRouter)
+app.use('/api',categoryRouter)
 
 app.listen(port, ()=>{
     console.log(`Server Running on ${port}`)
