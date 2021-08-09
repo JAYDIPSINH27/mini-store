@@ -2,31 +2,39 @@ const express = require('express')
 const router = express.Router()
 const productCtrl = require('../controllers/product.controller')
 
-router.post("/createProduct",
+router.post("/create",
    productCtrl.createProduct
 )
 
-router.post("/updateProduct",
+router.post("/addImage",
+    productCtrl.addImagestoProduct
+)
+
+router.post("/deleteImage",
+    productCtrl.deleteImagesfromProduct
+)
+
+router.post("/update",
    productCtrl.updateProduct
 )
 
-// router.post("/deleteProduct",
-//    productCtrl.deleteProduct
-// )
+router.post("/delete",
+   productCtrl.deleteProduct
+)
 
-router.get("/getProducts",
+router.get("/get",
     productCtrl.getProducts
 )
 
-router.get("/getProductbyId",
+router.get("/getbyId",
     productCtrl.getProductbyId
 )
 
-router.get("/getProductsbyCategory",
+router.get("/getbyCategory",
     productCtrl.getProductsbyCategory
 )
 
-router.get("/getProductsbyName",
+router.get("/getbyName",
     productCtrl.getProductsbyName
 )
 

@@ -5,7 +5,6 @@ const uploadImage = async(image,type) => {
 }
 
 const deleteImage = async(id) => {
-    console.log(id)
     return cloudinary.uploader.destroy(id)
 }
 

@@ -2,6 +2,7 @@ const Store = require('../models/Store')
 const Product = require('../models/Product')
 const getError = require('../utils/dbErrorHandler')
 const {uploadImages, deleteImages} = require('../utils/imageOperations')
+const { getProductDetails, deleteStorefromProducts } = require('../utils/relationOperations')
 
 module.exports = {
 
@@ -77,8 +78,10 @@ module.exports = {
                     .then(async (product) => {
                         if(product){
                             try{
+                                product.addStore(req.query.id)
                                 store.addProduct(req.body.product)
                                 await store.save()
+                                await product.save()
                                 return res.status(200).json({
                                     err: false,
                                     message: 'Product added successfully.'
@@ -177,20 +180,33 @@ module.exports = {
             Store.findById(req.query.id)
             .then( async(store) => {
                 if(store){
-                    store.deleteProduct(req.query.productId)
-                    try{
-                        await store.save()
-                        return res.status(200).json({
-                            err: false,
-                            message: 'Product deleted successfully.'
-                        })
-                    }
-                    catch(error){
+                    if(!store.hasProduct(req.query.productId)){
                         return res.status(400).json({
                             err: true,
-                            msg: getError(error)
+                            msg: "Product is not present."
                         })
                     }
+                    Product.findById(req.query.productId)
+                    .then(async (product) => {
+                        if(product){
+                            try{
+                                product.deleteStore(req.query.id)
+                                store.deleteProduct(req.query.productId)
+                                await store.save()
+                                await product.save()
+                                return res.status(200).json({
+                                    err: false,
+                                    message: 'Product deleted successfully.'
+                                })
+                            }
+                            catch(error){
+                                return res.status(400).json({
+                                    err: true,
+                                    msg: getError(error)
+                                })
+                            }
+                        }
+                    })
                 }else{
                     return res.status(400).json({
                         err: true,
@@ -530,6 +546,7 @@ module.exports = {
             Store.findById(req.query.id)
             .then( async(store) => {
                 if(store){
+                    await deleteStorefromProducts(store)
                     await store.deleteOne()
                     return res.status(200).json({
                         err: false,
@@ -590,9 +607,15 @@ module.exports = {
             Store.findById(req.query.id)
             .then( async(store) => {
                 if(store){
-                    return res.status(200).json({
-                        err: false,
-                        data: store
+                    getProductDetails(store)
+                    .then((data) => {
+                        return res.status(200).json({
+                            err: false,
+                            data: {
+                                ...store._doc,
+                                products : data
+                            }
+                        })
                     })
                 }else{
                     return res.status(400).json({
@@ -613,19 +636,31 @@ module.exports = {
 
     getStoresbyProduct : async (req,res) => {
         try{
-            let limit = req.query.limit || 5
-            if(!req.query.product){
+            let page = Math.max(req.query.page,0)
+            let perPage = 10
+            if(!req.query.productId){
                 return res.status(400).json({
                     err: true,
                     msg: "Product was not specified."
                 })
             }
-            Product.findById(req.query.product).limit(limit)
+            Product.findById(req.query.productId)
             .then( async(product) => {
                 if(product && product.stores.length > 0){
-                    return res.status(200).json({
-                        err: false,
-                        data: product.stores
+                    Store.find({ '_id': { $in: product.stores } }).limit(page).skip(perPage*(page))
+                    .then(async (stores) => {
+                        if(stores && stores.length > 0){
+                            return res.status(200).json({
+                                err: false,
+                                page,
+                                data: stores
+                            })
+                        }else{
+                            return res.status(400).json({
+                                err: true,
+                                msg: "No stores exist for this page."
+                            })
+                        }
                     })
                 }else{
                     return res.status(400).json({

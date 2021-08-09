@@ -1,23 +1,69 @@
 const Category = require('../models/Category')
+const {uploadImages} = require('../utils/imageOperations')
 
 module.exports = {
 
     createCategory : async (req,res) => {
         try{
             const cat = new Category({
-                name : req.query.name,
-                image : req.query.image || {}
+                name : req.body.name
             })
-            await cat.save()
-            return res.status(200).json({
-                err: false,
-                message: 'Category created successfully.'
+            let images = []
+            images.push(req.body.image)
+            uploadImages("categories",images)
+            .then(async (data) => {
+                console.log(data)
+                if(!data || data[0].err){
+                    return res.status(400).json({
+                        err: true,
+                        message: 'Could not upload image.'
+                    })
+                }else{
+                    cat.image = data[0]
+                    await cat.save()
+                    return res.status(200).json({
+                        err: false,
+                        message: 'Category created successfully.'
+                    })
+                }
             })
         }
         catch(error){
+            console.log(error)
             return res.status(400).json({
                 err: true,
                 msg: "Could not create category."
+            })
+        }
+    },
+
+    getCategorybyId : async (req,res) => {
+        try{
+            if(!req.query.id){
+                return res.status(400).json({
+                    err: true,
+                    msg: "Id was not specified."
+                })
+            }
+            Category.findById(req.query.id)
+            .then( async(cat) => {
+                if(product){
+                    return res.status(200).json({
+                        err: false,
+                        data: cat
+                    })
+                }else{
+                    return res.status(400).json({
+                        err: true,
+                        msg: "No such category exists."
+                    })
+                }
+            })    
+        }
+        catch(error){
+            return res.status(400).json({
+                err : true,
+                msg : "Could not get categories."
             })
         }
     },
