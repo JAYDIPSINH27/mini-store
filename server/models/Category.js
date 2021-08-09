@@ -6,8 +6,12 @@ const categorySchema = mongoose.Schema({
         required : "Name is required."
     },
     image : {
-        data: Buffer, 
-        contentType: String,
+        url : {
+            type : String,
+            trim : true,
+            match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'URL is invalid']
+        },
+        public_id : String
     }
 });
 

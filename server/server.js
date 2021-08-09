@@ -21,9 +21,9 @@ app.use(express.urlencoded({extended : false}));
 app.use(cookieParser());
 
 app.use('/api/auth',authRouter)
-app.use('/api',storeRouter)
-app.use('/api',productRouter)
-app.use('/api',categoryRouter)
+app.use('/api/stores',storeRouter)
+app.use('/api/products',productRouter)
+app.use('/api/categories',categoryRouter)
 
 app.listen(port, ()=>{
     console.log(`Server Running on ${port}`)
