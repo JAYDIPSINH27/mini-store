@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const cors = require('cors')
 require('dotenv').config();
 
 const authRouter = require('./routes/authRoutes');
@@ -18,6 +19,7 @@ mongoose.connect(mongo_url,{useNewUrlParser: true, useUnifiedTopology: true});
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 app.use(cookieParser());
+app.use(cors())
 
 app.use('/api/auth',authRouter)
 app.use('/api/stores',storeRouter)
