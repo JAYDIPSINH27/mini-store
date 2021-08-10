@@ -1,8 +1,8 @@
 const Store = require('../models/Store')
 const Product = require('../models/Product')
 const getError = require('../utils/dbErrorHandler')
-const {uploadImages, deleteImages} = require('../utils/imageOperations')
-const { getProductDetails, deleteStorefromProducts } = require('../utils/relationOperations')
+const {uploadImages, deleteImages} = require('../utils/multipleImageOperations')
+const { deleteStorefromProducts } = require('../utils/relationOperations')
 
 module.exports = {
 
@@ -27,8 +27,9 @@ module.exports = {
                 }
                 try{
                     await store.save()
-                    return res.status(200).json({
+                    return res.status(201).json({
                         err: false,
+                        data : store,
                         message: 'Store created successfully.',
                         err_images: err_images.length == 0? null : err_images
                     })
@@ -42,10 +43,10 @@ module.exports = {
                 }
             })
             .catch((error) => {
-                return {
+                return res.status(400).json({
                     err: true,
                     msg: "Could not upload images. Try again"
-                }
+                })
             })
         }
         catch(error){
@@ -59,13 +60,13 @@ module.exports = {
 
     addProducttoStore : async(req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then(async (store) => {
                 if(store){
                     if(store.hasProduct(req.body.product.productId)){
@@ -84,6 +85,7 @@ module.exports = {
                                 await product.save()
                                 return res.status(200).json({
                                     err: false,
+                                    data : "",
                                     message: 'Product added successfully.'
                                 })
                             }catch(error){
@@ -572,7 +574,23 @@ module.exports = {
         try{
             let page = Math.max(req.query.page,0)
             let perPage = 10
-            Store.find({}).limit(page).skip(perPage*(page))
+            let filter = {}
+            if(req.query.name){
+                filter['name'] = { $regex: req.query.name }
+            }
+            Store.find(filter)
+            .limit(page).skip(perPage*(page))
+            .populate({
+                path : 'products',
+                populate: {
+                    path: 'productId',
+                    select: 'name description category',
+                    populate : {
+                        path : 'category',
+                        select : 'name'
+                    }
+                } 
+            })
             .then( async(stores) => {
                 if(stores && stores.length > 0){
                     return res.status(200).json({
@@ -581,7 +599,7 @@ module.exports = {
                         data: stores
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No stores exist for this page."
                     })
@@ -598,27 +616,32 @@ module.exports = {
 
     getStorebyId : async (req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
+            .populate({
+                path : 'products',
+                populate: {
+                    path: 'productId',
+                    select: 'name description category',
+                    populate : {
+                        path : 'category',
+                        select : 'name'
+                    }
+                } 
+            })
             .then( async(store) => {
                 if(store){
-                    getProductDetails(store)
-                    .then((data) => {
-                        return res.status(200).json({
-                            err: false,
-                            data: {
-                                ...store._doc,
-                                products : data
-                            }
-                        })
+                    return res.status(200).json({
+                        err: false,
+                        data: store
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -677,38 +700,6 @@ module.exports = {
                 msg: "Could not fetch any store."
             })
         }
-    },
+    }
 
-    getStoresbyName : async (req,res) => {
-        try{
-            let limit = req.query.limit || 5
-            if(!req.query.name){
-                return res.status(400).json({
-                    err: true,
-                    msg: "Name was not specified."
-                })
-            }
-            Store.find({name : { $regex: req.query.name }}).limit(limit)
-            .then( async(stores) => {
-                if(stores && stores.length > 0){
-                    return res.status(200).json({
-                        err: false,
-                        data: stores
-                    })
-                }else{
-                    return res.status(400).json({
-                        err: true,
-                        msg: "No such store exists."
-                    })
-                }
-            })    
-        }
-        catch(error){
-            console.log(error)
-            return res.status(400).json({
-                err: true,
-                msg: "Could not fetch any store."
-            })
-        }
-    },
 }

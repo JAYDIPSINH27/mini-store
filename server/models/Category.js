@@ -1,18 +1,22 @@
 const mongoose = require('mongoose');
 
-const categorySchema = mongoose.Schema({
+const CategorySchema = mongoose.Schema({
     name : {
         type : String,
         required : "Name is required."
     },
     image : {
-        url : {
-            type : String,
-            trim : true,
-            match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'URL is invalid']
-        },
-        public_id : String
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Image'
+    },
+    createdAt : {
+        type : Date,
+        default : Date.now()
+    },
+    updatedAt : {
+        type : Date,
+        default : Date.now()
     }
 });
 
-module.exports = mongoose.model("Category",categorySchema)
+module.exports = mongoose.model("Category",CategorySchema)

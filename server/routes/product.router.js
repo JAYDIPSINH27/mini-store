@@ -1,41 +1,33 @@
 const express = require('express')
 const router = express.Router()
 const productCtrl = require('../controllers/product.controller')
+const { getDocuments, getDocumentbyId } = require('../middleware/modelResults')
+const Product = require('../models/Product')
+const { productPopulate } = require('../utils/populateObjects')
 
-router.post("/create",
-   productCtrl.createProduct
-)
+router.route("/")
+    .get(
+        getDocuments(
+            Product,
+            productPopulate
+        ),
+        productCtrl.getProducts
+    )
+    .post(productCtrl.createProduct)
 
-router.post("/addImage",
-    productCtrl.addImagestoProduct
-)
+router.route("/:id")
+    .get(
+        getDocumentbyId(
+            Product,
+            productPopulate
+        ),
+        productCtrl.getProductbyId
+    )
+    .patch(productCtrl.updateProduct)
+    .delete(productCtrl.deleteProduct)
 
-router.post("/deleteImage",
-    productCtrl.deleteImagesfromProduct
-)
-
-router.post("/update",
-   productCtrl.updateProduct
-)
-
-router.post("/delete",
-   productCtrl.deleteProduct
-)
-
-router.get("/get",
-    productCtrl.getProducts
-)
-
-router.get("/getbyId",
-    productCtrl.getProductbyId
-)
-
-router.get("/getbyCategory",
-    productCtrl.getProductsbyCategory
-)
-
-router.get("/getbyName",
-    productCtrl.getProductsbyName
-)
+router.route("/:id/images")
+    .post(productCtrl.addImagestoProduct)
+    .delete(productCtrl.deleteImagesfromProduct)
 
 module.exports = router 

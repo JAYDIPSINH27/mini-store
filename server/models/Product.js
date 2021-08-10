@@ -4,17 +4,15 @@ const Category = require('./Category')
 const ProductSchema = mongoose.Schema({
     category : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : 'categories',
+        ref : 'Category',
         required : 'Category is required.'
     },
-    images : [{
-        url : {
-            type : String,
-            trim : true,
-            match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'URL is invalid']
-        },
-        public_id : String
-    }],
+    images : [ 
+        {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Image'
+        }
+    ],
     name : {
         type : String,
         required : 'Product Name is required.'
@@ -29,7 +27,15 @@ const ProductSchema = mongoose.Schema({
             type : mongoose.Schema.Types.ObjectId,
             ref : 'Product',
         }
-    ]
+    ],
+    createdAt : {
+        type : Date,
+        default : Date.now()
+    },
+    updatedAt : {
+        type : Date,
+        default : Date.now()
+    }
 });
 
 ProductSchema.path('category').validate(async function(id){

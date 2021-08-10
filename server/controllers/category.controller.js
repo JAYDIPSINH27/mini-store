@@ -1,35 +1,48 @@
 const Category = require('../models/Category')
-const {uploadImages} = require('../utils/imageOperations')
+const Image = require('../models/Image')
+const getError = require('../utils/dbErrorHandler')
 
 module.exports = {
+
+    // @desc      Create Category
+    // @route     POST /api/v1/categories
+    // @access    Private
 
     createCategory : async (req,res) => {
         try{
             const cat = new Category({
                 name : req.body.name
             })
-            let images = []
-            images.push(req.body.image)
-            uploadImages("categories",images)
-            .then(async (data) => {
-                console.log(data)
-                if(!data || data[0].err){
-                    return res.status(400).json({
-                        err: true,
-                        message: 'Could not upload image.'
-                    })
-                }else{
-                    cat.image = data[0]
+            const image = new Image()
+            let response = await image.upload(cat._id,req.body.image,'Category')
+            if(response){
+                try{
+                    cat.image = response
                     await cat.save()
-                    return res.status(200).json({
+                    await image.save()
+                    return res.status(201).json({
                         err: false,
+                        data : await Category.populate(cat,{
+                            path : 'image',
+                            select : 'public_id url'
+                        }),
                         message: 'Category created successfully.'
                     })
+                }catch(error){
+                    await image.delete()
+                    return res.status(400).json({
+                        err: true,
+                        message: getError(error)
+                    })
                 }
-            })
+            }else{
+                return res.status(400).json({
+                    err: true,
+                    message: 'Could not upload image.'
+                })                
+            }
         }
         catch(error){
-            console.log(error)
             return res.status(400).json({
                 err: true,
                 msg: "Could not create category."
@@ -37,63 +50,43 @@ module.exports = {
         }
     },
 
-    getCategorybyId : async (req,res) => {
-        try{
-            if(!req.query.id){
-                return res.status(400).json({
-                    err: true,
-                    msg: "Id was not specified."
-                })
-            }
-            Category.findById(req.query.id)
-            .then( async(cat) => {
-                if(product){
-                    return res.status(200).json({
-                        err: false,
-                        data: cat
-                    })
-                }else{
-                    return res.status(400).json({
-                        err: true,
-                        msg: "No such category exists."
-                    })
-                }
-            })    
-        }
-        catch(error){
-            return res.status(400).json({
-                err : true,
-                msg : "Could not get categories."
-            })
-        }
-    },
+    // @desc      Get Categories
+    // @route     GET /api/v1/categories
+    // @access    Public
 
     getCategories : async (req,res) => {
-        try{
-            let page = req.query.page? Math.max(req.query.page,0) : 0
-            let perPage = 10
-            Category.find({}).limit(page).skip(perPage*(page))
-            .then( async(categories) => {
-                if(categories && categories.length > 0){
-                    return res.status(200).json({
-                        err: false,
-                        page,
-                        data: categories
-                    })
-                }else{
-                    return res.status(400).json({
-                        err: true,
-                        msg: "No categories exist for this page."
-                    })
+        if(res.results.err){
+            return res.status(404).json(res.results)
+        }else if(res.results.metadata.count == 0){
+            return res.status(404).json({
+                err : true,
+                metadata : {
+                    msg : "No Categories found."
                 }
-            })    
-        }
-        catch(error){
-            return res.status(400).json({
-                err: true,
-                msg: "Could not fetch any categories."
             })
+        }else{
+            return res.status(200).json(res.results)
         }
-    }
+    },
+    
+
+    // @desc      Get Categories by Id
+    // @route     GET /api/v1/categories/:id
+    // @access    Public
+
+    getCategorybyId : async (req,res) => {
+        if(res.results.err){
+            return res.status(404).json(res.results)
+        }else if(res.results.data == null){
+            return res.status(404).json({
+                err : true,
+                metadata : {
+                    msg : "No Category found."
+                }
+            })
+        }else{
+            return res.status(200).json(res.results)
+        }
+    },
 
 }

@@ -2,64 +2,27 @@ const express = require('express')
 const router = express.Router()
 const storeCtrl = require('../controllers/store.controller')
 
-router.post("/create",
-    storeCtrl.createStore
-)
+router.route("/")
+    .get(storeCtrl.getStores)
+    .post(storeCtrl.createStore)
 
-router.post("/update",
-    storeCtrl.updateStore
-)
+router.route("/:id")
+    .get(storeCtrl.getStorebyId)
+    .patch(storeCtrl.updateStore)
+    .delete(storeCtrl.deleteStore)
 
-router.post("/addProduct",
-    storeCtrl.addProducttoStore
-)
+router.route("/:id/product")
+    .post(storeCtrl.addProducttoStore)
+    .patch(storeCtrl.updateProductinStore)
+    .delete(storeCtrl.deleteProductfromStore)
 
-router.post("/updateProduct",
-    storeCtrl.updateProductinStore
-)
+router.route("/:id/address")
+    .post(storeCtrl.addAddresstoStore)
+    .patch(storeCtrl.updateAddressinStore)
+    .delete(storeCtrl.deleteAddressfromStore)
 
-router.post("/deleteProduct",
-    storeCtrl.deleteProductfromStore
-)
-
-router.post("/addAddress",
-    storeCtrl.addAddresstoStore
-)
-
-router.post("/updateAddress",
-    storeCtrl.updateAddressinStore
-)
-
-router.post("/deleteAddress",
-    storeCtrl.deleteAddressfromStore
-)
-
-router.post("/addImage",
-    storeCtrl.addImagestoStore
-)
-
-router.post("/deleteImage",
-    storeCtrl.deleteImagesfromStore
-)
-
-router.post("/delete",
-    storeCtrl.deleteStore
-)
-
-router.get("/get",
-    storeCtrl.getStores
-)
-
-router.get("/getbyId",
-    storeCtrl.getStorebyId
-)
-
-router.get("/getbyProduct",
-    storeCtrl.getStoresbyProduct
-)
-
-router.get("/getbyName",
-    storeCtrl.getStoresbyName
-)
+router.route("/:id/images")
+    .post(storeCtrl.addImagestoStore)
+    .delete(storeCtrl.deleteImagesfromStore)
 
 module.exports = router 
