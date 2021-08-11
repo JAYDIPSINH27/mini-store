@@ -1,6 +1,4 @@
-const Store = require('../models/Store')
 const Product = require('../models/Product')
-const Image = require('../models/Image')
 const getError = require('../utils/dbErrorHandler')
 const {uploadImages, deleteImages} = require('../utils/multipleImageOperations')
 const { deleteProductfromStores } = require('../utils/relationOperations')
@@ -79,36 +77,43 @@ module.exports = {
             Product.findById(req.params.id)
             .then( async(product) => {
                 if(product){
-                    uploadImages("products",req.body.images)
+                    uploadImages(product._id,"Product",req.body.images)
                     .then(async (data) => {
-                        let err_images = []
+                        let err_images = [],temp = []
                         for(let i in data){
                             if(data[i].err){
                                 err_images.push(Number(i))
                             }else{
-                                product.addImage(data[i])
+                                temp.push(data[i])
                             }
                         }
                         try{
-                            await product.save()
                             if(err_images.length < data.length){
+                                product.addImages(temp)
+                                await product.save()
                                 return res.status(200).json({
                                     err: false,
+                                    data: await Product.populate(product,productPopulate),
                                     message: 'Images added successfully.',
                                     err_images: err_images.length == 0? null : err_images
                                 })
                             }else{
-                                return res.status(400).json({
-                                    err: true,
-                                    msg: "Could not upload images. Try again",
-                                    err_images
+                                deleteImages(temp).then((data) => {
+                                    return res.status(400).json({
+                                        err: true,
+                                        err_images,
+                                        msg: "Could not upload images."
+                                    })
                                 })
                             }
                         }
                         catch(error){
-                            return res.status(400).json({
-                                err: true,
-                                msg: getError(error)
+                            deleteImages(temp).then((data) => {
+                                console.log(error)
+                                return res.status(400).json({
+                                    err: true,
+                                    msg: "Could not upload images"
+                                })
                             })
                         }
                     })
@@ -153,10 +158,10 @@ module.exports = {
                     .then(async (data) => {
                         let err_images = []
                         for(let i in data){
-                            if(data[i].err){
+                            if(!data[i]){
                                 err_images.push(Number(i))
                             }else{
-                                product.deleteImage(data[i].id)
+                                product.deleteImage(data[i])
                             }
                         }
                         try{
@@ -164,6 +169,7 @@ module.exports = {
                             if(err_images.length < data.length){
                                 return res.status(200).json({
                                     err: false,
+                                    data : await Product.populate(product,productPopulate),
                                     message: 'Images deleted successfully.',
                                     err_images: err_images.length == 0? null : err_images
                                 })
@@ -189,7 +195,7 @@ module.exports = {
                         }
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such product exists."
                     })
@@ -216,10 +222,20 @@ module.exports = {
                     msg: "Id was not specified."
                 })
             }
+            let updateFields = {                    
+                name: req.body.name,
+                description: req.body.name,
+                category: req.body.category
+            }
+            for (const [key, value] of Object.entries(updateFields)) {
+                if (!value) {
+                  delete updateFields[key];
+                }
+            }
             Product.findByIdAndUpdate(
                 req.params.id,
                 {
-                    ...req.body,
+                    ...updateFields,
                     updatedAt : Date.now()
                 },
                 {
@@ -227,12 +243,11 @@ module.exports = {
                     runValidators: true
                 }
             )
-            .populate({path : 'category',select: 'name'})
             .then( async(product) => {
                 if(product){
                    return res.status(200).json({
                         err: false,
-                        data: product,
+                        data: await Product.populate(product,productPopulate),
                         msg: "Product Updated Successfully."
                     })
                 }else{
@@ -273,10 +288,11 @@ module.exports = {
             .then( async(product) => {
                 if(product){
                     await deleteProductfromStores(product)
+                    await deleteImages(product.images)
                     await product.deleteOne()
                     return res.status(200).json({
                         err: false,
-                        data : await Product.populate(product,{path : 'category',select: 'name'}),
+                        data : await Product.populate(product,productPopulate),
                         msg: "Product Deleted Successfully."
                     })
                 }else{
@@ -331,6 +347,14 @@ module.exports = {
         }else{
             return res.status(200).json(res.results)
         }
-    }
+    },
+
+    // @desc      Update Quantity of Products by Id
+    // @route     PATCH /api/v1/products/:id/quantity
+    // @access    Private
+
+    updateQuantity : async (req,res) => {
+        
+    },
 
 }

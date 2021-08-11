@@ -17,9 +17,26 @@ module.exports = {
 
     categoryPopulate : [
         {
-            path : 'image',
+            path : 'images',
             select : 'public_id url'
         }
     ],
 
+    storePopulate : [
+        {
+            path : 'products',
+            populate: {
+                path: 'productId',
+                select: 'name description category',
+                populate : {
+                    path : 'category',
+                    select : 'name'
+                }
+            } 
+        },
+        {
+            path : 'images',
+            select : 'public_id url'
+        }
+    ]
 }

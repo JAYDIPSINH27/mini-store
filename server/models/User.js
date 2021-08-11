@@ -51,6 +51,10 @@ const UserSchema = mongoose.Schema({
         trim : true,
         match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'URL is invalid']
     },
+    admin : {
+        type: Boolean,
+        default: false
+    },
     history : [
         {
             type : mongoose.Schema.Types.ObjectId,

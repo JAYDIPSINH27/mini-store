@@ -3,8 +3,13 @@ const Product = require('../models/Product')
 const getError = require('../utils/dbErrorHandler')
 const {uploadImages, deleteImages} = require('../utils/multipleImageOperations')
 const { deleteStorefromProducts } = require('../utils/relationOperations')
+const {storePopulate} = require('../utils/populateObjects')
 
 module.exports = {
+
+    // @desc      Create Store
+    // @route     POST /api/v1/stores
+    // @access    Private
 
     createStore : async (req,res) => {
         try{
@@ -15,7 +20,7 @@ module.exports = {
                 rating : req.body.rating || 0,
                 products : [],
             })
-            uploadImages("stores",req.body.images)
+            uploadImages(store._id,"Store",req.body.images)
             .then(async (data) => {
                 let err_images = []
                 for(let i in data){
@@ -29,16 +34,17 @@ module.exports = {
                     await store.save()
                     return res.status(201).json({
                         err: false,
-                        data : store,
+                        data : await Store.populate(store,storePopulate),
                         message: 'Store created successfully.',
                         err_images: err_images.length == 0? null : err_images
                     })
                 }
                 catch(error){
-                    console.log(error)
-                    return res.status(400).json({
-                        err: true,
-                        msg: getError(error)
+                    deleteImages(store.images).then((data) => {
+                        return res.status(400).json({
+                            err: true,
+                            msg: getError(error)
+                        })
                     })
                 }
             })
@@ -58,6 +64,10 @@ module.exports = {
         }
     },
 
+    // @desc      Add Product to Store
+    // @route     POST /api/v1/stores/:id/products/:productId
+    // @access    Private
+
     addProducttoStore : async(req,res) => {
         try{
             if(!req.params.id){
@@ -69,23 +79,26 @@ module.exports = {
             Store.findById(req.params.id)
             .then(async (store) => {
                 if(store){
-                    if(store.hasProduct(req.body.product.productId)){
+                    if(store.hasProduct(req.params.productId)){
                         return res.status(400).json({
                             err: true,
                             msg: "Product is already added."
                         })
                     }
-                    Product.findById(req.body.product.productId)
+                    Product.findById(req.params.productId)
                     .then(async (product) => {
                         if(product){
                             try{
-                                product.addStore(req.query.id)
-                                store.addProduct(req.body.product)
+                                product.addStore(req.params.id)
+                                store.addProduct({
+                                    productId : req.params.productId,
+                                    ...req.body.product
+                                })
                                 await store.save()
                                 await product.save()
                                 return res.status(200).json({
                                     err: false,
-                                    data : "",
+                                    data : await Store.populate(store,storePopulate),
                                     message: 'Product added successfully.'
                                 })
                             }catch(error){
@@ -95,14 +108,14 @@ module.exports = {
                                 })
                             } 
                         }else{
-                            return res.status(400).json({
+                            return res.status(404).json({
                                 err: true,
                                 msg: "No such product exists."
                             })
                         }
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -117,28 +130,33 @@ module.exports = {
         }
     },
 
+    // @desc      Update Product in Store
+    // @route     PATCH /api/v1/stores/:id/products/:productId
+    // @access    Private
+
     updateProductinStore : async(req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            if(!req.query.productId){
+            if(!req.params.productId){
                 return res.status(400).json({
                     err: true,
                     msg: "Product Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then( async(store) => {
                 if(store){
-                    store.updateProduct(req.query.productId,req.body.product)
+                    store.updateProduct(req.params.productId,req.body.product)
                     try{
                         await store.save()
                         return res.status(200).json({
                             err: false,
+                            data : await Store.populate(store,storePopulate),
                             message: 'Product updated successfully.'
                         })
                     }
@@ -149,7 +167,7 @@ module.exports = {
                         })
                     }
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -164,40 +182,44 @@ module.exports = {
         }
     },
 
+    // @desc      Delete Product from Store
+    // @route     DELETE /api/v1/stores/:id/products/:productId
+    // @access    Private
 
     deleteProductfromStore : async(req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            if(!req.query.productId){
+            if(!req.params.productId){
                 return res.status(400).json({
                     err: true,
                     msg: "Product Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then( async(store) => {
                 if(store){
-                    if(!store.hasProduct(req.query.productId)){
+                    if(!store.hasProduct(req.params.productId)){
                         return res.status(400).json({
                             err: true,
                             msg: "Product is not present."
                         })
                     }
-                    Product.findById(req.query.productId)
+                    Product.findById(req.params.productId)
                     .then(async (product) => {
                         if(product){
                             try{
-                                product.deleteStore(req.query.id)
-                                store.deleteProduct(req.query.productId)
+                                product.deleteStore(req.params.id)
+                                store.deleteProduct(req.params.productId)
                                 await store.save()
                                 await product.save()
                                 return res.status(200).json({
                                     err: false,
+                                    data : await Store.populate(store,storePopulate),
                                     message: 'Product deleted successfully.'
                                 })
                             }
@@ -210,7 +232,7 @@ module.exports = {
                         }
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -225,47 +247,58 @@ module.exports = {
         }
     },
 
+    
+    // @desc      Add Images to Store
+    // @route     POST /api/v1/stores/:id/images
+    // @access    Private
+
     addImagestoStore : async(req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then( async(store) => {
                 if(store){
-                    uploadImages("stores",req.body.images)
+                    uploadImages(store._id,"Store",req.body.images)
                     .then(async (data) => {
-                        let err_images = []
+                        let err_images = [],temp = []
                         for(let i in data){
                             if(data[i].err){
                                 err_images.push(Number(i))
                             }else{
-                                store.addImage(data[i])
+                               temp.push(data[i])
                             }
                         }
                         try{
-                            await store.save()
                             if(err_images.length < data.length){
+                                store.addImages(temp)
+                                await store.save()
                                 return res.status(200).json({
                                     err: false,
+                                    data : await Store.populate(store,storePopulate),
                                     message: 'Images added successfully.',
                                     err_images: err_images.length == 0? null : err_images
                                 })
                             }else{
-                                return {
-                                    err: true,
-                                    msg: "Could not upload images. Try again",
-                                    err_images
-                                }
+                                deleteImages(temp).then((data) => {
+                                    return res.status(400).json({
+                                        err: true,
+                                        err_images,
+                                        msg: "Could not upload images."
+                                    })
+                                })
                             }
                         }
                         catch(error){
-                            return res.status(400).json({
-                                err: true,
-                                msg: getError(error)
+                            deleteImages(temp).then((data) => {
+                                return res.status(400).json({
+                                    err: true,
+                                    msg: getError(error)
+                                })
                             })
                         }
                     })
@@ -276,7 +309,7 @@ module.exports = {
                         }
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -291,15 +324,19 @@ module.exports = {
         }
     },
 
+    // @desc      Delete Images from Store
+    // @route     DELETE /api/v1/stores/:id/images
+    // @access    Private
+
     deleteImagesfromStore : async(req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then( async(store) => {
                 if(store){
                     deleteImages(req.body.images)
@@ -310,7 +347,7 @@ module.exports = {
                             if(data[i].err){
                                 err_images.push(Number(i))
                             }else{
-                                store.deleteImage(data[i].id)
+                                store.deleteImage(data[i])
                             }
                         }
                         try{
@@ -318,6 +355,7 @@ module.exports = {
                             if(err_images.length < data.length){
                                 return res.status(200).json({
                                     err: false,
+                                    data : await Store.populate(store,storePopulate),
                                     message: 'Images deleted successfully.',
                                     err_images: err_images.length == 0? null : err_images
                                 })
@@ -343,7 +381,7 @@ module.exports = {
                         }
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -358,15 +396,19 @@ module.exports = {
         }
     },
 
+    // @desc      Add address in Store
+    // @route     POST /api/v1/stores/:id/addresses
+    // @access    Private
+
     addAddresstoStore : async(req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then( async(store) => {
                 if(store){
                     store.addAddress(req.body.address)
@@ -375,6 +417,7 @@ module.exports = {
                         await store.save()
                         return res.status(200).json({
                             err: false,
+                            data: await Store.populate(store,storePopulate),
                             message: 'Address added successfully.'
                         })
                     }
@@ -385,7 +428,7 @@ module.exports = {
                         })
                     }
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -400,28 +443,34 @@ module.exports = {
         }
     },
 
+    // @desc      Update address in Store
+    // @route     PATCH /api/v1/stores/:id/addresses/:addressId
+    // @access    Private
+
     updateAddressinStore : async(req,res) => {
         try{
-            if(!req.query.id){
+            console.log(req.params)
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            if(!req.query.addressId){
+            if(!req.params.addressId){
                 return res.status(400).json({
                     err: true,
                     msg: "Address Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then( async(store) => {
                 if(store){
-                    store.updateAddress(req.query.addressId,req.body.address)
+                    store.updateAddress(req.params.addressId,req.body.address)
                     try{
                         await store.save()
                         return res.status(200).json({
                             err: false,
+                            data: await Store.populate(store,storePopulate),
                             message: 'Address updated successfully.'
                         })
                     }
@@ -432,7 +481,7 @@ module.exports = {
                         })
                     }
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -447,28 +496,33 @@ module.exports = {
         }
     },
 
+    // @desc      Delete address from Store
+    // @route     DELETE /api/v1/stores/:id/addresses/:addressId
+    // @access    Private
+
     deleteAddressfromStore : async(req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            if(!req.query.addressId){
+            if(!req.params.addressId){
                 return res.status(400).json({
                     err: true,
                     msg: "Address Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then( async(store) => {
                 if(store){
-                    store.deleteAddress(req.query.addressId)
+                    store.deleteAddress(req.params.addressId)
                     try{
                         await store.save()
                         return res.status(200).json({
                             err: false,
+                            data: await Store.populate(store,storePopulate),
                             message: 'Address deleted successfully.'
                         })
                     }
@@ -479,7 +533,7 @@ module.exports = {
                         })
                     }
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -494,39 +548,58 @@ module.exports = {
         }
     },
 
+    // @desc      Update Store
+    // @route     PATCH /api/v1/stores/:id
+    // @access    Private
+
     updateStore : async (req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            let updateFields = {                    
+                name: req.body.name,
+                description: req.body.name,
+                rating: req.body.rating
+            }
+            for (const [key, value] of Object.entries(updateFields)) {
+                if (!value) {
+                  delete updateFields[key];
+                }
+            }
+            Store.findByIdAndUpdate(
+                req.params.id,
+                {
+                    ...updateFields,
+                    updatedAt : Date.now()
+                },
+                {
+                    new : true,
+                    runValidators: true
+                }
+            )
             .then( async(store) => {
                 if(store){
-                    store.setName(req.body.name)
-                    store.setDescription(req.body.description)
-                    store.setRating(req.body.rating)
-                    try{
-                        await store.save()
-                        return res.status(200).json({
-                            err: false,
-                            message: 'Store updated successfully.'
-                        })
-                    }
-                    catch(error){
-                        return res.status(400).json({
-                            err: true,
-                            msg: getError(error)
-                        })
-                    }
+                    return res.status(200).json({
+                        err: false,
+                        data: await Store.populate(store,storePopulate),
+                        message: 'Store updated successfully.'
+                    })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
                 }
+            }) 
+            .catch(error => {
+                return res.status(400).json({
+                    err: true,
+                    msg: getError(error)
+                })
             })    
         }
         catch(error){
@@ -537,25 +610,31 @@ module.exports = {
         }
     },
 
+    // @desc      Delete Store
+    // @route     DELETE /api/v1/stores/:id
+    // @access    Private
+
     deleteStore : async (req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Store.findById(req.query.id)
+            Store.findById(req.params.id)
             .then( async(store) => {
                 if(store){
                     await deleteStorefromProducts(store)
+                    await deleteImages(store.images)
                     await store.deleteOne()
                     return res.status(200).json({
                         err: false,
+                        data: await Store.populate(store,storePopulate),
                         msg: "Store Deleted Successfully."
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such store exists."
                     })
@@ -570,135 +649,41 @@ module.exports = {
         }
     },
 
+    // @desc      Get Stores
+    // @route     GET /api/v1/stores
+    // @access    Public
+
     getStores : async (req,res) => {
-        try{
-            let page = Math.max(req.query.page,0)
-            let perPage = 10
-            let filter = {}
-            if(req.query.name){
-                filter['name'] = { $regex: req.query.name }
-            }
-            Store.find(filter)
-            .limit(page).skip(perPage*(page))
-            .populate({
-                path : 'products',
-                populate: {
-                    path: 'productId',
-                    select: 'name description category',
-                    populate : {
-                        path : 'category',
-                        select : 'name'
-                    }
-                } 
-            })
-            .then( async(stores) => {
-                if(stores && stores.length > 0){
-                    return res.status(200).json({
-                        err: false,
-                        page,
-                        data: stores
-                    })
-                }else{
-                    return res.status(404).json({
-                        err: true,
-                        msg: "No stores exist for this page."
-                    })
+        if(res.results.err){
+            return res.status(404).json(res.results)
+        }else if(res.results.metadata.count == 0){
+            return res.status(404).json({
+                err : true,
+                metadata : {
+                    msg : "No Stores found."
                 }
-            })    
-        }
-        catch(error){
-            return res.status(400).json({
-                err: true,
-                msg: "Could not fetch any stores."
             })
+        }else{
+            return res.status(200).json(res.results)
         }
     },
+
+    // @desc      Get Stores by Id
+    // @route     GET /api/v1/stores/:id
+    // @access    Public
 
     getStorebyId : async (req,res) => {
-        try{
-            if(!req.params.id){
-                return res.status(400).json({
-                    err: true,
-                    msg: "Id was not specified."
-                })
-            }
-            Store.findById(req.params.id)
-            .populate({
-                path : 'products',
-                populate: {
-                    path: 'productId',
-                    select: 'name description category',
-                    populate : {
-                        path : 'category',
-                        select : 'name'
-                    }
-                } 
-            })
-            .then( async(store) => {
-                if(store){
-                    return res.status(200).json({
-                        err: false,
-                        data: store
-                    })
-                }else{
-                    return res.status(404).json({
-                        err: true,
-                        msg: "No such store exists."
-                    })
+        if(res.results.err){
+            return res.status(404).json(res.results)
+        }else if(res.results.data == null){
+            return res.status(404).json({
+                err : true,
+                metadata : {
+                    msg : "No Store found."
                 }
-            })    
-        }
-        catch(error){
-            console.log(error)
-            return res.status(400).json({
-                err: true,
-                msg: "Could not fetch any store."
             })
-        }
-    },
-
-    getStoresbyProduct : async (req,res) => {
-        try{
-            let page = Math.max(req.query.page,0)
-            let perPage = 10
-            if(!req.query.productId){
-                return res.status(400).json({
-                    err: true,
-                    msg: "Product was not specified."
-                })
-            }
-            Product.findById(req.query.productId)
-            .then( async(product) => {
-                if(product && product.stores.length > 0){
-                    Store.find({ '_id': { $in: product.stores } }).limit(page).skip(perPage*(page))
-                    .then(async (stores) => {
-                        if(stores && stores.length > 0){
-                            return res.status(200).json({
-                                err: false,
-                                page,
-                                data: stores
-                            })
-                        }else{
-                            return res.status(400).json({
-                                err: true,
-                                msg: "No stores exist for this page."
-                            })
-                        }
-                    })
-                }else{
-                    return res.status(400).json({
-                        err: true,
-                        msg: "No such store exists."
-                    })
-                }
-            })    
-        }
-        catch(error){
-            console.log(error)
-            return res.status(400).json({
-                err: true,
-                msg: "Could not fetch any store."
-            })
+        }else{
+            return res.status(200).json(res.results)
         }
     }
 

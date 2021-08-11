@@ -1,9 +1,10 @@
 const express = require('express')
-const router = express.Router()
 const productCtrl = require('../controllers/product.controller')
 const { getDocuments, getDocumentbyId } = require('../middleware/modelResults')
 const Product = require('../models/Product')
 const { productPopulate } = require('../utils/populateObjects')
+
+const router = express.Router()
 
 router.route("/")
     .get(

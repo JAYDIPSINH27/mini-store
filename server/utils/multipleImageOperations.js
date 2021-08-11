@@ -28,9 +28,12 @@ module.exports = {
         for(let id of images){
             promises.push(Image.findById(id)
             .then(async (data) => {
+                let id = null
                 if(data){
+                    id = data._id.toString()
                     await data.deleteOne()
                 }
+                return id
             }))
         }
         return Promise.all(promises)
