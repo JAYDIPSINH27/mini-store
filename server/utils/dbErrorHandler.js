@@ -12,7 +12,7 @@ const getUniqueErrorMessage = (err) => {
 
 const getError = (err) => {
 
-    let message = ''
+    let message = 'Something went wrong'
 
     if(err.code){
         switch (err.code) {
@@ -24,13 +24,15 @@ const getError = (err) => {
                 message = 'Something went wrong'
         }
     }else{
-        for (let errName in err.errors) {
-            if (err.errors[errName].message) 
-                message = err.errors[errName].message
+        if(err.reason){
+            message = err.reason.toString().slice(7)
+        }else{
+            for (let errName in err.errors) {
+                if (err.errors[errName].message) 
+                    message = err.errors[errName].message
+            }
         }
     }
-
-    console.log(message)
 
     return message
 }

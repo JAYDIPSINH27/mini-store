@@ -1,55 +1,192 @@
 const Store = require('../models/Store')
 const Product = require('../models/Product')
+const Image = require('../models/Image')
 const getError = require('../utils/dbErrorHandler')
+const {uploadImages, deleteImages} = require('../utils/multipleImageOperations')
+const { deleteProductfromStores } = require('../utils/relationOperations')
+const { productPopulate } = require('../utils/populateObjects')
 
 module.exports = {
+
+    // @desc      Create Product
+    // @route     POST /api/v1/products
+    // @access    Private
 
     createProduct : async (req,res) => {
         try{
             const product = new Product({
-                name : req.query.name,
-                description : req.query.description || "",
-                images : req.query.images || [],
-                category :  req.query.category,
+                name : req.body.name,
+                description : req.body.description || "",
+                category : req.body.category,
                 store : [],
             })
-            await product.save()
-            return res.status(200).json({
-                err: false,
-                message: 'Product created successfully.'
+            uploadImages(product._id,"Product",req.body.images)
+            .then(async (data) => {
+                let err_images = []
+                for(let i in data){
+                    if(data[i]){
+                        product.addImage(data[i])
+                    }else{
+                        err_images.push(Number(i))
+                    }
+                }
+                try{
+                    await product.save()
+                    return res.status(201).json({
+                        err: false,
+                        data: await Product.populate(product,productPopulate),
+                        message: 'Product created successfully.',
+                        err_images: err_images.length == 0? null : err_images
+                    })
+                }
+                catch(error){
+                    deleteImages(product.images).then((data) => {
+                        return res.status(400).json({
+                            err: true,
+                            msg: getError(error)
+                        })
+                    })
+                }
+            })
+            .catch((error) => {
+                return res.status(400).json({
+                    err: true,
+                    msg: "Could not upload images. Try again"
+                })
             })
         }
         catch(error){
             console.log(error)
-            return res.status(400).json({
+            return res.status(500).json({
                 err: true,
-                msg: getError(error)
+                msg: "Could not create product."
             })
         }
     },
 
-    updateProduct : async (req,res) => {
+    // @desc      Add Images to Products
+    // @route     POST /api/v1/products/:id/images
+    // @access    Private
+
+    addImagestoProduct : async(req,res) => {
         try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Product.findById(req.query.id)
+            Product.findById(req.params.id)
             .then( async(product) => {
                 if(product){
-                    product.name = req.query.name || product.name
-                    product.description = req.query.description || product.description
-                    product.category = req.query.category || product.category
-                    if(req.query.images){
-                        req.query.images.forEach((image) => product.addImage(image))
-                    }
-                    await product.save()
-                    return res.status(200).json({
-                        err: false,
-                        data: product,
-                        msg: "Store Updated Successfully."
+                    uploadImages("products",req.body.images)
+                    .then(async (data) => {
+                        let err_images = []
+                        for(let i in data){
+                            if(data[i].err){
+                                err_images.push(Number(i))
+                            }else{
+                                product.addImage(data[i])
+                            }
+                        }
+                        try{
+                            await product.save()
+                            if(err_images.length < data.length){
+                                return res.status(200).json({
+                                    err: false,
+                                    message: 'Images added successfully.',
+                                    err_images: err_images.length == 0? null : err_images
+                                })
+                            }else{
+                                return res.status(400).json({
+                                    err: true,
+                                    msg: "Could not upload images. Try again",
+                                    err_images
+                                })
+                            }
+                        }
+                        catch(error){
+                            return res.status(400).json({
+                                err: true,
+                                msg: getError(error)
+                            })
+                        }
+                    })
+                    .catch((error) => {
+                        return res.status(400).json({
+                            err: true,
+                            msg: "Could not upload images. Try again"
+                        })
+                    })
+                }else{
+                    return res.status(404).json({
+                        err: true,
+                        msg: "No such product exists."
+                    })
+                }
+            })    
+        }
+        catch(error){
+            return res.status(400).json({
+                err: true,
+                msg: "Can not update product."
+            })
+        }
+    },
+
+    // @desc      Delete Images from Products
+    // @route     DELETE /api/v1/products/:id/images
+    // @access    Private
+
+    deleteImagesfromProduct : async(req,res) => {
+        try{
+            if(!req.params.id){
+                return res.status(400).json({
+                    err: true,
+                    msg: "Id was not specified."
+                })
+            }
+            Product.findById(req.params.id)
+            .then( async(product) => {
+                if(product){
+                    deleteImages(req.body.images)
+                    .then(async (data) => {
+                        let err_images = []
+                        for(let i in data){
+                            if(data[i].err){
+                                err_images.push(Number(i))
+                            }else{
+                                product.deleteImage(data[i].id)
+                            }
+                        }
+                        try{
+                            await product.save()
+                            if(err_images.length < data.length){
+                                return res.status(200).json({
+                                    err: false,
+                                    message: 'Images deleted successfully.',
+                                    err_images: err_images.length == 0? null : err_images
+                                })
+                            }else{
+                                return {
+                                    err: true,
+                                    msg: "Could not delete images. Try again",
+                                    err_images
+                                }
+                            }
+                        }
+                        catch(error){
+                            return res.status(400).json({
+                                err: true,
+                                msg: getError(error)
+                            })
+                        }
+                    })
+                    .catch((error) => {
+                        return {
+                            err: true,
+                            msg: "Could not delete images. Try again"
+                        }
                     })
                 }else{
                     return res.status(400).json({
@@ -67,87 +204,80 @@ module.exports = {
         }
     },
 
-    deleteProducts : async (req,res) => {
+    // @desc      Update Product
+    // @route     PATCH /api/v1/products/:id
+    // @access    Private
 
-    },
-
-    getProducts : async (req,res) => {
+    updateProduct : async (req,res) => {
         try{
-            let page = Math.max(req.query.page,0)
-            let perPage = 10
-            Product.find({}).limit(page).skip(perPage*(page))
-            .then( async(products) => {
-                if(products && products.length > 0){
-                    return res.status(200).json({
-                        err: false,
-                        page,
-                        data: products
-                    })
-                }else{
-                    return res.status(400).json({
-                        err: true,
-                        msg: "No products exist for this page."
-                    })
-                }
-            })    
-        }
-        catch(error){
-            return res.status(400).json({
-                err: true,
-                msg: "Could not fetch any products."
-            })
-        }
-    },
-
-    getProductbyId : async (req,res) => {
-        try{
-            if(!req.query.id){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
                     msg: "Id was not specified."
                 })
             }
-            Product.findById(req.query.id)
+            Product.findByIdAndUpdate(
+                req.params.id,
+                {
+                    ...req.body,
+                    updatedAt : Date.now()
+                },
+                {
+                    new : true,
+                    runValidators: true
+                }
+            )
+            .populate({path : 'category',select: 'name'})
             .then( async(product) => {
                 if(product){
-                    return res.status(200).json({
+                   return res.status(200).json({
                         err: false,
-                        data: product
+                        data: product,
+                        msg: "Product Updated Successfully."
                     })
                 }else{
-                    return res.status(400).json({
+                    return res.status(404).json({
                         err: true,
                         msg: "No such product exists."
                     })
                 }
-            })    
+            })
+            .catch(error => {
+                return res.status(400).json({
+                    err: true,
+                    msg: getError(error)
+                })
+            }) 
         }
         catch(error){
-            console.log(error)
             return res.status(400).json({
                 err: true,
-                msg: "Could not fetch any product."
+                msg: "Can not update product."
             })
         }
     },
 
-    getProductsbyCategory : async (req,res) => {
+    // @desc      Delete Product
+    // @route     DELETE /api/v1/products/:id
+    // @access    Private
+
+    deleteProduct : async (req,res) => {
         try{
-            let page = Math.max(req.query.page,0)
-            let perPage = 10
-            if(!req.query.category){
+            if(!req.params.id){
                 return res.status(400).json({
                     err: true,
-                    msg: "Product was not specified."
+                    msg: "Id was not specified."
                 })
             }
-            Product.find(req.query.category).limit(perPage).skip(page*perPage)
-            .then( async(products) => {
-                if(products && products.length > 0){
+            Product.findById(req.params.id)
+            .then( async(product) => {
+                if(product){
+                    await deleteProductfromStores(product)
+                    await product.deleteOne()
                     return res.status(200).json({
                         err: false,
-                        page,
-                        data: products
+                        data : await Product.populate(product,{path : 'category',select: 'name'}),
+                        msg: "Product Deleted Successfully."
                     })
                 }else{
                     return res.status(400).json({
@@ -158,44 +288,48 @@ module.exports = {
             })    
         }
         catch(error){
-            console.log(error)
             return res.status(400).json({
                 err: true,
-                msg: "Could not fetch any products."
+                msg: "Cant delete product."
             })
         }
     },
 
-    getProductsbyName : async (req,res) => {
-        try{
-            let limit = req.query.limit || 5
-            if(!req.query.name){
-                return res.status(400).json({
-                    err: true,
-                    msg: "Name was not specified."
-                })
-            }
-            Product.find({name : { $regex: req.query.name }}).limit(limit)
-            .then( async(products) => {
-                if(products && products.length > 0){
-                    return res.status(200).json({
-                        err: false,
-                        data: products
-                    })
-                }else{
-                    return res.status(400).json({
-                        err: true,
-                        msg: "No such product exists."
-                    })
+    // @desc      Get Products
+    // @route     GET /api/v1/products
+    // @access    Public
+
+    getProducts : async (req,res) => {
+        if(res.results.err){
+            return res.status(404).json(res.results)
+        }else if(res.results.metadata.count == 0){
+            return res.status(404).json({
+                err : true,
+                metadata : {
+                    msg : "No Products found."
                 }
-            })    
-        }
-        catch(error){
-            console.log(error)
-            return res.status(400).json({
-                err: true,
-                msg: "Could not fetch any products."
             })
+        }else{
+            return res.status(200).json(res.results)
+        }
+    },
+
+    // @desc      Get Products by Id
+    // @route     GET /api/v1/products/:id
+    // @access    Public
+
+    getProductbyId : async (req,res) => {
+        if(res.results.err){
+            return res.status(404).json(res.results)
+        }else if(res.results.data == null){
+            return res.status(404).json({
+                err : true,
+                metadata : {
+                    msg : "No Product found."
+                }
+            })
+        }else{
+            return res.status(200).json(res.results)
         }
     }
 
