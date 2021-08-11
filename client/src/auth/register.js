@@ -6,9 +6,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "../css/register.css";
 import loginImage from '../assets/login.svg';
 
-axios.defaults.withCredentials = true;
-
 const Register = () => {
+
+  const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
@@ -27,27 +27,25 @@ const Register = () => {
     if (password !== confirmPassword) {
       toast.error("Both password must be same");
     } else {
-      await axios
-        .post("/auth/signup", {
-          email: email,
-          password: password,
-        })
-        .then((res) => {
-          if (res.data.error) {
-            toast.error(res.data.error);
-          }
-          if (res.data.emailError) {
-            toast.error(res.data.emailError);
-          }
-          if (res.data.passwordError) {
-            toast.error(res.data.passwordError);
-          }
-          if (res.data.token) {
-            toast.success("Register Successfully");
-          }
+      await axios({
+        method : "POST",
+        url : 'http://localhost:4000/api/v1/auth/registration',
+        headers : {
+          'Content-Type' : 'application/json',
+          'Accept' : 'application/json'
+        },
+        data : {
+          name,
+          email,
+          password
+        }
+      })
+      .then((res) => res.data)
+      .then(data => {
+          toast.success("Registered Successfully");
         })
         .catch((err) => {
-          console.log(err);
+          toast.error(err.response.data.msg);
         });
     }
   };
@@ -84,6 +82,20 @@ const Register = () => {
                       setEmail(event.target.value);
                     }}
                     value={email}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Name</label>
+                  <input
+                    name="name"
+                    type="text"
+                    placeholder="Enter Your Name"
+                    className="form-control"
+                    onChange={(event) => {
+                      setName(event.target.value);
+                    }}
+                    value={name}
                     required
                   />
                 </div>

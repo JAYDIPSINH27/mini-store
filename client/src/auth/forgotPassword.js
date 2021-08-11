@@ -7,7 +7,6 @@ import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 import forgotImage from "../assets/forgot.png";
 
-axios.defaults.withCredentials = true;
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState(null);
@@ -17,21 +16,24 @@ const ForgotPassword = () => {
 
   const submitButton = async (event) => {
     event.preventDefault();
-    await axios
-      .post("/auth/forgot-password", {
-        email: email,
-      })
-      .then((res) => {
-        if (res.data.error) {
-          toast.error(res.data.error);
-        }
-        if (res.data.message) {
-          toast.info("Change password using link sent in your email");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await axios({
+      method : "POST",
+      url : 'http://localhost:4000/api/v1/auth/user/password',
+      headers : {
+        'Content-Type' : 'application/json',
+        'Accept' : 'application/json'
+      },
+      data : {
+        email
+      }
+    })
+    .then((res) => res.data)
+    .then((data) => {
+      toast.info(data.msg);
+    })
+    .catch((err) => {
+      toast.error(err.response.data.msg);
+    });
   };
 
   if (cookies.get("jwt") !== undefined) {

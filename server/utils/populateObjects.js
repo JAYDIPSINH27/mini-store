@@ -38,5 +38,12 @@ module.exports = {
             path : 'images',
             select : 'public_id url'
         }
+    ],
+
+    userPopulate : [
+        {
+            path : 'image',
+            select : 'public_id url'
+        }
     ]
 }

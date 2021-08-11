@@ -8,10 +8,9 @@ import passwordImage from "../assets/security.png";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 import { Link } from 'react-router-dom';
+import queryString from 'query-string';
 
-axios.defaults.withCredentials = true;
-
-const ChangePassword = () => {
+const ChangePassword = (props) => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
 
@@ -32,22 +31,31 @@ const ChangePassword = () => {
 
   const submitButton = async (event) => {
     event.preventDefault();
-    await axios
-      .post(`/auth/change-password/${token}`, {
-        password: password,
-        cpassword: confirmPassword,
+    if (password !== confirmPassword) {
+      toast.error("Both password must be same");
+    } else {
+      const {user,token} = queryString.parse(props.location.search)
+      await axios({
+        method : "PATCH",
+        url : 'http://localhost:4000/api/v1/auth/user/password',
+        headers : {
+          'Content-Type' : 'application/json',
+          'Accept' : 'application/json'
+        },
+        data : {
+          user,
+          token,
+          password
+        }
       })
-      .then((res) => {
-        if (res.data.error) {
-          toast.error(res.data.error);
-        }
-        if (res.data.message) {
-          toast.success(res.data.message);
-        }
+      .then((res) => res.data)
+      .then(data => {
+        history.push("/signin?reset=true");
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err.response.data.msg)
       });
+    }
   };
 
   if (cookies.get("jwt") !== undefined) {
