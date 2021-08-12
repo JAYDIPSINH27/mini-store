@@ -29,6 +29,11 @@ const Login = (props) => {
       toast.success("Activation successful.");
     }else if(queryObj.reset){
       toast.success("Password Reset Successful.");
+    }else if(queryObj.error){
+      toast.error(queryObj.error);
+    }else if(queryObj.token){
+      cookies.set('jwt', queryObj.token , { path: '/' })
+      history.push("/home");
     }
   },[])
 
@@ -134,6 +139,10 @@ const Login = (props) => {
                   </Link>
                 </p>
               </div>
+              <div className='text-center'>
+                <a href="http://localhost:4000/api/v1/auth/google"> Login with Google </a>
+              </div>
+              
             </div>
           </div>
         </div>

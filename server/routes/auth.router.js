@@ -8,6 +8,14 @@ router.post('/registration',
     authCtrl.registerUser
 )
 
+router.get('/google',
+    authCtrl.googleSigninUrl
+) 
+
+router.get('/googleCallback',
+    authCtrl.googleSigninVerify
+)
+
 router.post('/login',
     authCtrl.loginUser
 )    

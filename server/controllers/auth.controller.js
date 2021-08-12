@@ -6,6 +6,7 @@ const getError = require('../utils/dbErrorHandler');
 const { createToken } = require('../utils/createTokens');
 const ActivationToken = require('../models/ActivationToken');
 const PasswordToken = require('../models/PasswordToken');
+const {urlGoogle,getGoogleEmailFromCode} = require('../utils/googleClient')
 
 const redirectURL = process.env.REDIRECT_URL
 const frontendURL = process.env.FRONTEND_URL
@@ -340,5 +341,39 @@ module.exports = {
             })
         }
     },
+
+    
+    // @desc      Login with Google
+    // @route     GET /api/v1/auth/google
+    // @access    Public
+
+    googleSigninUrl : async (req,res) => {
+        res.redirect(urlGoogle())
+    },
+    
+    // @desc      Callback for Google Auth
+    // @route     GET /api/v1/auth/googleCallback
+    // @access    Public
+
+    googleSigninVerify : async (req,res) => {
+        try{
+            let email = await getGoogleEmailFromCode(req.query.code)
+            User.findOne({email : email})
+            .then(user => {
+                if(user){
+                    const token = jwt.sign({id : user.email},jwtSecret)
+                    let url = `${frontendURL}/signin?token=${encodeURIComponent(token)}}`
+                    return  res.redirect(url)
+                }else{
+                    let url = `${frontendURL}/signin?error=${encodeURIComponent('User doesnt exist')}`
+                    return  res.redirect(url)
+                }
+            })
+        }
+        catch(err){
+            let url = `${frontendURL}/signin?error=${encodeURIComponent('Could not login')}`
+            return  res.redirect(url)
+        }
+    }
 }
 
