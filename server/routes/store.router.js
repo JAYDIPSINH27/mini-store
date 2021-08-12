@@ -1,6 +1,7 @@
 const express = require('express')
 const storeCtrl = require('../controllers/store.controller')
 const Store = require('../models/Store')
+const passport= require('../config/passport_config')
 const { getDocuments, getDocumentbyId } = require('../middleware/modelResults')
 const {storePopulate} = require('../utils/populateObjects')
 
@@ -14,7 +15,10 @@ router.route("/")
         ),
         storeCtrl.getStores
     )
-    .post(storeCtrl.createStore)
+    .post(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.createStore
+    )
 
 router.route("/:id")
     .get(        
@@ -24,23 +28,53 @@ router.route("/:id")
         ),
         storeCtrl.getStorebyId
     )
-    .patch(storeCtrl.updateStore)
-    .delete(storeCtrl.deleteStore)
+    .patch(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.updateStore
+    )
+    .delete(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.deleteStore
+    )
  
 router.route("/:id/products/:productId")
-    .post(storeCtrl.addProducttoStore)
-    .patch(storeCtrl.updateProductinStore)
-    .delete(storeCtrl.deleteProductfromStore)
+    .post(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.addProducttoStore
+    )
+    .patch(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.updateProductinStore
+    )
+    .delete(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.deleteProductfromStore
+    )
 
 router.route("/:id/addresses")
-    .post(storeCtrl.addAddresstoStore)
+    .post(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.addAddresstoStore
+    )
 
 router.route("/:id/addresses/:addressId")   
-    .patch(storeCtrl.updateAddressinStore)
-    .delete(storeCtrl.deleteAddressfromStore)
+    .patch(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.updateAddressinStore
+    )
+    .delete(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.deleteAddressfromStore
+    )
 
 router.route("/:id/images")
-    .post(storeCtrl.addImagestoStore)
-    .delete(storeCtrl.deleteImagesfromStore)
+    .post(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.addImagestoStore
+    )
+    .delete(
+        passport.authenticate('admin', {session : false}),
+        storeCtrl.deleteImagesfromStore
+    )
 
 module.exports = router 

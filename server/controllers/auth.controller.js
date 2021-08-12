@@ -27,6 +27,9 @@ module.exports = {
         if(req.body.address){
             user.addAddress(req.body.address)
         }
+        if(req.body.admin){
+            user.admin = true
+        }
         if(req.body.image){
             image = new Image()
             let response = await image.upload(user._id,req.body.image,'User')
