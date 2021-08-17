@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory, Link } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import loginImage from '../assets/login.svg';
+import queryString from 'query-string';
 
-axios.defaults.withCredentials = true;
+const Login = (props) => {
 
-const Login = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const history = new useHistory();
@@ -23,28 +23,42 @@ const Login = () => {
     }
   }
 
+  useEffect(() => {
+    let queryObj = queryString.parse(props.location.search)
+    if(queryObj.activation){
+      toast.success("Activation successful.");
+    }else if(queryObj.reset){
+      toast.success("Password Reset Successful.");
+    }else if(queryObj.error){
+      toast.error(queryObj.error);
+    }else if(queryObj.token){
+      cookies.set('jwt', queryObj.token , { path: '/' })
+      history.push("/home");
+    }
+  },[])
+
   const submitButton = async (event) => {
     event.preventDefault();
-    await axios
-      .post("/auth/signin", {
-        email: email,
-        password: password,
-      })
-      .then((res) => {
-        if (res.data.error) {
-          toast.error("❗" + res.data.error);
-        }
-        if (res.data.message) {
-            toast.info(res.data.message);
-          }
-        if (res.data.token) {
-          console.log(res);
-          history.push("/home");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await axios({
+      method : "POST",
+      url : 'http://localhost:4000/api/v1/auth/login',
+      headers : {
+        'Content-Type' : 'application/json',
+        'Accept' : 'application/json'
+      },
+      data : {
+        email,
+        password
+      }
+    })
+    .then((res) => res.data)
+    .then(data => {
+        cookies.set('jwt', data.token , { path: '/' })
+        history.push("/home");
+    })
+    .catch((err) => {
+      toast.error(err.response.data.msg);
+    });
   };
   if (cookies.get("jwt") !== undefined) {
     history.push("/home");
@@ -125,6 +139,10 @@ const Login = () => {
                   </Link>
                 </p>
               </div>
+              <div className='text-center'>
+                <a href="http://localhost:4000/api/v1/auth/google"> Login with Google </a>
+              </div>
+              
             </div>
           </div>
         </div>

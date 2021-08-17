@@ -1,14 +1,12 @@
 const mongoose = require('mongoose')
 
 const StoreSchema = mongoose.Schema({
-    images : [{
-        url : {
-            type : String,
-            trim : true,
-            match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'URL is invalid']
-        },
-        public_id : String
-    }],
+    images : [
+        {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Image'
+        }
+    ],
     name : {
         type : String,
         required : 'Store Name is required.'
@@ -99,8 +97,15 @@ StoreSchema.methods = {
     addImage : function(image){
         this.images.push(image)
     },
+    addImages : function(images){
+        if(this.images.length == 0){
+            this.images = images
+        }else{
+            this.images = [...this.images,...images]
+        }
+    },
     deleteImage : function(id){
-        this.images = this.images.filter((image) => image.public_id != id)
+        this.images = this.images.filter((image) => image != id)
     },
     addAddress : function(address){
         this.addresses.push(address)

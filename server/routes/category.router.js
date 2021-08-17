@@ -1,9 +1,11 @@
 const express = require('express')
-const router = express.Router()
 const catCtrl = require('../controllers/category.controller')
 const { getDocuments, getDocumentbyId } = require('../middleware/modelResults')
 const Category = require('../models/Category')
 const {categoryPopulate} = require('../utils/populateObjects')
+const passport= require('../config/passport_config')
+
+const router = express.Router()
 
 router.route("/")
    .get(
@@ -13,7 +15,10 @@ router.route("/")
       ),
       catCtrl.getCategories
    )
-   .post(catCtrl.createCategory)
+   .post(
+      passport.authenticate('admin', {session : false}),
+      catCtrl.createCategory
+   )
 
 router.route("/:id")
    .get(

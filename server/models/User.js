@@ -1,27 +1,27 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-const key = process.env.SECRET_KEY;
 
-const saltRounds = process.env.SALT_ROUNDS
+const saltRounds = Number(process.env.SALT_ROUNDS)
 
 const UserSchema = mongoose.Schema({
+    name : {
+        type : String,
+        required : "Name is required."
+    },
     email : {
         type : String,
-        required : "Email ",
+        required : "Email is required",
         trim: true,
         unique: 'Email already exists',
-        match: [/.+\@.+\..+/, 'Email is invalid'],
-        required: 'Email is required'
+        match: [/.+\@.+\..+/, 'Email is invalid']
     },
     hashed_password : { 
         type : String,
         required: "Password is required",
     },
     active: {
-        type : Number,
-        default : 0 
+        type : Boolean,
+        default : false
     },
     addresses : [
         {
@@ -47,20 +47,38 @@ const UserSchema = mongoose.Schema({
         }
     ],
     image : {
-        type : String,
-        trim : true,
-        match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'URL is invalid']
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Image'
+    },
+    admin : {
+        type: Boolean,
+        default: false
     },
     history : [
         {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : 'Product'
+            productId : {
+                type : mongoose.Schema.Types.ObjectId,
+                ref : 'Product'
+            },
+            date : {
+                type: Date,
+                default: Date.now()
+            },
+            quantity : {
+                type : Number,
+                required : "Quantity is required.",
+                min : [0,"Quantity cant be a negative number."]
+            }
         }
     ],
-    created: {
+    createdAt: {
         type: Date,
         default: Date.now()
-    }  
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now()
+    }   
 });
 
 UserSchema.path('hashed_password').validate(function(pass){
@@ -93,44 +111,10 @@ UserSchema.methods = {
     },
     addAddress : function(address){
         this.addresses.push(address)
+    },
+    isActive : function(){
+        return this.active
     }
 }
 
 module.exports = mongoose.model('User',UserSchema)
-
-// userSchema.pre('save', function(next){
-//     const user = this;
-//     if (user.isModified('password')) {
-//         bcrypt.genSalt(10, (err, salt) => {
-//             bcrypt.hash(user.password, salt, function(err, hash) {
-//                 if (err) {
-//                     return next(err)
-//                 }
-//                 user.password = hash;
-//                 next();
-//             });
-//         })
-//     } else {
-//         user.active = 1
-//         next()
-//     }
-// });
-
-// // userSchema.methods.comparePassword = function(password){
-// //     const user = this;
-// //     return new Promise((resolve, reject)=>{
-// //         bcrypt.compare(password, user.password, (err, isMatch) => {
-// //             if (err) {
-// //                 return reject(err);
-// //             }
-// //             if (!isMatch) {
-// //                 return reject(err);
-// //             }
-// //             return resolve(true);
-// //         });
-// //     });
-// // }
-
-// const User = mongoose.model('User', userSchema);
-
-// module.exports = User;

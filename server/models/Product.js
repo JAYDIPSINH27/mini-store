@@ -25,7 +25,7 @@ const ProductSchema = mongoose.Schema({
     stores : [
         {
             type : mongoose.Schema.Types.ObjectId,
-            ref : 'Product',
+            ref : 'Store',
         }
     ],
     createdAt : {
@@ -64,8 +64,15 @@ ProductSchema.methods = {
     addImage : function(image){
         this.images.push(image)
     },
+    addImages : function(images){
+        if(this.images.length == 0){
+            this.images = images
+        }else{
+            this.images = [...this.images,...images]
+        }
+    },
     deleteImage : function(id){
-        this.images = this.images.filter((image) => image.public_id != id)
+        this.images = this.images.filter((image) => image != id)
     },
     addStore : function(id){
         this.stores.push(id)
