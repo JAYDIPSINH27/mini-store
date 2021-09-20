@@ -5,7 +5,9 @@ import Login from "./auth/login";
 import Home from "./Screens/Home";
 import ForgotPassword from "./auth/forgotPassword";
 import ChangePassword from './auth/changePassword';
+import Products from "./components/ProductsPage";
 import { PaymentTest } from "./components/stripe";
+
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path="/home" component={Home} />
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/change-password" component={ChangePassword} />
+
+          <Route path="/products" component={Products} />
         </Switch>
       </BrowserRouter>
     </div>
