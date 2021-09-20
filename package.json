@@ -21,6 +21,9 @@
   },
   "homepage": "https://github.com/clever-developer-club/mini-store#readme",
   "dependencies": {
-    "concurrently": "^6.2.0"
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "axios": "^0.21.4",
+    "concurrently": "^6.2.0",
+    "fontsource-roboto": "^4.0.0"
   }
 }

@@ -1,2 +1,2 @@
 # Mini Store
-Change for test.
+Web application using MERN stack
