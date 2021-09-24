@@ -12,7 +12,7 @@ const ImageSchema = mongoose.Schema({
         type : String,
         trim : true,
         required : true,
-        match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'URL is invalid']
+        match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/, 'URL is invalid']
     },
     parent_id : {
         type: mongoose.Schema.Types.ObjectId, 
@@ -25,7 +25,6 @@ const ImageSchema = mongoose.Schema({
 })
 
 ImageSchema.pre('deleteOne', { document: true, query: false }, async function(next){
-    let self = this
     let response = await this.delete()
     if(response){
         next()
@@ -46,7 +45,7 @@ ImageSchema.methods = {
             self.public_id = public_id
             return self._id
         })
-        .catch(err => false)
+        .catch(() => false)
     },
     delete: async function(){
         return deleteImage(this.public_id)
@@ -56,7 +55,7 @@ ImageSchema.methods = {
             }
             return false
         })
-        .catch(err => false)
+        .catch(() => false)
     }
 }
 

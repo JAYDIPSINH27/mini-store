@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Image = require('../models/Image');
 const { userPopulate } = require('../utils/populateObjects');
 const {sendWelcomeEmail,sendRequestPasswordEmail,sendResetPasswordEmail} = require('../utils/sendEmail')
 const getError = require('../utils/dbErrorHandler');
@@ -57,12 +58,14 @@ module.exports = {
             if(resp){
                 return res.status(201).json({
                     err: false,
-                    msg: "Successfully signed up and verification email sent."
+                    msg: "Successfully signed up and verification email queued."
                 })
             }else{
+                await user.deleteOne()
+                await activateToken.deleteOne()
                 return res.status(400).json({
                     err: false,
-                    msg: "Successfully signed up but could not send verification mail."
+                    msg: "Could not send verification mail."
                 })
             }
         }
@@ -186,7 +189,7 @@ module.exports = {
                     // })
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 res.redirect(`${frontendURL}/signin?activation=false`)
                 // console.log(err)
                 // return res.status(400).json({
@@ -227,7 +230,7 @@ module.exports = {
     // @access    Private
 
     updateUser : async (req,res) => {
-
+        console.log((req,res))
     },
 
     // @desc      Forgot Password

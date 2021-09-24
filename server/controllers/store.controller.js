@@ -40,7 +40,7 @@ module.exports = {
                     })
                 }
                 catch(error){
-                    deleteImages(store.images).then((data) => {
+                    deleteImages(store.images).then(() => {
                         return res.status(400).json({
                             err: true,
                             msg: getError(error)
@@ -48,7 +48,7 @@ module.exports = {
                     })
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 return res.status(400).json({
                     err: true,
                     msg: "Could not upload images. Try again"
@@ -284,7 +284,7 @@ module.exports = {
                                     err_images: err_images.length == 0? null : err_images
                                 })
                             }else{
-                                deleteImages(temp).then((data) => {
+                                deleteImages(temp).then(() => {
                                     return res.status(400).json({
                                         err: true,
                                         err_images,
@@ -294,7 +294,7 @@ module.exports = {
                             }
                         }
                         catch(error){
-                            deleteImages(temp).then((data) => {
+                            deleteImages(temp).then(() => {
                                 return res.status(400).json({
                                     err: true,
                                     msg: getError(error)
@@ -302,7 +302,7 @@ module.exports = {
                             })
                         }
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         return {
                             err: true,
                             msg: "Could not upload images. Try again"
@@ -374,7 +374,7 @@ module.exports = {
                             })
                         }
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         return {
                             err: true,
                             msg: "Could not delete images. Try again"

@@ -142,7 +142,6 @@ const Login = (props) => {
               <div className='text-center'>
                 <a href="http://localhost:4000/api/v1/auth/google"> Login with Google </a>
               </div>
-              
             </div>
           </div>
         </div>

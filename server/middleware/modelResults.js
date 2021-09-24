@@ -99,6 +99,7 @@ module.exports = {
             }
         }
         catch(error){
+            console.log(error)
             res.results = {
                 err : true,
                 metadata : {
