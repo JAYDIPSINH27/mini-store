@@ -26,7 +26,7 @@ const sendEmail = async (recipient,subject,html) => {
 
     try {
 
-        const transporter = nodemailer.createTransport({
+        const transporter = await nodemailer.createTransport({
             host : 'smtp.gmail.com',
             port : 587,
             auth: {
@@ -35,22 +35,19 @@ const sendEmail = async (recipient,subject,html) => {
             }
         }) 
       
-    const mailOptions = {
-        from: `"Mini-Store" <${process.env.EMAIL_USER}>`,
-        to: recipient.email,
-        subject: subject,
-        html: html
-    };
+        const mailOptions = {
+            from: `"Mini-Store" <${process.env.EMAIL_USER}>`,
+            to: recipient.email,
+            subject: subject,
+            html: html
+        };
       
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error)
-            return false
-        } else {
-            console.log(info.response)
+        const results = await transporter.sendMail(mailOptions)
+        if (results.rejected.length == 0 && results.response.startsWith("250 2.0.0 OK")) {
             return true
         }
-    });
+        return false
+        
     }catch(err){
         return false
     }
@@ -58,6 +55,7 @@ const sendEmail = async (recipient,subject,html) => {
 
 const sendWelcomeEmail = async (recipient,link) => {
     let resp = await sendEmail(recipient,'Successful Registration at Mini-Store',welcomeTemplate(recipient.user,link))
+    console.log(resp);
     if(resp){
         return true
     }

@@ -13,7 +13,7 @@ const UserSchema = mongoose.Schema({
         required : "Email is required",
         trim: true,
         unique: 'Email already exists',
-        match: [/.+\@.+\..+/, 'Email is invalid']
+        match: [/.+@.+\..+/, 'Email is invalid']
     },
     hashed_password : { 
         type : String,
@@ -54,21 +54,10 @@ const UserSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    history : [
+    orders : [
         {
-            productId : {
-                type : mongoose.Schema.Types.ObjectId,
-                ref : 'Product'
-            },
-            date : {
-                type: Date,
-                default: Date.now()
-            },
-            quantity : {
-                type : Number,
-                required : "Quantity is required.",
-                min : [0,"Quantity cant be a negative number."]
-            }
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Order'
         }
     ],
     createdAt: {
@@ -81,7 +70,7 @@ const UserSchema = mongoose.Schema({
     }   
 });
 
-UserSchema.path('hashed_password').validate(function(pass){
+UserSchema.path('hashed_password').validate(function(){
     if(this._password && this._password.length < 8){
         this.invalidate('password', 'Password must be at least 8 characters.')
     }
@@ -114,6 +103,9 @@ UserSchema.methods = {
     },
     isActive : function(){
         return this.active
+    },
+    addOrder : function(id){
+        this.orders.push(id)
     }
 }
 

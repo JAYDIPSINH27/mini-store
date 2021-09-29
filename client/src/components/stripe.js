@@ -5,13 +5,36 @@ import Stripe from 'react-stripe-checkout'
 export const PaymentTest = () => {
 
     const tokenHandler = (token) => {
-        console.log(token)
         axios({
             method : 'POST',
-            url : `http://localhost:4000/api/v1/payment`,
+            url : `http://localhost:4000/api/v1/payment/cash`,
             data: {
                 token,
-                amount : 100
+                cart: {
+                    products : [
+                        {
+                            productId: '6111fefe5b2b6850d822a193',
+                            quantity : 5
+                        },
+                        {
+                            productId: '6111fefe5b2b6850d822a193',
+                            quantity : 6
+                        }
+                    ],
+                    amount : 100,
+                },
+                user:{
+                    id: '6111fefe5b2b6850d822a193',
+                    email: 'sample@gmail.com',
+                    name: "Test",
+                    address: {
+                        location: 'Location',
+                        landmark: 'LandMark',
+                        pincode: '0000000',
+                        city: 'City',
+                        state: 'State'
+                    }
+                }
             }
         })
         .then(res => console.log(res.data))
