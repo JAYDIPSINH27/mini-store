@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography } from '@material-ui/core'
+import Cookies from 'universal-cookie';
+import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography,Button } from '@material-ui/core'
 import {Cancel, LocalMall, Mail,  Person, Search} from '@material-ui/icons'
 import { alpha } from '@material-ui/core'
 
@@ -55,45 +56,90 @@ const useStyles = makeStyles((theme) => ({
             display: "none",
         },
     },
+    button: {
+        alignItems: "center",
+        marginRight: theme.spacing(2),
+        '&:hover': {
+            color:"black",
+            backgroundColor: alpha(theme.palette.common.white, 0.05),
+        },
+        color: theme.palette.common.white,
+        borderColor:theme.palette.common.white,
+    },
     
 
 }))
 
 function Navbar() {
+    const cookies = new Cookies();
     const [open, setOpen] = useState(false)
     const classes = useStyles({ open });
-    return (
-        <AppBar position="fixed">
-            <Toolbar className={classes.toolbar} >
-                <Typography variant="h6" className={classes.logoLg}>
-                    Mini Mall
-                </Typography>
-                <Typography variant="h6" className={classes.logoSm}>
-                    MALL
-                </Typography>
-                
-                <div className={classes.search} >
-                    <Search />
-                    <InputBase placeholder="Search..." className={classes.input} />
-                    <Cancel className={classes.cancel} onClick={() => setOpen(false)} />
-                </div>
 
-                <div className={classes.icons} >
+    if (cookies.get('jwt') !== undefined) {
+        return (
+            <AppBar position="fixed">
+                <Toolbar className={classes.toolbar} >
+                    <Typography variant="h6" className={classes.logoLg}>
+                        Mini Mall
+                    </Typography>
+                    <Typography variant="h6" className={classes.logoSm}>
+                        MALL
+                    </Typography>
+                    
+                    <div className={classes.search} >
+                        <Search />
+                        <InputBase placeholder="Search..." className={classes.input} />
+                        <Cancel className={classes.cancel} onClick={() => setOpen(false)} />
+                    </div>
+    
+                    <div className={classes.icons} >
+                        <Search className={classes.searchButton} onClick={() => setOpen(true)}/>
+                        <Badge badgeContent={4} color="secondary" className={classes.badge}>
+                            <Mail />
+                        </Badge>
+                        <Badge badgeContent={2} color="secondary" className={classes.badge}>
+                            <LocalMall />
+                        </Badge>
+                        <Badge color="secondary" className={classes.badge}>
+                            <Person />
+                        </Badge>
+                    </div>
+                  
+                </Toolbar>
+            </AppBar>
+        )
+    }
+    else{
+        return (
+            <AppBar position="fixed">
+                <Toolbar className={classes.toolbar} >
+                    <Typography variant="h6" className={classes.logoLg}>
+                        Mini Mall
+                    </Typography>
+                    <Typography variant="h6" className={classes.logoSm}>
+                        MALL
+                    </Typography>
+                    
+                    <div className={classes.search} >
+                        <Search />
+                        <InputBase placeholder="Search..." className={classes.input} />
+                        <Cancel className={classes.cancel} onClick={() => setOpen(false)} />
+                    </div>
+    
+                    <div className={classes.icons} >
                     <Search className={classes.searchButton} onClick={() => setOpen(true)}/>
-                    <Badge badgeContent={4} color="secondary" className={classes.badge}>
-                        <Mail />
-                    </Badge>
-                    <Badge badgeContent={2} color="secondary" className={classes.badge}>
-                        <LocalMall />
-                    </Badge>
-                    <Badge color="secondary" className={classes.badge}>
-                        <Person />
-                    </Badge>
-                </div>
-              
-            </Toolbar>
-        </AppBar>
-    )
+                    <Button href="/signup" variant="outlined"  className={classes.button}>SIGN UP</Button>
+                    <Button href="/signin"  variant="outlined"  className={classes.button}>SIGN IN</Button>
+                    
+                    </div>
+                  
+                </Toolbar>
+            </AppBar>
+        )
+
+    }
+
+    
 }
 
 export default Navbar
