@@ -2,10 +2,11 @@
 // @route     localhost:3000/
 // @access    Private/Public
 
-import { ArrowLeftOutlined, ArrowRightOutlined } from '@material-ui/icons'
+import { ArrowLeftOutlined, ArrowRightOutlined, NoEncryption } from '@material-ui/icons'
 import React,{useState,useEffect} from 'react'
 import styled from "styled-components"
 import { slideData } from '../SlideData'
+import { mobile } from './responsive'
 
 const Container = styled.div`
     padding:5rem 0rem;
@@ -14,6 +15,7 @@ const Container = styled.div`
     display:flex;
     position:relative;
     overflow:hidden;
+    ${mobile({display:"none"})}
 `
 
 const Arrow = styled.div`
