@@ -1,12 +1,13 @@
 import Home1 from '../assets/Home1.jpg'
 import Home2 from '../assets/Home2.jpg'
+import Home3 from '../assets/Home3.jpg'
 
 export const slideData=[
     {
         id:1,
-        img:Home1,
+        img:Home3,
         title:"Diwali Sale",
-        desc:"Don't wait for your turn in long queues, shop at your home at best price",
+        desc:"Don't wait for your turn in long queues, shop at your home.",
         bg:"f5fafd",
     },
     {
@@ -19,8 +20,8 @@ export const slideData=[
     {
         id:3,
         img:Home1,
-        title:"Diwali Sale",
-        desc:"Don't wait for your turn in long queues, shop at your home at best price",
+        title:"Multiple Payment Options",
+        desc:"Choose whether Pay online or Pay after delivery",
         bg:"fbf0f4",
     } 
 ]

@@ -37,11 +37,11 @@ const HomePage = () => {
         <div>
         
        <Navbar />
-       {/* <div className={classes.carousel}>
+       <div className={classes.carousel}>
                <Carousel />
-        </div> */}
+        </div>
         <Slider />
-        {/* <Categories /> */}
+        <Categories />
         <HomeProducts />
         <Newsletter />
         <Footer />

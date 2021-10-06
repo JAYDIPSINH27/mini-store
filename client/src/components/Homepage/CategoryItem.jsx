@@ -10,6 +10,9 @@ const Container=styled.div`
     margin:5px;
     height:50vh;
     position:relative;
+    display:flex;
+    align-items: center;
+    justify-content: center;
 `
 const Image=styled.img`
     width:80%;
@@ -31,6 +34,8 @@ const Info=styled.div`
 const Title=styled.h2`
     color:white;
     margin-bottom:20px;
+    align-items: center;
+    justify-content: center;
 
 `
 const Button=styled.a`
