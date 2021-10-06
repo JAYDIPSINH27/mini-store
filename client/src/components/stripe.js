@@ -1,3 +1,7 @@
+// @desc      Stripe Component
+// @route     localhost:3000/test
+// @access    Private/Public
+
 import React from 'react'
 import axios from 'axios'
 import Stripe from 'react-stripe-checkout'

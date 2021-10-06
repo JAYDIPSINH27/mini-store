@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.route("/stripe")
     .post(
-        passport.authenticate('user', {session : false}),
+        // passport.authenticate('user', {session : false}),
         payCtrl.makeStripePayment
     )
 

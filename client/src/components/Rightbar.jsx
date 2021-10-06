@@ -1,3 +1,7 @@
+// @desc      Rightbar Component
+// @route     localhost:3000/
+// @access    Private/Public
+
 import { Container, makeStyles } from '@material-ui/core';
 import React from 'react'
 

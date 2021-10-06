@@ -1,3 +1,7 @@
+// @desc      ProductPage Component
+// @route     localhost:3000/products
+// @access    Private/Public
+
 import { Grid, makeStyles } from '@material-ui/core'
 import React from 'react'
 import Leftbar from './Leftbar'

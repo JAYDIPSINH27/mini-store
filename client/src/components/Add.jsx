@@ -1,3 +1,7 @@
+// @desc      Add Component
+// @route     Used in all Routes
+// @access    Private/Public
+
 import { Button, Container, Fab, makeStyles, Modal, Snackbar, Tooltip } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { Add as AddIcon } from '@material-ui/icons';
