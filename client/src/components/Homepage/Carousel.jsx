@@ -6,8 +6,8 @@ import React from 'react'
 import AwesomeSlider from 'react-awesome-slider';
 import withAutoplay from 'react-awesome-slider/dist/autoplay';
 import 'react-awesome-slider/dist/styles.css';
-import Home1 from '../assets/Home1.jpg'
-import Home2 from '../assets/Home2.jpg'
+import Home1 from '../../assets/Home1.jpg'
+import Home2 from '../../assets/Home2.jpg'
 
 const AutoplaySlider = withAutoplay(AwesomeSlider);
 

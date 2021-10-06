@@ -4,7 +4,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import { popularProducts } from './SlideData'
+import { popularProducts } from '../SlideData'
 import HomeProduct from './HomeProduct'
 
 const Container=styled.div`

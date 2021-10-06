@@ -6,7 +6,7 @@ import Home from "./Screens/Home";
 import ForgotPassword from "./auth/forgotPassword";
 import ChangePassword from './auth/changePassword';
 import Products from "./components/ProductsPage";
-import HomePage from "./components/HomePage";
+import HomePage from "./components/Homepage/HomePage";
 import { PaymentTest } from "./components/stripe";
 
 

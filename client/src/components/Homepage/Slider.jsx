@@ -5,7 +5,7 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@material-ui/icons'
 import React,{useState,useEffect} from 'react'
 import styled from "styled-components"
-import { slideData } from './SlideData'
+import { slideData } from '../SlideData'
 
 const Container = styled.div`
     padding:5rem 0rem;
