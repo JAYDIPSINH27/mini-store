@@ -7,7 +7,7 @@ export const PaymentTest = () => {
     const tokenHandler = (token) => {
         axios({
             method : 'POST',
-            url : `http://localhost:4000/api/v1/payment/cash`,
+            url : `http://localhost:4000/api/v1/payment/stripe`,
             data: {
                 token,
                 cart: {
@@ -24,7 +24,7 @@ export const PaymentTest = () => {
                     amount : 100,
                 },
                 user:{
-                    id: '6111fefe5b2b6850d822a193',
+                    id: '614e196de6874e38487acb55',
                     email: 'sample@gmail.com',
                     name: "Test",
                     address: {

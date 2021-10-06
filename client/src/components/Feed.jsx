@@ -41,12 +41,12 @@ function Feed() {
         <Container className={classes.container}>
             <Grid container spacing={4}>
                 {products.map((productValue) => (
-                    <Grid item sm={12} md={6} lg={4}> 
+                    <Grid item sm={12} md={6} lg={4} key={productValue.id}> 
                         <Product product={productValue}/>
                     </Grid>
                 ))}
                 {products.map((productValue) => (
-                    <Grid item sm={12} md={6} lg={4}> 
+                    <Grid item sm={12} md={6} lg={4} key={productValue.id}> 
                         <Product product={productValue}/>
                     </Grid>
                 ))}
