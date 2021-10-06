@@ -1,3 +1,7 @@
+// @desc      HomeProducts Component
+// @route     localhost:3000/
+// @access    Private/Public
+
 import React from 'react'
 import styled from 'styled-components'
 import { popularProducts } from './SlideData'

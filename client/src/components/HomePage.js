@@ -1,3 +1,7 @@
+// @desc      HomePage Component
+// @route     localhost:3000/
+// @access    Private/Public
+
 import React from 'react'
 import Navbar from './Navbar'
 import Slider from './Slider'
@@ -37,7 +41,7 @@ const HomePage = () => {
                <Carousel />
         </div> */}
         <Slider />
-        <Categories />
+        {/* <Categories /> */}
         <HomeProducts />
         <Newsletter />
         <Footer />

@@ -1,10 +1,14 @@
+// @desc      Category Item Component
+// @route     localhost:3000/
+// @access    Private/Public
+
 import React from 'react'
 import styled from "styled-components"
 
 const Container=styled.div`
     flex:1;
     margin:5px;
-    height:70vh;
+    height:50vh;
     position:relative;
 `
 const Image=styled.img`

@@ -1,3 +1,7 @@
+// @desc      Feed Component
+// @route     localhost:3000/products
+// @access    Private/Public
+
 import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'

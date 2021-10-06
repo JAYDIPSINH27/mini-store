@@ -1,3 +1,7 @@
+// @desc      Header Component
+// @route     localhost:3000/home
+// @access    Private/Public
+
 import React from "react";
 import { useHistory } from "react-router-dom";
 import Cookies from 'universal-cookie';

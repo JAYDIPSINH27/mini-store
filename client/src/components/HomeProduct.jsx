@@ -1,3 +1,7 @@
+// @desc      HomeProduct Component
+// @route     localhost:3000/
+// @access    Private/Public
+
 import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from '@material-ui/icons'
 import React from 'react'
 import styled from 'styled-components'

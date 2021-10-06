@@ -1,3 +1,7 @@
+// @desc      Navbar Component
+// @route     Used in all Routes
+// @access    Private/Public different for both
+
 import React, { useState } from 'react'
 import Cookies from 'universal-cookie';
 import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography,Button } from '@material-ui/core'

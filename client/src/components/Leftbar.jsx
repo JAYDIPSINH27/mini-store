@@ -1,3 +1,7 @@
+// @desc      Leftbar Component
+// @route     localhost:3000/products
+// @access    Private/Public
+
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import { ViewList, ExitToApp, Home, Storefront,} from '@material-ui/icons';
 import React from 'react'

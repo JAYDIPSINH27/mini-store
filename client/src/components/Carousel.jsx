@@ -1,3 +1,7 @@
+// @desc      Carousel Component
+// @route     localhost:3000/
+// @access    Private/Public
+
 import React from 'react'
 import AwesomeSlider from 'react-awesome-slider';
 import withAutoplay from 'react-awesome-slider/dist/autoplay';
