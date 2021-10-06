@@ -7,16 +7,20 @@ import styled from "styled-components"
 
 const Container=styled.div`
     flex:1;
-    margin:5px;
-    height:50vh;
+    /* margin:5px;
+    height:60vh; */
+
+    min-width: 300px;
+    height: 350px;
     position:relative;
     display:flex;
-    align-items: center;
+    /* align-items: center;
+    justify-content: center; */
     justify-content: center;
 `
 const Image=styled.img`
-    width:80%;
-    height:80%;
+    width:75%;
+    height:75%;
     object-fit: cover;
     
 `
