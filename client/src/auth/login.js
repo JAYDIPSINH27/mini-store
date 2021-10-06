@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import loginImage from '../assets/login.svg';
 import queryString from 'query-string';
-import {setUser,setJWT} from '../redux/helpers/authHelper'
+import {setUser,setJWT} from '../redux/helpers/authHelpers'
 
 const Login = (props) => {
 
