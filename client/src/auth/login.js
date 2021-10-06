@@ -6,11 +6,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import loginImage from '../assets/login.svg';
 import queryString from 'query-string';
+import {setUser,setJWT} from '../redux/helpers/authHelpers'
 
 const Login = (props) => {
 
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [email, setEmail] = useState("sugarbae051@gmail.com");
+  const [password, setPassword] = useState("hello123");
   const history = new useHistory();
   const cookies = new Cookies();
 
@@ -53,6 +54,8 @@ const Login = (props) => {
     })
     .then((res) => res.data)
     .then(data => {
+        setUser(data.data)
+        setJWT(data.token)
         cookies.set('jwt', data.token , { path: '/' })
         history.push("/home");
     })

@@ -4,7 +4,7 @@ const {orderPopulate} = require('../utils/populateObjects')
 const {v4 : uuid} = require('uuid')
 const User = require('../models/User')
 
-const currency = process.env.STRIPE_CURRENCY.toLocaleLowerCase()
+const currency = process.env.STRIPE_CURRENCY.toLowerCase()
 
 module.exports = {
 
