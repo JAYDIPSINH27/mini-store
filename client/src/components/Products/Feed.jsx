@@ -49,14 +49,9 @@ function Feed() {
                         <Product product={productValue}/>
                     </Grid>
                 ))}
-                {products.map((productValue) => (
-                    <Grid item sm={12} md={6} lg={4} key={productValue.id}> 
-                        <Product product={productValue}/>
-                    </Grid>
-                ))}
             </Grid>
 
-            {/* <Typography>hello</Typography> */}
+            
         </Container>
     )
 }

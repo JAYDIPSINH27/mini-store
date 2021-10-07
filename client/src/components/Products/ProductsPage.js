@@ -5,18 +5,11 @@
 import { Grid, makeStyles } from '@material-ui/core'
 import React from 'react'
 import Leftbar from './Leftbar'
-import Rightbar from './Rightbar'
 import Navbar from './Navbar'
 import Feed from './Feed'
-import Add from './Add'
-import axios from 'axios'
 
 const UseStyles = makeStyles((theme) => ({
-    right: {
-        [theme.breakpoints.down("sm")]: {
-            display: "none",
-        },
-    },
+    
 }))
 
 function ProductsPage() {
@@ -32,11 +25,8 @@ function ProductsPage() {
                 <Grid item sm={10} xs={10}>
                     <Feed />
                 </Grid>
-                {/* <Grid item className={classes.right}>
-                    <Rightbar />
-                </Grid> */}
             </Grid>
-            {/* <Add /> */}
+            
         </div>
     )
 }

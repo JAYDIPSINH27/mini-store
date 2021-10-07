@@ -9,8 +9,9 @@ import HomePage from "./components/Homepage/HomePage";
 import { PaymentTest } from "./components/stripe";
 import Layout from "./components/Layout";
 import StoreList from "./components/shop/StoreList";
-import Feed from "./components/Feed"
+import Feed from "./components/Products/Feed"
 import Shop from "./components/shop/Shop";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
               <Route path="/products" component={Feed} />
               <Route path="/stores" component={StoreList} />
               <Route path="/store/:id" component={Shop} />
+
+              <Route path="/dashboard" component={Dashboard} />
             </Switch>
           </Layout>
         </Switch>
