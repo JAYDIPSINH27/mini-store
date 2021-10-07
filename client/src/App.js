@@ -8,7 +8,10 @@ import ChangePassword from './auth/changePassword';
 import Products from "./components/ProductsPage";
 import HomePage from "./components/Homepage/HomePage";
 import { PaymentTest } from "./components/stripe";
-
+import Layout from "./components/Layout";
+import StoreList from "./components/shop/StoreList";
+import Feed from "./components/Feed"
+import Shop from "./components/shop/Shop";
 
 function App() {
   return (
@@ -22,8 +25,13 @@ function App() {
           <Route path="/home" component={Home} />
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/change-password" component={ChangePassword} />
-
-          <Route path="/products" component={Products} />
+          <Layout>
+            <Switch>
+              <Route path="/products" component={Feed} />
+              <Route path="/stores" component={StoreList} />
+              <Route path="/store/:id" component={Shop} />
+            </Switch>
+          </Layout>
         </Switch>
       </BrowserRouter>
     </div>

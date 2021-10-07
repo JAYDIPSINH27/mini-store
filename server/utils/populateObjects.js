@@ -27,11 +27,17 @@ module.exports = {
             path : 'products',
             populate: {
                 path: 'productId',
-                select: 'name description category',
-                populate : {
-                    path : 'category',
-                    select : 'name'
-                }
+                select: 'name description category images',
+                populate : [
+                    {
+                        path : 'category',
+                        select : 'name'
+                    },
+                    {
+                        path : 'images',
+                        select : 'url'
+                    }
+                ]
             } 
         },
         {
