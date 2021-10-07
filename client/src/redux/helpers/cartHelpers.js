@@ -5,6 +5,10 @@ export const getCart = () => {
     return store.getState().cartReducer
 }
 
+export const getCartLength = () => {
+    return store.getState().cartReducer.cart.length
+}
+
 export const addToCart = (product,quantity) => {
     let existingProduct = getCart().cart.find(p => p.id === product.id)
     if(existingProduct !== undefined) return

@@ -1,11 +1,10 @@
 import "./App.css";
-import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Register from "./auth/register";
 import Login from "./auth/login";
 import Home from "./Screens/Home";
 import ForgotPassword from "./auth/forgotPassword";
 import ChangePassword from './auth/changePassword';
-import Products from "./components/ProductsPage";
 import HomePage from "./components/Homepage/HomePage";
 import { PaymentTest } from "./components/stripe";
 import Layout from "./components/Layout";

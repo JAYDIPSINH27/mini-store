@@ -36,7 +36,6 @@ passport.use(
     'admin',
     new JWTStrategy(jwtOptions,(jwt_payload,done) => {
         try{
-            console.log(jwt_payload)
             User.findOne({email : jwt_payload.id})
             .then(user => {
                 if(user && user.admin){
