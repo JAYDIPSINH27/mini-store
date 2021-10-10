@@ -3,10 +3,12 @@
 // @access    Private/Public different for both
 
 import React, { useState } from 'react'
-import Cookies from 'universal-cookie';
 import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography,Button } from '@material-ui/core'
-import {Cancel, LocalMall, Mail,  Person, Search} from '@material-ui/icons'
+import {Cancel, LocalMall, Mail,  Person, Search,ExitToApp} from '@material-ui/icons'
 import { alpha } from '@material-ui/core'
+import { useHistory } from "react-router-dom";
+import Cookies from 'universal-cookie';
+import { getUser,logOut } from '../redux/helpers/authHelpers';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -70,24 +72,40 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.common.white,
         borderColor:theme.palette.common.white,
     },
+    a:{
+        textDecoration:"none",
+        color: theme.palette.common.white,
+        '&:hover': {
+            textDecoration:"none",
+            color: theme.palette.common.white,
+            opacity:"0.9"
+        },
+    },
     
 
 }))
 
 function Navbar() {
-    const cookies = new Cookies();
     const [open, setOpen] = useState(false)
     const classes = useStyles({ open });
+    const cookies = new Cookies();
+    const history = useHistory();
+
+    const clearCookie = () => {
+        logOut()
+        cookies.remove('jwt');
+        history.push('/')
+    }
 
     if (cookies.get('jwt') !== undefined) {
         return (
             <AppBar position="fixed">
                 <Toolbar className={classes.toolbar} >
                     <Typography variant="h6" className={classes.logoLg}>
-                        Mini Mall
+                       <a href="/" className={classes.a}> Mini Mall</a>
                     </Typography>
                     <Typography variant="h6" className={classes.logoSm}>
-                        MALL
+                    <a href="/" className={classes.a}>Mall</a>
                     </Typography>
                     
                     <div className={classes.search} >
@@ -98,14 +116,19 @@ function Navbar() {
     
                     <div className={classes.icons} >
                         <Search className={classes.searchButton} onClick={() => setOpen(true)}/>
-                        <Badge badgeContent={4} color="secondary" className={classes.badge}>
+                        {/* <Badge badgeContent={4} color="secondary" className={classes.badge}>
                             <Mail />
-                        </Badge>
+                        </Badge> */}
                         <Badge badgeContent={2} color="secondary" className={classes.badge}>
                             <LocalMall />
                         </Badge>
                         <Badge color="secondary" className={classes.badge}>
                             <Person />
+                        </Badge>
+                        <Badge color="secondary" className={classes.badge}>
+                            
+                            <ExitToApp onClick={clearCookie}  className={classes.a}/>
+                            
                         </Badge>
                     </div>
                   

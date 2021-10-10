@@ -85,7 +85,7 @@ const HomeProducts = () => {
             </Info>
             {products.map(item=>(
 
-                <HomeProduct item={item} key={item.id}/>
+                <HomeProduct item={item} key={item._id}/>
 
             ))}
         </Container>

@@ -34,7 +34,7 @@ const Login = (props) => {
       toast.error(queryObj.error);
     }else if(queryObj.token){
       cookies.set('jwt', queryObj.token , { path: '/' })
-      history.push("/home");
+      history.push("/");
     }
   },[])
 
@@ -57,14 +57,14 @@ const Login = (props) => {
         setUser(data.data)
         setJWT(data.token)
         cookies.set('jwt', data.token , { path: '/' })
-        history.push("/home");
+        history.push("/");
     })
     .catch((err) => {
       toast.error(err.response.data.msg);
     });
   };
   if (cookies.get("jwt") !== undefined) {
-    history.push("/home");
+    history.push("/");
   } else {
     return (
       <>
