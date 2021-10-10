@@ -17,7 +17,7 @@ module.exports = {
 
     categoryPopulate : [
         {
-            path : 'images',
+            path : 'image',
             select : 'public_id url'
         }
     ],

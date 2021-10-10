@@ -14,13 +14,13 @@ const cartReducer = (state = initialState,action) => {
             })
         case constants.REMOVE_FROM_CART:
             return Object.assign({},state,{
-                cart : state.cart.filter(product => product.id !== action.payload.id),
+                cart : state.cart.filter(product => product._id !== action.payload.id),
                 amount : state.amount - action.payload.amount
             })
         case constants.UPDATE_CART:
             return Object.assign({},state,{
                 cart : state.cart.map(product => {
-                    if(product.id === action.payload.id){
+                    if(product._id === action.payload.id){
                         product.quantity = action.payload.quantity
                     }
                     return product

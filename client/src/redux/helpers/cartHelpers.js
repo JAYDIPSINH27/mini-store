@@ -10,7 +10,7 @@ export const getCartLength = () => {
 }
 
 export const addToCart = (product,quantity) => {
-    let existingProduct = getCart().cart.find(p => p.id === product.id)
+    let existingProduct = getCart().cart.find(p => p._id === product._id)
     if(existingProduct !== undefined) return
     product.quantity = quantity
     let payload = {
@@ -21,7 +21,7 @@ export const addToCart = (product,quantity) => {
 }
 
 export const removeFromCart = (productId) => {
-    let product = getCart().cart.find(product => product.id === productId)
+    let product = getCart().cart.find(product => product._id === productId)
     if(product === undefined) return
     let payload = {
         id : productId,
@@ -31,7 +31,7 @@ export const removeFromCart = (productId) => {
 }
 
 export const updateCart = (productId,quantity) => {
-    let product = getCart().cart.find(product => product.id === productId)
+    let product = getCart().cart.find(product => product._id === productId)
     if(product === undefined) return
     let payload = {
         id : productId,
