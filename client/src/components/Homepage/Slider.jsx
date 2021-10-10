@@ -120,7 +120,7 @@ const Slider = () => {
                 <InfoContainer>
                     <Title>{item.title}</Title>
                     <Desc>{item.desc}</Desc>
-                    <Button href="/products">Shop Now</Button>
+                    <Button href="/stores">Shop Now</Button>
                 </InfoContainer>
                     </Slide>
 

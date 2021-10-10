@@ -2,7 +2,7 @@
 // @route     Used in all Routes
 // @access    Private/Public different for both
 
-import React, { useState } from 'react'
+import React, { useEffect,useState } from 'react'
 import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography,Button } from '@material-ui/core'
 import {Cancel, LocalMall, Mail,  Person, Search,ExitToApp} from '@material-ui/icons'
 import { alpha } from '@material-ui/core'
@@ -91,6 +91,8 @@ function Navbar() {
     const cookies = new Cookies();
     const history = useHistory();
 
+    const [user,setUser] = useState(null);
+    useEffect(()=>{getUser()},[user])
     const clearCookie = () => {
         logOut()
         cookies.remove('jwt');
@@ -124,6 +126,7 @@ function Navbar() {
                         </Badge>
                         <Badge color="secondary" className={classes.badge}>
                             <Person />
+                            <h3>{console.log(getUser().name)}</h3>
                         </Badge>
                         <Badge color="secondary" className={classes.badge}>
                             
@@ -141,10 +144,10 @@ function Navbar() {
             <AppBar position="fixed">
                 <Toolbar className={classes.toolbar} >
                     <Typography variant="h6" className={classes.logoLg}>
-                        Mini Mall
+                    <a href="/" className={classes.a}> Mini Mall</a>
                     </Typography>
                     <Typography variant="h6" className={classes.logoSm}>
-                        MALL
+                    <a href="/" className={classes.a}>Mall</a>
                     </Typography>
                     
                     <div className={classes.search} >
