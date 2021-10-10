@@ -49,12 +49,21 @@ const useStyles = makeStyles((theme) => ({
     },
     a:{
         textDecoration:"none",
+
         color: "#555",
         '&:hover': {
             textDecoration:"none",
             color: "#555",
             opacity:"0.9"
         },
+        [theme.breakpoints.down("sm")]: {
+            color: theme.palette.common.white,
+            '&:hover': {
+                textDecoration:"none",
+                color: theme.palette.common.white,
+                opacity:"0.9"
+            },
+        }
     },
    
 }))
