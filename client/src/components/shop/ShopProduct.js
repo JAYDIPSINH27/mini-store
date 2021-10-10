@@ -12,6 +12,7 @@ import ReactStars from "react-rating-stars-component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import {getCart, addToCart} from "../../redux/helpers/cartHelpers";
 
 const useStyles = makeStyles(() => ({
   products: {
@@ -37,6 +38,11 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     justifyContent: "center",
   },
+  addToCartButton : {
+    '&:hover' : {
+      color : "white"
+    }
+  }
 }));
 
 const ShopProduct = (props) => {
@@ -49,6 +55,12 @@ const ShopProduct = (props) => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  const addCart = (product, quantity) => {
+    addToCart(product, quantity);
+    const cart = getCart();
+    console.log(cart);
+  }
 
   return (
     <>
@@ -115,11 +127,14 @@ const ShopProduct = (props) => {
                   </CardContent>
                   <CardActions className={classes.cartButton}>
                     <Button
-                      href="#"
                       size="small"
                       fullWidth
                       color="primary"
                       variant="contained"
+                      className={classes.addToCartButton}
+                      onClick={() => {
+                        addCart(product, 1);
+                      }}
                     >
                       Add To Cart
                     </Button>
