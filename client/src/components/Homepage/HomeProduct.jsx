@@ -55,7 +55,7 @@ object-fit: cover;
 `
 
 
-const Icon=styled.button`
+const Icon=styled.a`
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -80,14 +80,14 @@ const HomeProduct = ({item}) => {
             <Circle />
             <Image src={item.images[0].url} />
             <Info>
-                <Icon>
+                <Icon href="/products">
                     <ShoppingCartOutlined />
 
                 </Icon>
-                <Icon>
-                    <SearchOutlined />
+                <Icon href="/products">
+                    <SearchOutlined  />
                 </Icon>
-                <Icon>
+                <Icon href="/products">
                     <FavoriteBorderOutlined />
                 </Icon>
 

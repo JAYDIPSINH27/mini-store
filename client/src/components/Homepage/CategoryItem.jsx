@@ -19,15 +19,16 @@ const Container=styled.div`
     justify-content: center;
 `
 const Image=styled.img`
-    width:75%;
+    /* width:75%; */
+    min-width: 150px;
     height:75%;
     object-fit: cover;
-    opacity: 0.6;
+    opacity: 0.4;
     
 `
 const Info=styled.div`
     position: absolute;
-    top:0;
+    top:50px;
     left:0;
     width:100%;
     height:100%;
@@ -35,6 +36,7 @@ const Info=styled.div`
     flex-direction: column;
     align-items:center;
     justify-items: center;
+    z-index: 3;
 `
 const Title=styled.h2`
     color:black;
