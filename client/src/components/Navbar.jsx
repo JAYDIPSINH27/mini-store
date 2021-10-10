@@ -126,12 +126,12 @@ function Navbar() {
                             <Storefront/>
                             </a>
                         </Badge>
-                        <Badge badgeContent={2} color="secondary" className={classes.badge}>
-                            <LocalMall />
-                        </Badge>
                         <Badge color="secondary" className={classes.badge}>
                             <Person />
-                            <h3>{console.log(getUser().name)}</h3>
+                            <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
+                        </Badge>
+                        <Badge badgeContent={2} color="secondary" className={classes.badge}>
+                            <LocalMall />
                         </Badge>
                         <Badge color="secondary" className={classes.badge}>
                             <ExitToApp onClick={clearCookie}  className={classes.a}/>
