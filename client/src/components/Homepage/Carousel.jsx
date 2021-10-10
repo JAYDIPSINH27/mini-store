@@ -7,15 +7,15 @@ import AwesomeSlider from 'react-awesome-slider';
 import withAutoplay from 'react-awesome-slider/dist/autoplay';
 import 'react-awesome-slider/dist/styles.css';
 import styled from "styled-components"
-import Home1 from '../../assets/Home1.jpg'
-import Home2 from '../../assets/Home2.jpg'
-import Home3 from '../../assets/Home3.jpg'
+import Caro1 from '../../assets/Caro1.jpg'
+import Caro2 from '../../assets/Caro2.jpg'
+import Caro3 from '../../assets/Caro3.jpg'
 
 
 const Container = styled.div`
-    padding:2rem 0rem;
+    padding:0.5rem 0rem;
     width:100%;
-    height:90vh;
+    height:80%;
     display:flex;
     position:relative;
     /* overflow:hidden; */
@@ -33,11 +33,13 @@ const Carousel = () => {
                 cancelOnInteraction={true} // should stop playing on user interaction
                 interval={2000}
                 mobileTouch={true}
+                fillparent={true}
+                
                
             >
-                <div data-src={Home1}/>
-                <div data-src={Home2} />
-                <div data-src={Home3} />
+                <div data-src={Caro2}/>
+                <div data-src={Caro1} />
+                <div data-src={Caro3} />
             </AutoplaySlider>
         </Container>
     )
