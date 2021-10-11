@@ -34,7 +34,8 @@ function Product(props) {
             <CardActionArea>
                 <CardMedia 
                     className={classes.media} 
-                    image="https://images.pexels.com/photos/7319337/pexels-photo-7319337.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+                    // image="https://images.pexels.com/photos/7319337/pexels-photo-7319337.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+                    image={props.product.images[0].url}
                     title={props.product.name}    
                     />
             </CardActionArea>
