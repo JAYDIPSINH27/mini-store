@@ -9,6 +9,7 @@ import { alpha } from '@material-ui/core'
 import { useHistory } from "react-router-dom";
 import Cookies from 'universal-cookie';
 import { getUser,logOut } from '../redux/helpers/authHelpers';
+import { getCartLength } from '../redux/helpers/cartHelpers';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -130,7 +131,7 @@ function Navbar() {
                             <Person />
                             <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
                         </Badge>
-                        <Badge badgeContent={2} color="secondary" className={classes.badge}>
+                        <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}>
                         <a href="/cart" className={classes.a} >
                             <LocalMall />
                         </a> 
