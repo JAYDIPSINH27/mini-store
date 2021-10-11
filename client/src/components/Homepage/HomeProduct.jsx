@@ -47,13 +47,15 @@ const Circle=styled.div`
 `
 
 const Image=styled.img`
-height:75%;
+height:55%;
+min-width: 150px;
 z-index: 2;
+object-fit: cover;
 
 `
 
 
-const Icon=styled.button`
+const Icon=styled.a`
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -76,16 +78,16 @@ const HomeProduct = ({item}) => {
     return (
         <Container>
             <Circle />
-            <Image src={item.img} />
+            <Image src={item.images[0].url} />
             <Info>
-                <Icon>
+                <Icon href="/products">
                     <ShoppingCartOutlined />
 
                 </Icon>
-                <Icon>
-                    <SearchOutlined />
+                <Icon href="/products">
+                    <SearchOutlined  />
                 </Icon>
-                <Icon>
+                <Icon href="/products">
                     <FavoriteBorderOutlined />
                 </Icon>
 

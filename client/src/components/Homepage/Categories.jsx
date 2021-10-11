@@ -6,6 +6,7 @@ import React,{useState,useEffect} from 'react'
 import styled from "styled-components"
 import axios from 'axios';
 import CategoryItem from './CategoryItem'
+import { Category } from '@material-ui/icons'
 
 const Container=styled.div`
     display:flex;
@@ -13,7 +14,24 @@ const Container=styled.div`
     justify-content:space-between;
     flex-wrap: wrap;
 `
+const Info=styled.div`
+   
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-items: center;
+`
+const Title=styled.h2`
+    color:black;
+    margin-bottom:20px;
+    align-items: center;
+    justify-content: center;
 
+`
 
 const Categories = () => {
 
@@ -42,6 +60,11 @@ const Categories = () => {
 
     return (
         <Container>
+
+            <Info>
+                <Title><Category/>&nbsp;Categories</Title>
+            </Info>
+
             {categories.map(item=>(
                 <CategoryItem item={item} key={item._id} />
             ))}

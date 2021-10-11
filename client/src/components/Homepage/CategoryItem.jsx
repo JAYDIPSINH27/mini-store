@@ -19,14 +19,16 @@ const Container=styled.div`
     justify-content: center;
 `
 const Image=styled.img`
-    width:75%;
+    /* width:75%; */
+    min-width: 150px;
     height:75%;
     object-fit: cover;
+    opacity: 0.4;
     
 `
 const Info=styled.div`
     position: absolute;
-    top:0;
+    top:50px;
     left:0;
     width:100%;
     height:100%;
@@ -34,9 +36,10 @@ const Info=styled.div`
     flex-direction: column;
     align-items:center;
     justify-items: center;
+    z-index: 3;
 `
 const Title=styled.h2`
-    color:white;
+    color:black;
     margin-bottom:20px;
     align-items: center;
     justify-content: center;
@@ -45,11 +48,11 @@ const Title=styled.h2`
 const Button=styled.a`
     text-decoration:none;
     padding:10px;
-    font-size:20px;
+    font-size:15px;
     // background-color:transparent;
-    // cursor:pointer ;
-    background-color:white;
-    color: grey;
+    cursor:pointer ;
+    background-color:#EB9800;
+    color: white;
     font-weight:bold;
     border-radius:5px;
     cursor:pointer;
@@ -62,10 +65,11 @@ const Button=styled.a`
 const CategoryItem = ({item}) => {
     return (
         <Container>
-            <Image src="https://images.pexels.com/photos/7319337/pexels-photo-7319337.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" />
+            {/* <Image src="https://images.pexels.com/photos/7319337/pexels-photo-7319337.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" /> */}
+            <Image src={item.image.url} />
             <Info>
                 <Title>{item.name}</Title>
-                <Button href="/products">Shop Now </Button>
+                <Button href="/products">View More</Button>
             </Info>    
         </Container>
     )

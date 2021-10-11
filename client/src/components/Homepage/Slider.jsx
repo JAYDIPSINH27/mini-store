@@ -36,8 +36,9 @@ const Arrow = styled.div`
 `
 const Wrapper=styled.div`
     height:100%;
+    width:auto;
     display:flex;
-    transition: all 1.5s ease;
+    transition: all 2s ease;
     transform:translateX(${props=>props.slideIndex * -100}vw);
 `
 const Slide=styled.div`
@@ -119,7 +120,7 @@ const Slider = () => {
                 <InfoContainer>
                     <Title>{item.title}</Title>
                     <Desc>{item.desc}</Desc>
-                    <Button href="/products">Shop Now</Button>
+                    <Button href="/stores">Shop Now</Button>
                 </InfoContainer>
                     </Slide>
 

@@ -37,7 +37,7 @@ const ForgotPassword = () => {
   };
 
   if (cookies.get("jwt") !== undefined) {
-    history.push("/home");
+    history.push("/");
   } else {
     return (
       <>
