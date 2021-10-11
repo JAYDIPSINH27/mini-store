@@ -8,6 +8,7 @@ const { createToken } = require('../utils/createTokens');
 const ActivationToken = require('../models/ActivationToken');
 const PasswordToken = require('../models/PasswordToken');
 const {urlGoogle,getGoogleEmailFromCode} = require('../utils/googleClient')
+const {deleteImages} = require('../utils/multipleImageOperations')
 
 const redirectURL = process.env.REDIRECT_URL
 const frontendURL = process.env.FRONTEND_URL
@@ -230,7 +231,48 @@ module.exports = {
     // @access    Private
 
     updateUser : async (req,res) => {
-        console.log((req,res))
+        try{
+        if(req.user){
+            let user = await User.findById(req.user._id)
+            if(!user){
+                return res.status(400).json({
+                    err : true,
+                    data : "Could not get user."
+                })
+            }
+            if(req.body.addresses){
+                user.addAddress(req.body.addresses)
+            }
+            if(req.body.name){
+                user.name = req.body.name
+            }
+            if(req.body.image){
+                await deleteImages([user.image])
+                let image = new Image()
+                let response = await image.upload(user._id,req.body.image,'User')
+                if(response){
+                    user.image = response
+                }
+            }
+            await user.save()
+            let data = user._doc
+            delete data["hashed_password"]
+            return res.status(200).json({
+                err : false,
+                data
+            })
+        }else{
+            return res.status(400).json({
+                err : true,
+                msg : "Could not get user."
+            })
+        }
+        }catch(error){
+            return res.status(400).json({
+                err: true,
+                msg: getError(error)
+            })
+        }
     },
 
     // @desc      Forgot Password

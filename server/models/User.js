@@ -98,8 +98,8 @@ UserSchema.methods = {
     addItem : function(item){
         this.history.push(item)
     },
-    addAddress : function(address){
-        this.addresses.push(address)
+    addAddress : function(addresses){
+        this.addresses.push(...addresses)
     },
     isActive : function(){
         return this.active
