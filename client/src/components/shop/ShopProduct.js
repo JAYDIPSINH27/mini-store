@@ -60,10 +60,11 @@ const ShopProduct = (props) => {
   };
 
   const checkCart = (product, quantity) => {
+    console.log(product)
     if (
       document.getElementById(product.productId._id).innerText === "REMOVE FROM CART"
     ) {
-      removeFromCart(product);
+      removeFromCart(product._id);
       document.getElementById(product.productId._id).innerText = "ADD TO CART";
     } else {
       const cart = getCart();

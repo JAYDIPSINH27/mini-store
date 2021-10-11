@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import Cookies from 'universal-cookie';
 import { getUser,logOut } from '../redux/helpers/authHelpers';
 import { getCartLength } from '../redux/helpers/cartHelpers';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -92,6 +93,8 @@ function Navbar() {
     const cookies = new Cookies();
     const history = useHistory();
 
+    const cart = useSelector((state) =>state.cartReducer.cart.length)
+
     const [user,setUser] = useState(null);
     useEffect(()=>{getUser()},[user])
     const clearCookie = () => {
@@ -131,7 +134,8 @@ function Navbar() {
                             <Person />
                             <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
                         </Badge>
-                        <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}>
+                        {/* <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}> */}
+                        <Badge badgeContent={cart} color="secondary" className={classes.badge}>
                         <a href="/cart" className={classes.a} >
                             <LocalMall />
                         </a> 
