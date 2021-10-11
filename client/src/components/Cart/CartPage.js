@@ -13,10 +13,11 @@ import { Button } from "@material-ui/core";
 import ReactStars from "react-rating-stars-component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {getCart, addToCart,removeFromCart} from "../../redux/helpers/cartHelpers";
+import {getCart, addToCart,removeFromCart,updateCart} from "../../redux/helpers/cartHelpers";
 import Slider from "react-slick";
 import { useSelector } from 'react-redux';
 import { remove } from "lodash";
+import { Add,Remove } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
   loadingDiv :{
@@ -94,6 +95,17 @@ const Stores = (props) => {
     removeFromCart(productId)
     console.log(productId)
   }
+  const addOne=(cart)=>{
+    updateCart(cart._id,cart.quantity+1)
+  }
+  const removeOne=(cart)=>{
+    if(cart.quantity===0){
+      removeFromCart(cart._id)
+    }else{
+
+      updateCart(cart._id,cart.quantity-1)
+    }
+  }
 
   return (
     <>
@@ -161,6 +173,8 @@ const Stores = (props) => {
                     </Typography>
                   </CardContent>
                   <CardActions>
+                      <Button onClick={()=>{addOne(cart)}}><Add/></Button>
+                      <Button onClick={()=>{removeOne(cart)}}><Remove/></Button>
                     <Button
                       onClick={()=>{remove(cart._id)}}
                       size="small"
