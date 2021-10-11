@@ -7,7 +7,7 @@ import React,{useState,useEffect} from 'react'
 import styled from "styled-components"
 import { slideData } from '../SlideData'
 import { mobile } from './responsive'
-
+import spinner from '../../assets/spinner.gif'
 const Container = styled.div`
     padding:5rem 0rem;
     width:100%;
@@ -38,7 +38,12 @@ const Wrapper=styled.div`
     height:100%;
     width:auto;
     display:flex;
-    transition: all 2s ease;
+    /* transition: transform 2s ease; */
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    -ms-transition: none;
+    transition: ease-in;
     transform:translateX(${props=>props.slideIndex * -100}vw);
 `
 const Slide=styled.div`
@@ -114,7 +119,7 @@ const Slider = () => {
 
                     <Slide bg={item.bg} key={item.id}>
                 <ImageContainer>
-                    <Image src={item.img} />
+                    <Image src={item.img} style={{backgroundImage:"spinner"}} />
                 </ImageContainer>
 
                 <InfoContainer>

@@ -9,6 +9,8 @@ import { alpha } from '@material-ui/core'
 import { useHistory } from "react-router-dom";
 import Cookies from 'universal-cookie';
 import { getUser,logOut } from '../redux/helpers/authHelpers';
+import { getCartLength } from '../redux/helpers/cartHelpers';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -92,12 +94,15 @@ function Navbar() {
     const history = useHistory();
 
     const [user,setUser] = useState(null);
+    const [cartlength,setcartlength] = useState(getCartLength());
     useEffect(()=>{getUser()},[user])
     const clearCookie = () => {
         logOut()
         cookies.remove('jwt');
         history.push('/')
     }
+
+    const cart = useSelector((state) =>state.cartReducer.cart.length)
 
     if (cookies.get('jwt') !== undefined) {
         return (
@@ -130,7 +135,7 @@ function Navbar() {
                             <Person />
                             <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
                         </Badge>
-                        <Badge badgeContent={2} color="secondary" className={classes.badge}>
+                        <Badge badgeContent={cart} color="secondary" className={classes.badge}>
                         <a href="/cart" className={classes.a} >
                             <LocalMall />
                         </a> 

@@ -101,7 +101,7 @@ const Stores = (props) => {
                 variant="h4"
                 component="h4"
             >
-                          Your Cart
+            Your Cart
             </Typography>
           </div>
          </Grid> 

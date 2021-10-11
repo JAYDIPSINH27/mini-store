@@ -5,21 +5,21 @@ import Home3 from '../assets/Home3.jpg'
 export const slideData=[
     {
         id:1,
-        img:Home3,
+        img:Home1,
         title:"Diwali Sale",
         desc:"Don't wait for your turn in long queues, shop at your home.",
         bg:"f5fafd",
     },
     {
         id:2,
-        img:Home2,
+        img:Home3,
         title:"Flexible Delivery",
         desc:"Choose your delivery options for every products.",
         bg:"fcf1ed",
     },
     {
         id:3,
-        img:Home1,
+        img:Home2,
         title:"Multiple Payment Options",
         desc:"Choose whether Pay online or Pay after delivery",
         bg:"fbf0f4",
