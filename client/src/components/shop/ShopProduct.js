@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
@@ -12,7 +12,12 @@ import ReactStars from "react-rating-stars-component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import {getCart, addToCart} from "../../redux/helpers/cartHelpers";
+import {
+  getCart,
+  addToCart,
+  removeFromCart,
+} from "../../redux/helpers/cartHelpers";
+import { find } from "lodash";
 
 const useStyles = makeStyles(() => ({
   products: {
@@ -29,26 +34,24 @@ const useStyles = makeStyles(() => ({
   productImage: {
     height: "200px",
     width: "300px",
-    // marginLeft: "auto",
-    // marginRight: "auto",
-    // width: "100%",
-    // height: "100%",
   },
   cartButton: {
     display: "flex",
     justifyContent: "center",
   },
-  addToCartButton : {
-    '&:hover' : {
-      color : "white"
-    }
-  }
+  addToCartButton: {
+    marginRight : "8px",
+    marginBottom : "8px",
+    "&:hover": {
+      color: "white",
+    },
+  },
 }));
 
 const ShopProduct = (props) => {
   const classes = useStyles();
   const settings = {
-    dots : true,
+    dots: true,
     fade: true,
     infinite: true,
     speed: 500,
@@ -56,11 +59,23 @@ const ShopProduct = (props) => {
     slidesToScroll: 1,
   };
 
-  const addCart = (product, quantity) => {
-    addToCart(product, quantity);
-    const cart = getCart();
-    console.log(cart);
-  }
+  const checkCart = (product, quantity) => {
+    if (
+      document.getElementById(product.productId._id).innerText === "REMOVE FROM CART"
+    ) {
+      removeFromCart(product);
+      document.getElementById(product.productId._id).innerText = "ADD TO CART";
+    } else {
+      const cart = getCart();
+      if (find(cart.cart, { productId: product.productId }) === undefined) {
+        addToCart(product, quantity);
+      } else {
+        document.getElementById(product.productId._id).innerText =
+          "REMOVE FROM CART";
+      }
+      document.getElementById(product.productId._id).innerText = "REMOVE FROM CART";
+    }
+  };
 
   return (
     <>
@@ -82,20 +97,11 @@ const ShopProduct = (props) => {
                         );
                       })}
                     </Slider>
-
-                    {/* <div className={classes.imageDiv}>
-                        <img
-                          src={product.productId.images[0].url}
-                          className={classes.productImage}
-                          alt="No image found"
-                        />
-                    </div> */}
                   </CardActionArea>
                   <CardContent>
                     <Grid container className={classes.ratingDiv}>
                       <Grid item xs={8} sm={8} md={8} lg={8}>
                         <Typography
-                          // className={classes.fontStyle}
                           variant="body1"
                         >
                           {product.productId.name}
@@ -103,7 +109,6 @@ const ShopProduct = (props) => {
                       </Grid>
                       <Grid item xs={4} sm={4} md={4} lg={4}>
                         <Typography
-                          // className={classes.fontStyle}
                           variant="body2"
                         >
                           {product.productId.category.name}
@@ -119,23 +124,38 @@ const ShopProduct = (props) => {
                     {/* <Typography
                       variant="body2"
                       color="textSecondary"
-                      component="p"
                     >
                       {product.productId.description}
                     </Typography> */}
                     <Typography variant="h5">₹ {product.price}</Typography>
                   </CardContent>
                   <CardActions className={classes.cartButton}>
+                    <p style={{display : "none"}}>
+                    {  
+                      setTimeout(() => {
+                       find(getCart().cart, { productId: product.productId }) ===
+                    undefined
+                      ? (document.getElementById(
+                          product.productId._id
+                        ).innerText = "ADD TO CART")
+                      : (document.getElementById(
+                          product.productId._id
+                        ).innerText = "REMOVE FROM CART")
+                    },0)
+                    }
+                    </p>
                     <Button
                       size="small"
                       fullWidth
                       color="primary"
                       variant="contained"
                       className={classes.addToCartButton}
+                      id={`${product.productId._id}`}
                       onClick={() => {
-                        addCart(product, 1);
+                        checkCart(product, 1);
                       }}
                     >
+                      {/* <AddIcon /> */}
                       Add To Cart
                     </Button>
                   </CardActions>

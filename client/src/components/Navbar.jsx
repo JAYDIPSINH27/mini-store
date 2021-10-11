@@ -135,7 +135,8 @@ function Navbar() {
                             <Person />
                             <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
                         </Badge>
-                        <Badge badgeContent={cart} color="secondary" className={classes.badge}>
+                        {/* <Badge badgeContent={cart} color="secondary" className={classes.badge}> */}
+                        <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}>
                         <a href="/cart" className={classes.a} >
                             <LocalMall />
                         </a> 
