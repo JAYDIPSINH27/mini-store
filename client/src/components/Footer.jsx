@@ -9,7 +9,8 @@ import { mobile } from './Homepage/responsive'
 
 const Container=styled.div`
     display:flex;
-    ${mobile({flexDirection: "column"})}
+    margin-top: 2em;
+    ${mobile({flexDirection: "column",marginTop: "1em"})}
 `
 
 const Left=styled.div`

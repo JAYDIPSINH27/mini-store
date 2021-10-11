@@ -27,10 +27,10 @@ export const addToCart = (product,quantity) => {
 }
 
 export const removeFromCart = (productId) => {
-    let product = getCart().cart.find(product => product._id === productId._id)
+    let product = getCart().cart.find(product => product._id === productId)
     if(product === undefined) return
     let payload = {
-        id : productId._id,
+        id : productId,
         amount : (product.price)*(product.quantity)
     }
     store.dispatch(actions.removeFromCart(payload))

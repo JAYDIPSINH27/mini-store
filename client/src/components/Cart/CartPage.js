@@ -13,8 +13,10 @@ import { Button } from "@material-ui/core";
 import ReactStars from "react-rating-stars-component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {getCart, addToCart} from "../../redux/helpers/cartHelpers";
+import {getCart, addToCart,removeFromCart} from "../../redux/helpers/cartHelpers";
 import Slider from "react-slick";
+import { useSelector } from 'react-redux';
+import { remove } from "lodash";
 
 const useStyles = makeStyles((theme) => ({
   loadingDiv :{
@@ -87,6 +89,12 @@ const Stores = (props) => {
     slidesToScroll: 1,
   };
   console.log(props.data);
+
+  const remove=(productId)=>{
+    removeFromCart(productId)
+    console.log(productId)
+  }
+
   return (
     <>
       <Grid container>
@@ -103,6 +111,7 @@ const Stores = (props) => {
             >
             Your Cart
             </Typography>
+            <a href="/payment">Purchase</a>
           </div>
          </Grid> 
         
@@ -151,15 +160,15 @@ const Stores = (props) => {
                       {cart.quantity}
                     </Typography>
                   </CardContent>
-                  {/* <CardActions>
+                  <CardActions>
                     <Button
-                      href={`/store/${store._id}`}
+                      onClick={()=>{remove(cart._id)}}
                       size="small"
                       color="primary"
                     >
-                      Show More
+                      Remove from Cart
                     </Button>
-                  </CardActions> */}
+                  </CardActions>
                 </Card>
               </Grid>
 
@@ -174,7 +183,6 @@ const Stores = (props) => {
 
 const CartPage = () => {
   const [stores, setStores] = useState([]);
-  const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
 
@@ -194,22 +202,24 @@ const CartPage = () => {
     getStores();
   }, []);
 
-  useEffect(() => {
-    const getCartItem = async () => {
-    //   await axios
-    //   .get("http://localhost:4000/api/v1/stores")
-    //   .then((stores) => {
-    //     setStores(stores.data.data);
-    //     setLoading(true);
-    //     console.log(stores);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    setCart(getCart())
-    }
-    getCartItem();
-  }, [cart]);
+  // useEffect(() => {
+  //   const getCartItem = async () => {
+  //   //   await axios
+  //   //   .get("http://localhost:4000/api/v1/stores")
+  //   //   .then((stores) => {
+  //   //     setStores(stores.data.data);
+  //   //     setLoading(true);
+  //   //     console.log(stores);
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     console.log(err);
+  //   //   });
+  //   setCart(getCart())
+  //   }
+  //   getCartItem();
+  // }, [cart]);
+
+  const cart = useSelector((state) =>state.cartReducer)
 
   return (
     <>
