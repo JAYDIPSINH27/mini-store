@@ -11,7 +11,6 @@ import Cookies from 'universal-cookie';
 import { getUser,logOut } from '../redux/helpers/authHelpers';
 import { getCartLength } from '../redux/helpers/cartHelpers';
 
-
 const useStyles = makeStyles((theme) => ({
     toolbar: {
         display: "flex",
@@ -94,14 +93,12 @@ function Navbar() {
     const history = useHistory();
 
     const [user,setUser] = useState(null);
-    const [cartlength,setcartlength] = useState(getCartLength());
     useEffect(()=>{getUser()},[user])
     const clearCookie = () => {
         logOut()
         cookies.remove('jwt');
         history.push('/')
     }
-
 
     if (cookies.get('jwt') !== undefined) {
         return (
@@ -134,7 +131,6 @@ function Navbar() {
                             <Person />
                             <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
                         </Badge>
-                        {/* <Badge badgeContent={2} color="secondary" className={classes.badge}> */}
                         <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}>
                         <a href="/cart" className={classes.a} >
                             <LocalMall />
