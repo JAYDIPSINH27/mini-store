@@ -131,7 +131,9 @@ function Navbar() {
                             <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
                         </Badge>
                         <Badge badgeContent={2} color="secondary" className={classes.badge}>
+                        <a href="/cart" className={classes.a} >
                             <LocalMall />
+                        </a> 
                         </Badge>
                         <Badge color="secondary" className={classes.badge}>
                             <ExitToApp onClick={clearCookie}  className={classes.a}/>
