@@ -7,6 +7,7 @@ import styled from "styled-components"
 import axios from 'axios';
 import CategoryItem from './CategoryItem'
 import { Category } from '@material-ui/icons'
+import logo from "../../assets/shopping.gif";
 
 const Container=styled.div`
     display:flex;
@@ -36,6 +37,7 @@ const Title=styled.h2`
 const Categories = () => {
 
     const [categories, setCategory] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     //get the category details
     useEffect(() => {
@@ -46,6 +48,7 @@ const Categories = () => {
           })
           .then((res) => {
             setCategory(res.data.data)
+            setLoading(true)
             
           })
           .catch((err) => {
@@ -65,9 +68,16 @@ const Categories = () => {
                 <Title><Category/>&nbsp;Categories</Title>
             </Info>
 
-            {categories.map(item=>(
+          {loading
+            ?
+            (categories.map(item=>(
                 <CategoryItem item={item} key={item._id} />
-            ))}
+            )))
+            :
+            (
+              <img src={logo} alt="loading..." width="300px" />
+            )    
+          }
         </Container>
     )
 }

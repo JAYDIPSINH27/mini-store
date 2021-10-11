@@ -32,7 +32,6 @@ const UseStyles = makeStyles((theme) => ({
 const HomePage = () => {
 
     const classes = UseStyles({  })
-
     return (
         <div>
         

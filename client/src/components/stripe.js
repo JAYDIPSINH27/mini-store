@@ -2,11 +2,24 @@
 // @route     localhost:3000/test
 // @access    Private/Public
 
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import Stripe from 'react-stripe-checkout'
+import {getCart, addToCart,removeFromCart} from "../redux/helpers/cartHelpers";
+import { getUser,logOut } from '../redux/helpers/authHelpers';
 
 export const PaymentTest = () => {
+    const [cart, setCart] = useState([]);
+    const user=getUser()
+    useEffect(() => {
+        const getCartItem = async () => {
+        setCart(getCart())
+        }
+        getCartItem();
+      }, [cart]);
+
+      console.log(cart);
+      console.log(user);
 
     const tokenHandler = (token) => {
         axios({
@@ -16,27 +29,20 @@ export const PaymentTest = () => {
                 token,
                 cart: {
                     products : [
-                        {
-                            productId: '6111fefe5b2b6850d822a193',
-                            quantity : 5
-                        },
-                        {
-                            productId: '6111fefe5b2b6850d822a193',
-                            quantity : 6
-                        }
+                        cart.cart
                     ],
-                    amount : 100,
+                    amount : cart.amount,
                 },
                 user:{
-                    id: '614e196de6874e38487acb55',
-                    email: 'sample@gmail.com',
-                    name: "Test",
+                    id: user._id,
+                    email: user.email,
+                    name: user.name,
                     address: {
-                        location: 'Location',
-                        landmark: 'LandMark',
-                        pincode: '0000000',
-                        city: 'City',
-                        state: 'State'
+                        location: user.addresses[0].location,
+                        // landmark: user.addresses[0].location,
+                        pincode: user.addresses[0].pincode,
+                        city: user.addresses[0].city,
+                        state:user.addresses[0].state
                     }
                 }
             }

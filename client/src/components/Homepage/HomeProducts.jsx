@@ -8,6 +8,7 @@ import styled from 'styled-components'
 // import { popularProducts } from '../SlideData'
 import HomeProduct from './HomeProduct'
 import { TrendingUp } from '@material-ui/icons'
+import logo from "../../assets/shopping.gif";
 
 const Container=styled.div`
     padding: 20px;
@@ -55,7 +56,7 @@ const Button=styled.a`
 const HomeProducts = () => {
 
     const [products, setProducts] = useState([]);
-
+    const [loading, setLoading] = useState(false);
     //get the products details
     useEffect(() => {
         const getProducts = async ()=>{
@@ -65,7 +66,7 @@ const HomeProducts = () => {
           })
           .then((res) => {
             setProducts(res.data.data)
-            
+            setLoading(true)
           })
           .catch((err) => {
             console.log(err)
@@ -83,11 +84,16 @@ const HomeProducts = () => {
                 <Title><TrendingUp />&nbsp;Trending Products</Title>
                 <Button href="/products">View More</Button>
             </Info>
-            {products.map(item=>(
+            {loading?
+            (products.map(item=>(
 
                 <HomeProduct item={item} key={item._id}/>
 
-            ))}
+            )))
+            :
+            (
+              <img src={logo} alt="loading..." width="300px" />
+            )}
         </Container>
           
     )

@@ -6,6 +6,7 @@ import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Product from './Product';
+import logo from "../../assets/shopping.gif";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 function Feed() {
     const classes = useStyles({  })
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     //get the products details
     useEffect(() => {
@@ -27,7 +29,7 @@ function Feed() {
           })
           .then((res) => {
             setProducts(res.data.data)
-            
+            setLoading(true);
           })
           .catch((err) => {
             console.log(err)
@@ -43,12 +45,17 @@ function Feed() {
 
     return (
         <Container className={classes.container}>
+          
             <Grid container spacing={4}>
-                {products.map((productValue) => (
+              {loading?
+                (products.map((productValue) => (
                     <Grid item sm={12} md={6} lg={4} key={productValue.id}> 
                         <Product product={productValue}/>
                     </Grid>
-                ))}
+                )))
+                :
+                ( <img src={logo} alt="loading..." width="300px" />)
+                }
             </Grid>
 
             
