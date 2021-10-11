@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import StoreList from "./components/shop/StoreList";
 import Feed from "./components/Products/Feed";
 import Shop from "./components/shop/Shop";
+import CartPage from "./components/Cart/CartPage"
 import Dashboard from "./components/Dashboard/Dashboard";
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -34,7 +35,8 @@ function App() {
                 <Route path="/products" component={Feed} />
                 <Route path="/stores" component={StoreList} />
                 <Route path="/store/:id" component={Shop} />
-
+                <Route path="/store/:id" component={Shop} />
+                <Route path="/cart" component={CartPage} />
                 <Route path="/dashboard" component={Dashboard} />
               </Switch>
             </Layout>

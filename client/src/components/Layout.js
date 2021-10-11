@@ -2,6 +2,7 @@ import { Grid, makeStyles } from '@material-ui/core'
 import React from 'react'
 import Leftbar from './Leftbar'
 import Navbar from './Navbar'
+import Footer from './Footer'
 
 const UseStyles = makeStyles((theme) => ({
     
@@ -21,6 +22,7 @@ const Layout = ({children}) => {
                     {children}
                 </Grid>
             </Grid>
+            <Footer />
         </div>
     )
 }
