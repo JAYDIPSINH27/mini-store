@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
   },
   fontStyle: {
-    fontFamily: "Noto Serif",
+    // fontFamily: "Noto Serif",
   },
   carosoulDiv: {
     width: "100%",
@@ -70,22 +70,31 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    margin: "20px",
+    marginTop: "4rem",
+    marginBottom: "1rem",
+    display: "flex",
+  },
+  Text: {
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    marginTop: "1rem",
+    marginBottom: "1rem",
     display: "flex",
   },
   a: {
     textDecoration: "none",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor:"#EB9800",
     textAlign: "center",
     border: "2 ",
     fontSize: "20px",
     // color: "#555",
-    color: "black",
+    color: "white",
     "&:hover": {
       textDecoration: "none",
-      color: "#555",
-      opacity: "0.9",
+      color: "black",
     },
     [theme.breakpoints.down("sm")]: {
       color: theme.palette.common.white,
@@ -133,7 +142,7 @@ const Stores = (props) => {
         <Grid item></Grid>
       </Grid>
       <Container>
-        <Grid container>
+        <Grid item>
           <div className={classes.Title}>
             <Typography
               className={classes.fontStyle}
@@ -146,24 +155,28 @@ const Stores = (props) => {
           </div>
         </Grid>
 
-        <Grid container>
-          <div className={classes.Title}>
+        <Grid item>
+          <div className={classes.Text}>
             <Typography
               className={classes.fontStyle}
               gutterBottom
               variant="h4"
               component="h4"
             >
-              Total Amount :{props.data.amount}
+              Total Amount :{props.data.amount}₹
             </Typography>
-            <Button
-              className={classes.a}
-              href="/payment"
-              style={{ marginLeft: "20px" }}
-            >
-              Purchase
-            </Button>
-          </div>
+            </div>
+            <div className={classes.Text}>
+            
+              <Button
+                className={classes.a}
+                href="/payment"
+                
+              >
+                PlaceOrder
+              </Button>
+            
+            </div>
         </Grid>
 
         <Grid container spacing={5}>
@@ -217,7 +230,7 @@ const Stores = (props) => {
                       component="p"
                     >
                       Price:
-                      {cart.price}
+                      {cart.price}₹
                     </Typography>
                   </CardContent>
                   <CardActions>

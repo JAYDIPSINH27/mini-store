@@ -5,21 +5,135 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import Stripe from 'react-stripe-checkout'
-import {getCart, addToCart,removeFromCart} from "../redux/helpers/cartHelpers";
+import {clearCart} from "../redux/helpers/cartHelpers";
 import { getUser,logOut } from '../redux/helpers/authHelpers';
+import { useSelector } from "react-redux";
+import { makeStyles} from "@material-ui/core";
+import { Container,Grid } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Home1 from "../assets/Caro2.jpg"
+
+const useStyles = makeStyles((theme) => ({
+    loadingDiv: {
+      // border : "2px solid black",
+      width: "100%",
+    },
+    loadingImage: {
+      margin: "auto",
+    },
+    imageDiv: {
+      display: "flex",
+      minWidth: "150px",
+      height: "180px",
+      backgroundColor: "yellow",
+    },
+    storeImage: {
+      marginLeft: "auto",
+      marginRight: "auto",
+      width: "100%",
+      height: "100%",
+    },
+    search: {
+      margin: "20px",
+    },
+    formControl: {
+      margin: "20px",
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+    sortSearch: {
+      display: "flex",
+      justifyContent: "space-between",
+    },
+    ratingDiv: {
+      justifyContent: "space-between",
+    },
+    fontStyle: {
+    //   fontFamily: "Noto Serif",
+    },
+    carosoulDiv: {
+      width: "100%",
+      height: "400px",
+      marginBottom: "20px",
+    },
+    container: {
+      paddingTop: theme.spacing(10),
+      paddingBottom: theme.spacing(2),
+    },
+    Title: {
+      alignItems: "center",
+      justifyContent: "center",
+      textAlign: "center",
+      marginTop: "5rem",
+      marginBottom: "1rem",
+      display: "flex",
+    },
+    Text: {
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        marginTop: "1rem",
+        marginBottom: "1rem",
+        display: "flex",
+      },
+    a: {
+      textDecoration: "none",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor:"#EB9800",
+      textAlign: "center",
+      border: "2 ",
+      fontSize: "20px",
+      // color: "#555",
+      color: "white",
+      "&:hover": {
+        textDecoration: "none",
+        color: "black",
+      },
+      [theme.breakpoints.down("sm")]: {
+        color: theme.palette.common.white,
+        "&:hover": {
+          textDecoration: "none",
+          color: theme.palette.common.white,
+          opacity: "0.9",
+        },
+      },
+    },
+  }));
 
 export const PaymentTest = () => {
-    const [cart, setCart] = useState([]);
+    const classes = useStyles();
+    // const [cart, setCart] = useState([]);
+    const cart = useSelector((state) => state.cartReducer);
     const user=getUser()
-    useEffect(() => {
-        const getCartItem = async () => {
-        setCart(getCart())
-        }
-        getCartItem();
-      }, [cart]);
+   
 
       console.log(cart);
       console.log(user);
+
+      const products=[]
+      cart.cart.map((prod)=>{
+            products.push({
+                productId: prod.productId._id,
+                quantity : prod.quantity
+            })
+      })
+
+      const successPayment = data => {
+        // alert('Payment Successful');
+        toast("Payment Successfull")
+        clearCart(data.data.message)
+        console.log(data)
+      };
+       
+      const errorPayment = data => {
+        alert(data.data.message);
+        console.log(data.data.message)
+      };
 
     const tokenHandler = (token) => {
         axios({
@@ -28,9 +142,10 @@ export const PaymentTest = () => {
             data: {
                 token,
                 cart: {
-                    products : [
-                        cart.cart
-                    ],
+                    products : 
+                        products
+                        
+                    ,
                     amount : cart.amount,
                 },
                 user:{
@@ -39,7 +154,7 @@ export const PaymentTest = () => {
                     name: user.name,
                     address: {
                         location: user.addresses[0].location,
-                        // landmark: user.addresses[0].location,
+                        landmark: user.addresses[0].location,
                         pincode: user.addresses[0].pincode,
                         city: user.addresses[0].city,
                         state:user.addresses[0].state
@@ -47,16 +162,64 @@ export const PaymentTest = () => {
                 }
             }
         })
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err.response.data))
+        // .then(res => console.log(token))
+        .then(successPayment)
+        // .catch(err => console.log(err.response.data))
+        .catch(errorPayment)
     }
+
+
 
     return(
         <>
-            <Stripe
+
+        <Grid container>
+        <Grid item></Grid>
+      </Grid>
+      <Container>
+      <ToastContainer />
+        <Grid item>
+          <div className={classes.Title}>
+            <Typography
+              className={classes.fontStyle}
+              gutterBottom
+              variant="h4"
+              component="h4"
+            >
+              Mini Mall
+            </Typography>
+          </div>
+          <div className={classes.Text}>
+            <Typography
+              className={classes.fontStyle}
+              gutterBottom
+              variant="h6"
+              component="h6"
+            >
+              Choose Payment Option
+            </Typography>
+          </div>
+        </Grid>
+
+        <div className={classes.Text}>
+         <Stripe
+                name="Mini Mall"
+                image={Home1}
+                description={`Payment by ${user.name}`}
+                panelLabel="Pay Total" // prepended to the amount in the bottom pay button
+                amount={cart.amount} // cents
+                currency="INR"
                 stripeKey="pk_test_51JNXGXSC9D6J4dbWboIoFAKi8SR1w4Go1pOAiO0iomrtOohP2jfYFX5iyKD6SXBB6O06RWIqfTQSHKDdV6fqiROY00Gh2dCwEs"
+                // locale="in"
+                // email={user.email}
                 token={tokenHandler}
+                ComponentClass="div"
+                // shippingAddress
+                // billingAddress={false}
+
             />
+            </div>
+      </Container>
         </>
     )
 }
