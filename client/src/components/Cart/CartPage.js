@@ -74,7 +74,30 @@ const useStyles = makeStyles((theme) => ({
     textAlign:"center",
     margin: "20px",
     display: "flex",
-   }, 
+   },
+   a:{
+    textDecoration:"none",
+    alignItems:"center",
+    justifyContent:"center",
+    textAlign:"center",
+    border: "2 ",
+    fontSize:"20px",
+    // color: "#555",
+    color: "black",
+    '&:hover': {
+        textDecoration:"none",
+        color: "#555",
+        opacity:"0.9"
+    },
+    [theme.breakpoints.down("sm")]: {
+        color: theme.palette.common.white,
+        '&:hover': {
+            textDecoration:"none",
+            color: theme.palette.common.white,
+            opacity:"0.9"
+        },
+    }
+}, 
 }));
 
 const Stores = (props) => {
@@ -123,9 +146,22 @@ const Stores = (props) => {
             >
             Your Cart
             </Typography>
-            <a href="/payment">Purchase</a>
           </div>
-         </Grid> 
+      </Grid> 
+
+      <Grid container  >
+          <div className={classes.Title}>
+          <Typography
+                className={classes.fontStyle}
+                gutterBottom
+                variant="h4"
+                component="h4"
+            >
+            Total Amount :{props.data.amount}
+            </Typography>
+            <Button className={classes.a} href="/payment" style={{marginLeft:"20px"}}>Purchase</Button>
+          </div>
+      </Grid> 
         
         <Grid container spacing={5}>
           {props.data.cart.map((cart) => {
@@ -170,6 +206,15 @@ const Stores = (props) => {
                     >
                         Quantity:
                       {cart.quantity}
+                    </Typography>
+
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                        Price:
+                      {cart.price}
                     </Typography>
                   </CardContent>
                   <CardActions>

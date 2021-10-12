@@ -13,7 +13,7 @@ import Caro3 from '../../assets/Caro3.jpg'
 
 
 const Container = styled.div`
-    padding:0.5rem 0rem;
+    padding:0.5rem 1rem;
     width:100%;
     height:80%;
     display:flex;
