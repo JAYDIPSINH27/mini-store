@@ -18,6 +18,8 @@ import {
   removeFromCart,
 } from "../../redux/helpers/cartHelpers";
 import { find } from "lodash";
+import { useHistory } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   products: {
@@ -49,6 +51,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ShopProduct = (props) => {
+  
+  const user = useSelector((state) => state.authReducer);
+  const history = useHistory();
+
   const classes = useStyles();
   const settings = {
     dots: true,
@@ -58,23 +64,26 @@ const ShopProduct = (props) => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
+ 
   const checkCart = (product, quantity) => {
-    console.log(product)
-    if (
-      document.getElementById(product.productId._id).innerText === "REMOVE FROM CART"
-    ) {
-      removeFromCart(product._id);
-      document.getElementById(product.productId._id).innerText = "ADD TO CART";
-    } else {
-      const cart = getCart();
-      if (find(cart.cart, { productId: product.productId }) === undefined) {
-        addToCart(product, quantity);
+    if (user.jwtToken !== "") {
+      if (
+        document.getElementById(product.productId._id).innerText === "REMOVE FROM CART"
+      ) {
+        removeFromCart(product._id);
+        document.getElementById(product.productId._id).innerText = "ADD TO CART";
       } else {
-        document.getElementById(product.productId._id).innerText =
-          "REMOVE FROM CART";
+        const cart = getCart();
+        if (find(cart.cart, { productId: product.productId }) === undefined) {
+          addToCart(product, quantity);
+        } else {
+          document.getElementById(product.productId._id).innerText =
+            "REMOVE FROM CART";
+        }
+        document.getElementById(product.productId._id).innerText = "REMOVE FROM CART";
       }
-      document.getElementById(product.productId._id).innerText = "REMOVE FROM CART";
+    } else {
+      history.push("/signin");
     }
   };
 

@@ -5,8 +5,8 @@
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import { ViewList, ExitToApp, Home, Storefront,} from '@material-ui/icons';
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import Cookies from 'universal-cookie';
 import { getUser,logOut } from '../redux/helpers/authHelpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,12 +70,11 @@ const useStyles = makeStyles((theme) => ({
 
 function Leftbar() {
     const classes = useStyles({  })
-    const cookies = new Cookies();
     const history = useHistory();
+    const user = useSelector((state) => state.authReducer); 
 
     const clearCookie = () => {
         logOut()
-        cookies.remove('jwt');
         history.push('/')
     }
 
@@ -91,9 +90,6 @@ function Leftbar() {
             <div className={classes.item}> 
             <a href="/products" className={classes.a}>
                 <ViewList className={classes.icon}/>
-                {/* <Typography className={classes.text}>
-                Product List 
-                </Typography> */}
                 <span className={classes.text}>Products</span>
             </a>  
             </div>
@@ -101,22 +97,17 @@ function Leftbar() {
             <div className={classes.item}> 
                 <a href="/stores" className={classes.a}>
                 <Storefront className={classes.icon}/>
-                {/* <Typography className={classes.text}>
-                Shop List
-                </Typography> */}
                 <span className={classes.text}>Stores</span>
                 </a>
             </div>
-            
-            <div className={classes.item}>
+            {
+                user.jwtToken !== "" ? <div className={classes.item}>
                 <a onClick={clearCookie} className={classes.a}> 
                 <ExitToApp className={classes.icon}/>
-                {/* <Typography className={classes.text}>
-                Logout
-                </Typography> */}
                 <span className={classes.text}>Logout</span>
                 </a>
-            </div>
+            </div> : null
+            }
 
         </Container>
     )
