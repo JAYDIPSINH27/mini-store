@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import logo from "../../assets/shopping.gif";
+import React from "react";
 import { makeStyles, alpha } from "@material-ui/core";
 import { Container } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
@@ -13,23 +11,23 @@ import { Button } from "@material-ui/core";
 import ReactStars from "react-rating-stars-component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {getCart, addToCart,removeFromCart,updateCart} from "../../redux/helpers/cartHelpers";
-import Slider from "react-slick";
-import { useSelector } from 'react-redux';
-import { remove } from "lodash";
-import { Add,Remove } from '@material-ui/icons'
+import { removeFromCart, updateCart } from "../../redux/helpers/cartHelpers";
+import { useSelector } from "react-redux";
+import { Add, Remove } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
+import DeleteIcon from "@material-ui/icons/Delete"
 
 const useStyles = makeStyles((theme) => ({
-  loadingDiv :{
+  loadingDiv: {
     // border : "2px solid black",
-    width : "100%"
+    width: "100%",
   },
   loadingImage: {
     margin: "auto",
   },
   imageDiv: {
     display: "flex",
-    minWidth:"150px",
+    minWidth: "150px",
     height: "180px",
     backgroundColor: "yellow",
   },
@@ -67,37 +65,37 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(2),
-    },
-   Title:{
-    alignItems:"center",
-    justifyContent:"center",
-    textAlign:"center",
+  },
+  Title: {
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
     margin: "20px",
     display: "flex",
-   },
-   a:{
-    textDecoration:"none",
-    alignItems:"center",
-    justifyContent:"center",
-    textAlign:"center",
+  },
+  a: {
+    textDecoration: "none",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
     border: "2 ",
-    fontSize:"20px",
+    fontSize: "20px",
     // color: "#555",
     color: "black",
-    '&:hover': {
-        textDecoration:"none",
-        color: "#555",
-        opacity:"0.9"
+    "&:hover": {
+      textDecoration: "none",
+      color: "#555",
+      opacity: "0.9",
     },
     [theme.breakpoints.down("sm")]: {
+      color: theme.palette.common.white,
+      "&:hover": {
+        textDecoration: "none",
         color: theme.palette.common.white,
-        '&:hover': {
-            textDecoration:"none",
-            color: theme.palette.common.white,
-            opacity:"0.9"
-        },
-    }
-}, 
+        opacity: "0.9",
+      },
+    },
+  },
 }));
 
 const Stores = (props) => {
@@ -114,21 +112,20 @@ const Stores = (props) => {
   };
   console.log(props.data);
 
-  const remove=(productId)=>{
-    removeFromCart(productId)
-    console.log(productId)
-  }
-  const addOne=(cart)=>{
-    updateCart(cart._id,cart.quantity+1)
-  }
-  const removeOne=(cart)=>{
-    if(cart.quantity===0){
-      removeFromCart(cart._id)
-    }else{
-
-      updateCart(cart._id,cart.quantity-1)
+  const remove = (productId) => {
+    removeFromCart(productId);
+    console.log(productId);
+  };
+  const addOne = (cart) => {
+    updateCart(cart._id, cart.quantity + 1);
+  };
+  const removeOne = (cart) => {
+    if (cart.quantity === 0) {
+      removeFromCart(cart._id);
+    } else {
+      updateCart(cart._id, cart.quantity - 1);
     }
-  }
+  };
 
   return (
     <>
@@ -136,38 +133,44 @@ const Stores = (props) => {
         <Grid item></Grid>
       </Grid>
       <Container>
-      <Grid container  >
+        <Grid container>
           <div className={classes.Title}>
-          <Typography
-                className={classes.fontStyle}
-                gutterBottom
-                variant="h4"
-                component="h4"
+            <Typography
+              className={classes.fontStyle}
+              gutterBottom
+              variant="h4"
+              component="h4"
             >
-            Your Cart
+              Your Cart
             </Typography>
           </div>
-      </Grid> 
+        </Grid>
 
-      <Grid container  >
+        <Grid container>
           <div className={classes.Title}>
-          <Typography
-                className={classes.fontStyle}
-                gutterBottom
-                variant="h4"
-                component="h4"
+            <Typography
+              className={classes.fontStyle}
+              gutterBottom
+              variant="h4"
+              component="h4"
             >
-            Total Amount :{props.data.amount}
+              Total Amount :{props.data.amount}
             </Typography>
-            <Button className={classes.a} href="/payment" style={{marginLeft:"20px"}}>Purchase</Button>
+            <Button
+              className={classes.a}
+              href="/payment"
+              style={{ marginLeft: "20px" }}
+            >
+              Purchase
+            </Button>
           </div>
-      </Grid> 
-        
+        </Grid>
+
         <Grid container spacing={5}>
           {props.data.cart.map((cart) => {
             return (
-                // <h1>{cart.id}</h1>
-                                
+              // <h1>{cart.id}</h1>
+
               <Grid item xs={12} sm={6} md={4} key={cart._id}>
                 <Card className={classes.card}>
                   <CardActionArea>
@@ -204,7 +207,7 @@ const Stores = (props) => {
                       color="textSecondary"
                       component="p"
                     >
-                        Quantity:
+                      Quantity:
                       {cart.quantity}
                     </Typography>
 
@@ -213,26 +216,42 @@ const Stores = (props) => {
                       color="textSecondary"
                       component="p"
                     >
-                        Price:
+                      Price:
                       {cart.price}
                     </Typography>
                   </CardContent>
                   <CardActions>
-                      <Button onClick={()=>{addOne(cart)}}><Add/></Button>
-                      <Button onClick={()=>{removeOne(cart)}}><Remove/></Button>
                     <Button
-                      onClick={()=>{remove(cart._id)}}
+                      onClick={() => {
+                        addOne(cart);
+                      }}
+                      variant="outlined"
+                    >
+                      <Add />
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        removeOne(cart);
+                      }}
+                      variant="outlined"
+                    >
+                      <Remove />
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        remove(cart._id);
+                      }}
                       size="small"
                       color="primary"
+                      variant="contained"
                     >
-                      Remove from Cart
+                    <DeleteIcon/>
+                      Remove
                     </Button>
                   </CardActions>
                 </Card>
               </Grid>
-
-              );
-        
+            );
           })}
         </Grid>
       </Container>
@@ -241,61 +260,25 @@ const Stores = (props) => {
 };
 
 const CartPage = () => {
-  const [stores, setStores] = useState([]);
-  const [loading, setLoading] = useState(false);
   const classes = useStyles();
+  const cart = useSelector((state) => state.cartReducer);
+  const user = useSelector((state) => state.authReducer);
+  const history = useHistory();
 
-  useEffect(() => {
-    const getStores = async () => {
-      await axios
-      .get("http://localhost:4000/api/v1/stores")
-      .then((stores) => {
-        setStores(stores.data.data);
-        setLoading(true);
-        console.log(stores);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
-    getStores();
-  }, []);
-
-  // useEffect(() => {
-  //   const getCartItem = async () => {
-  //   //   await axios
-  //   //   .get("http://localhost:4000/api/v1/stores")
-  //   //   .then((stores) => {
-  //   //     setStores(stores.data.data);
-  //   //     setLoading(true);
-  //   //     console.log(stores);
-  //   //   })
-  //   //   .catch((err) => {
-  //   //     console.log(err);
-  //   //   });
-  //   setCart(getCart())
-  //   }
-  //   getCartItem();
-  // }, [cart]);
-
-  const cart = useSelector((state) =>state.cartReducer)
-
-  return (
-    <>
-      <Container className={classes.container}>
-        <div>
-          {loading ? (
-            <Stores data={cart} />
-            //<div className={classes.loadingDiv}>
-              //<img src={logo} alt="loading..." width="300px" className={classes.loadingImage}/>
-            //</div>
-          ) : (
-            <img src={logo} alt="loading..." width="300px" />
-          )}
-        </div>
-      </Container>
-    </>
-  );
+  if (user.jwtToken !== "") {
+    return (
+      <>
+        <Container className={classes.container}>
+          <div>
+              <Stores data={cart} />
+          </div>
+        </Container>
+      </>
+    );
+  } else {
+    history.push("/signin");
+  }
+  return 0;
 };
 
 export default CartPage;

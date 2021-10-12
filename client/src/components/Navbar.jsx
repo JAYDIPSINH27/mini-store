@@ -7,9 +7,7 @@ import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography,Button } from 
 import {Cancel, LocalMall, Mail,  Person,PersonOutline, Search,ExitToApp,Storefront,ShoppingCartOutlined} from '@material-ui/icons'
 import { alpha } from '@material-ui/core'
 import { useHistory } from "react-router-dom";
-import Cookies from 'universal-cookie';
 import { getUser,logOut } from '../redux/helpers/authHelpers';
-import { getCartLength } from '../redux/helpers/cartHelpers';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
@@ -90,20 +88,19 @@ const useStyles = makeStyles((theme) => ({
 function Navbar() {
     const [open, setOpen] = useState(false)
     const classes = useStyles({ open });
-    const cookies = new Cookies();
     const history = useHistory();
 
     const cart = useSelector((state) =>state.cartReducer.cart.length)
+    const authUser = useSelector((state) => state.authReducer);
 
     const [user,setUser] = useState(null);
     useEffect(()=>{getUser()},[user])
     const clearCookie = () => {
         logOut()
-        cookies.remove('jwt');
         history.push('/')
     }
 
-    if (cookies.get('jwt') !== undefined) {
+    if (authUser.jwtToken !== "") {
         return (
             <AppBar position="fixed">
                 <Toolbar className={classes.toolbar} >

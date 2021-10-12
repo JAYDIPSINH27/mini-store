@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import loginImage from '../assets/login.svg';
 import queryString from 'query-string';
 import {setAuthDetails} from '../redux/helpers/authHelpers'
+import {useSelector} from "react-redux";
 
 const Login = (props) => {
 
@@ -14,6 +15,7 @@ const Login = (props) => {
   const [password, setPassword] = useState("hello123");
   const history = new useHistory();
   const cookies = new Cookies();
+  const user = useSelector((state) => state.authReducer)
 
   function showPassword() {
     var x = document.getElementById("password");
@@ -62,7 +64,7 @@ const Login = (props) => {
       toast.error(err.response.data.msg);
     });
   };
-  if (cookies.get("jwt") !== undefined) {
+  if (user.jwtToken !== "") {
     history.push("/");
   } else {
     return (
