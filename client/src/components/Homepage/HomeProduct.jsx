@@ -2,7 +2,7 @@
 // @route     localhost:3000/
 // @access    Private/Public
 
-import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from '@material-ui/icons'
+import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined,Storefront } from '@material-ui/icons'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -80,8 +80,8 @@ const HomeProduct = ({item}) => {
             <Circle />
             <Image src={item.images[0].url} />
             <Info>
-                <Icon href="/products">
-                    <ShoppingCartOutlined />
+                <Icon href={"/store/"+item.stores[0]._id}>
+                    <Storefront />
 
                 </Icon>
                 <Icon href="/products">

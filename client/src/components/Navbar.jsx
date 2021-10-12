@@ -4,7 +4,7 @@
 
 import React, { useEffect,useState } from 'react'
 import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography,Button } from '@material-ui/core'
-import {Cancel, LocalMall, Mail,  Person, Search,ExitToApp,Storefront} from '@material-ui/icons'
+import {Cancel, LocalMall, Mail,  Person,PersonOutline, Search,ExitToApp,Storefront,ShoppingCartOutlined} from '@material-ui/icons'
 import { alpha } from '@material-ui/core'
 import { useHistory } from "react-router-dom";
 import Cookies from 'universal-cookie';
@@ -130,18 +130,19 @@ function Navbar() {
                             <Storefront/>
                             </a>
                         </Badge>
-                        <Badge color="secondary" className={classes.badge}>
-                            <Person />
-                            <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
-                        </Badge>
+                        
                         {/* <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}> */}
                         <Badge badgeContent={cart} color="secondary" className={classes.badge}>
                         <a href="/cart" className={classes.a} >
-                            <LocalMall />
+                            <ShoppingCartOutlined />
                         </a> 
                         </Badge>
                         <Badge color="secondary" className={classes.badge}>
                             <ExitToApp onClick={clearCookie}  className={classes.a}/>
+                        </Badge>
+                        <Badge color="secondary" className={classes.badge}>
+                            <PersonOutline />
+                            <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
                         </Badge>
                     </div>
                   

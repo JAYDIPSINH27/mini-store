@@ -139,7 +139,7 @@ const Shop = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} lg={4}>
                       <ReactStars
-                        size="25"
+                        size={25}
                         value={store.rating}
                         edit={false}
                         isHalf={true}
