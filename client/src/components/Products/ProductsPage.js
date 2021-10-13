@@ -1,6 +1,6 @@
 // @desc      ProductPage Component
 // @route     localhost:3000/products
-// @access    Private/Public
+// @access    Private
 
 import { Grid, makeStyles } from '@material-ui/core'
 import React from 'react'

@@ -24,7 +24,7 @@ function App() {
         <BrowserRouter>
           <Switch>
             <Route exact path="/" component={HomePage} />
-            <Route path="/payment" component={PaymentTest} />
+            {/* <Route path="/payment" component={PaymentTest} /> */}
             <Route path="/signup" component={Register} />
             <Route path="/signin" component={Login} />
             <Route path="/home" component={Home} />
@@ -38,6 +38,8 @@ function App() {
                 <Route path="/store/:id" component={Shop} />
                 <Route path="/cart" component={CartPage} />
                 <Route path="/dashboard" component={Dashboard} />
+                <Route path="/payment" component={PaymentTest} />
+
               </Switch>
             </Layout>
           </Switch>

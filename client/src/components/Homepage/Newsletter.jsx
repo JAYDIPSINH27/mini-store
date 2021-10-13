@@ -1,6 +1,6 @@
 // @desc      NewsLetter Component
 // @route     localhost:3000/
-// @access    Private/Public
+// @access    Private
 
 import { Send } from '@material-ui/icons'
 import React from 'react'

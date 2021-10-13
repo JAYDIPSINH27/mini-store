@@ -1,3 +1,6 @@
+// @desc      Shop Component
+// @route     localhost:3000/stores
+// @access    Private
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Container, makeStyles, Grid, Typography } from "@material-ui/core";

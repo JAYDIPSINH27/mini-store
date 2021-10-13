@@ -1,6 +1,6 @@
 // @desc      HomeProducts Component
 // @route     localhost:3000/
-// @access    Private/Public
+// @access    Private
 
 import React,{useState,useEffect} from 'react'
 import axios from 'axios'

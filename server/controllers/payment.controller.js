@@ -3,7 +3,7 @@ const Order = require('../models/Order')
 const {orderPopulate} = require('../utils/populateObjects')
 const {v4 : uuid} = require('uuid')
 const User = require('../models/User')
-
+const {createToken}=require('../utils/createTokens')
 const currency = process.env.STRIPE_CURRENCY.toLowerCase()
 
 module.exports = {
@@ -105,6 +105,7 @@ module.exports = {
             const {cart,user} = req.body
 
             let order = new Order({
+                paymentId:createToken().token,
                 paymentGateway : 'cash',
                 status: 'pending',
                 email: user.email,

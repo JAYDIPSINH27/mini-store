@@ -1,6 +1,6 @@
 // @desc      HomePage Component
 // @route     localhost:3000/
-// @access    Private/Public
+// @access    Private
 
 import React from 'react'
 import Navbar from '../Navbar'

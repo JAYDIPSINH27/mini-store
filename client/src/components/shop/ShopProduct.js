@@ -1,3 +1,7 @@
+// @desc      Shop Component
+// @route     localhost:3000/store/:id
+// @access    Private
+
 import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";

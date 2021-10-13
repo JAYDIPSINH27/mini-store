@@ -1,6 +1,6 @@
 // @desc      Product Component
 // @route     localhost:3000/products
-// @access    Private/Public
+// @access    Private
 
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, makeStyles, Typography } from '@material-ui/core';
 import React from 'react'

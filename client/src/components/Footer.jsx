@@ -1,6 +1,6 @@
 // @desc      Footer Component
 // @route     Used in all Routes
-// @access    Private/Public
+// @access    Private
 
 import { Facebook, Instagram, MailOutline, Phone, Room, Twitter } from '@material-ui/icons'
 import React from 'react'
