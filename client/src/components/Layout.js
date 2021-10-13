@@ -1,3 +1,6 @@
+// @desc      Layout for Components
+// @route     used in all routes
+// @access    Private
 import { Grid, makeStyles } from '@material-ui/core'
 import React from 'react'
 import Leftbar from './Leftbar'

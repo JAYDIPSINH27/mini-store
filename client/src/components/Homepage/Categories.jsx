@@ -1,6 +1,6 @@
 // @desc      Categories Component
 // @route     localhost:3000/
-// @access    Private/Public
+// @access    Private
 
 import React,{useState,useEffect} from 'react'
 import styled from "styled-components"

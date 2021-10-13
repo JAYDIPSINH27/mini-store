@@ -1,6 +1,6 @@
 // @desc      Slider Component
 // @route     localhost:3000/
-// @access    Private/Public
+// @access    Private
 
 import { ArrowLeftOutlined, ArrowRightOutlined, NoEncryption } from '@material-ui/icons'
 import React,{useState,useEffect} from 'react'

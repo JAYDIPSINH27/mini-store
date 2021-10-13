@@ -1,3 +1,6 @@
+// @desc      CartPage Component
+// @route     localhost:3000/cart
+// @access    Private
 import React from "react";
 import { makeStyles, alpha } from "@material-ui/core";
 import { Container } from "@material-ui/core";

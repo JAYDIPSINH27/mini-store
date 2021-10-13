@@ -1,3 +1,6 @@
+// @desc      StoreList Component
+// @route     localhost:3000/stores
+// @access    Private
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import logo from "../../assets/shopping.gif";
