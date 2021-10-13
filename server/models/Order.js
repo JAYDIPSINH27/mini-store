@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
     paymentId: {
-        type: String
+        type: String,
+        unique:"ID must be unique"
     },
     paymentGateway: {
         type: String,
@@ -22,7 +23,6 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required : "Email is required",
         trim: true,
-        unique: 'Email already exists',
         match: [/.+@.+\..+/, 'Email is invalid']
     },
     userId: {

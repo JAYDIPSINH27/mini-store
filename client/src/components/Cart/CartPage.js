@@ -133,7 +133,7 @@ const Stores = (props) => {
     updateCart(cart._id, cart.quantity + 1);
   };
   const removeOne = (cart) => {
-    if (cart.quantity === 0) {
+    if (cart.quantity === 1) {
       removeFromCart(cart._id);
     } else {
       updateCart(cart._id, cart.quantity - 1);

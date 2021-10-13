@@ -274,7 +274,7 @@ export const PaymentTest = () => {
                 // billingAddress={false}
 
             >
-              <Button className={classes.pay} onClick={()=>{cashOnDelivery()}}>Pay With Card</Button>
+              <Button className={classes.pay}>Pay With Card</Button>
               </Stripe>
             
             </div>
