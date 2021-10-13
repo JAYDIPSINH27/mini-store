@@ -15,6 +15,7 @@ import CartPage from "./components/Cart/CartPage"
 import Dashboard from "./components/Dashboard/Dashboard";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import Profile from "./components/Profile/Profile";
 
 function App() {
   console.log("store : ", store);
@@ -39,7 +40,7 @@ function App() {
                 <Route path="/cart" component={CartPage} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/payment" component={PaymentTest} />
-
+                <Route path="/profile" component={Profile}/>
               </Switch>
             </Layout>
           </Switch>

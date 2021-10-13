@@ -6,7 +6,7 @@ import React, { useEffect,useState } from 'react'
 import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography,Button } from '@material-ui/core'
 import {Cancel, LocalMall, Mail,  Person,PersonOutline, Search,ExitToApp,Storefront,ShoppingCartOutlined} from '@material-ui/icons'
 import { alpha } from '@material-ui/core'
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { getUser,logOut } from '../redux/helpers/authHelpers';
 import { useSelector } from 'react-redux';
 
@@ -138,7 +138,9 @@ function Navbar() {
                             <ExitToApp onClick={clearCookie}  className={classes.a}/>
                         </Badge>
                         <Badge color="secondary" className={classes.badge}>
-                            <PersonOutline />
+                            <Link to="/profile">
+                            <PersonOutline className={classes.a}/>
+                            </Link>
                             <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
                         </Badge>
                     </div>

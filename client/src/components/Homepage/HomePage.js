@@ -1,8 +1,8 @@
 // @desc      HomePage Component
 // @route     localhost:3000/
-// @access    Private
+// @access    Private/Public
 
-import React from 'react'
+import React, {useEffect} from 'react'
 import Navbar from '../Navbar'
 import Slider from './Slider'
 import Categories from './Categories'
@@ -12,7 +12,7 @@ import Carousel from './Carousel'
 // import Announcement from './Announcement'
 import { Grid, makeStyles } from '@material-ui/core'
 import HomeProducts from './HomeProducts'
-
+import {useSelector} from "react-redux";
 
 
 const UseStyles = makeStyles((theme) => ({
@@ -30,6 +30,10 @@ const UseStyles = makeStyles((theme) => ({
 }))
 
 const HomePage = () => {
+    const user = useSelector((state) => state.authReducer)
+    useEffect(() => {
+        console.log(user);
+    }, [])
 
     const classes = UseStyles({  })
     return (
