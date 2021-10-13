@@ -9,7 +9,7 @@ import {clearCart} from "../redux/helpers/cartHelpers";
 import { getUser,logOut } from '../redux/helpers/authHelpers';
 import { useSelector } from "react-redux";
 import { makeStyles} from "@material-ui/core";
-import { Container,Grid } from "@material-ui/core";
+import { Container,Grid,Button } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -103,6 +103,30 @@ const useStyles = makeStyles((theme) => ({
         },
       },
     },
+    pay: {
+      textDecoration: "none",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor:"#3f51b5",
+      textAlign: "center",
+      border: "2 ",
+      fontSize: "20px",
+      // color: "#555",
+      color: "white",
+      "&:hover": {
+        textDecoration: "none",
+        color: "black",
+        backgroundColor:"lightgreen"
+      },
+      [theme.breakpoints.down("sm")]: {
+        color: theme.palette.common.white,
+        "&:hover": {
+          textDecoration: "none",
+          color: theme.palette.common.white,
+          opacity: "0.9",
+        },
+      },
+    },
   }));
 
 export const PaymentTest = () => {
@@ -123,16 +147,17 @@ export const PaymentTest = () => {
             })
       })
 
-      const successPayment = data => {
+      const successPayment = (data) => {
         // alert('Payment Successful');
-        toast("Payment Successfull")
-        clearCart(data.data.message)
+        toast(data.data.message)
+        clearCart()
         console.log(data)
       };
        
-      const errorPayment = data => {
-        alert(data.data.message);
-        console.log(data.data.message)
+      const errorPayment = (data) => {
+        // alert(data.data.message);
+        toast(data.message)
+        console.log(data)
       };
 
     const tokenHandler = (token) => {
@@ -163,9 +188,40 @@ export const PaymentTest = () => {
             }
         })
         // .then(res => console.log(token))
-        .then(successPayment)
+        .then(res=>successPayment(res))
         // .catch(err => console.log(err.response.data))
-        .catch(errorPayment)
+        .catch(res=>errorPayment(res))
+    }
+
+    const cashOnDelivery=()=>{
+      axios({
+        method : 'POST',
+        url : `http://localhost:4000/api/v1/payment/cash`,
+        data: {
+            cart: {
+                products : 
+                    products
+                    
+                ,
+                amount : cart.amount,
+            },
+            user:{
+                id: user._id,
+                email: user.email,
+                name: user.name,
+                address: {
+                    location: user.addresses[0].location,
+                    landmark: user.addresses[0].location,
+                    pincode: user.addresses[0].pincode,
+                    city: user.addresses[0].city,
+                    state:user.addresses[0].state
+                }
+            }
+        }
+    })
+    .then(res=>successPayment(res))
+        // .catch(err => console.log(err.response.data))
+        .catch(res=>errorPayment(res))
     }
 
 
@@ -217,7 +273,13 @@ export const PaymentTest = () => {
                 // shippingAddress
                 // billingAddress={false}
 
-            />
+            >
+              <Button className={classes.pay} onClick={()=>{cashOnDelivery()}}>Pay With Card</Button>
+              </Stripe>
+            
+            </div>
+            <div className={classes.Text}>
+            <Button className={classes.pay} onClick={()=>{cashOnDelivery()}}>Cash</Button>
             </div>
       </Container>
         </>

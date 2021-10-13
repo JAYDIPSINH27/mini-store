@@ -12,7 +12,7 @@ router.route("/stripe")
 
 router.route("/cash")
     .post(
-        passport.authenticate('user', {session : false}),
+        // passport.authenticate('user', {session : false}),
         payCtrl.makeCashPayment
     )
 
