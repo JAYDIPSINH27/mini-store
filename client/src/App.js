@@ -12,10 +12,15 @@ import StoreList from "./components/shop/StoreList";
 import Feed from "./components/Products/Feed";
 import Shop from "./components/shop/Shop";
 import CartPage from "./components/Cart/CartPage"
-import Dashboard from "./components/Dashboard/Dashboard";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import Profile from "./components/Profile/Profile";
+import ProfileEdit from "./components/Profile/ProfileEdit";
+import Search from "./components/SearchBar/Search"
+import DashboardHome from "./components/Dashboard/DashboardHome";
+import ProductList from "./components/Dashboard/ProductList";
+import AddProduct from "./components/Dashboard/AddProduct";
+import StoreDetails from "./components/Dashboard/StoreDetails";
 
 function App() {
   console.log("store : ", store);
@@ -38,9 +43,15 @@ function App() {
                 <Route path="/store/:id" component={Shop} />
                 <Route path="/store/:id" component={Shop} />
                 <Route path="/cart" component={CartPage} />
-                <Route path="/dashboard" component={Dashboard} />
                 <Route path="/payment" component={PaymentTest} />
                 <Route path="/profile" component={Profile}/>
+                <Route path="/edit/profile" component={ProfileEdit}/>
+                <Route path="/search/:name" component={Search}/>
+
+                <Route exact path="/dashboard" component={DashboardHome} />
+                <Route path="/dashboard/product/view" component={ProductList} />
+                <Route path="/dashboard/product/add" component={AddProduct} />
+                <Route path="/dashboard/store/details" component={StoreDetails} />
               </Switch>
             </Layout>
           </Switch>

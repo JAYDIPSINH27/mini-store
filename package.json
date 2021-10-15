@@ -25,7 +25,8 @@
     "axios": "^0.21.4",
     "concurrently": "^6.2.0",
     "fontsource-roboto": "^4.0.0",
-    "react-awesome-slider": "^4.1.0"
+    "react-awesome-slider": "^4.1.0",
+    "react-razorpay": "^1.1.2"
   },
   "devDependencies": {
     "eslint": "^7.32.0"

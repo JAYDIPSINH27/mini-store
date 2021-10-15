@@ -17,6 +17,7 @@ import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import EditIcon from '@material-ui/icons/Edit';
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#dbdbdb",
   },
   large: {
-    width: theme.spacing(35),
-    height: theme.spacing(35),
-    margin: "auto",
+    width: theme.spacing(30),
+    height: theme.spacing(30),
+    margin: "auto"
   },
   name: {
     color: "#8a8a8a",
@@ -64,36 +65,23 @@ const useStyles = makeStyles((theme) => ({
   },
   cardText : {
     fontFamily : "Georgia, serif",
+  },
+  imgDiv : {
+    padding : "10px"
   }
 }));
 
 const Profile = () => {
   const classes = useStyles();
   const user = useSelector((state) => state.authReducer);
-
-  const [fileInput, setFileInput] = useState("");
-  const [selectedFile, setSelectedFile] = useState("");
-  const [previewSource, setPreviewSource] = useState("");
-
-  const imageFile = (e) => {
-    const file = e.target.files[0];
-    previewFile(file);
-  };
-
-  const previewFile = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setPreviewSource(reader.result);
-    };
-  };
+  console.log(user.user);
 
   return (
     <div className={classes.body}>
       <Container className={classes.root}>
         <div className={classes.cardDiv}>
           <Card className={classes.card}>
-            <CardActionArea>
+            <CardActionArea className={classes.imgDiv}>
               <Avatar
                 alt="Remy Sharp"
                 src={user.user.image ? user.user.image.url : ""}
@@ -113,14 +101,16 @@ const Profile = () => {
               <div className={classes.email}>
                 <LocationOnIcon style={{ marginRight: "10px" }} />
                 <Typography variant="h6" className={classes.cardText}>
-                  {user.user.addresses[0].location},
-                  {user.user.addresses[0].landmark},
-                  {user.user.addresses[0].city}, {user.user.addresses[0].state},
-                  {user.user.addresses[0].pincode}
+                  {user.user.addresses[user.user.addresses.length-1].location},
+                  {user.user.addresses[user.user.addresses.length-1].landmark},
+                  {user.user.addresses[user.user.addresses.length-1].city}, {user.user.addresses[0].state},
+                  {user.user.addresses[user.user.addresses.length-1].pincode}
                 </Typography>
               </div>
               <div className={classes.editButton}>
+              <Link to="/edit/profile" style={{width : "100%"}}>
                 <Button variant="contained" color="primary" fullWidth><EditIcon/>Edit</Button>
+              </Link>
               </div>
             </CardContent>
           </Card>

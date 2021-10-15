@@ -10,6 +10,7 @@ import { Link, useHistory } from "react-router-dom";
 import { getUser,logOut } from '../redux/helpers/authHelpers';
 import { useSelector } from 'react-redux';
 
+
 const useStyles = makeStyles((theme) => ({
     toolbar: {
         display: "flex",
@@ -100,6 +101,11 @@ function Navbar() {
         history.push('/')
     }
 
+    const [text,setText]=useState('')
+    const search=(q)=>{
+        setText(q)
+    }
+
     if (authUser.jwtToken !== "") {
         return (
             <AppBar position="fixed">
@@ -113,7 +119,10 @@ function Navbar() {
                     
                     <div className={classes.search} >
                         <Search />
-                        <InputBase placeholder="Search..." className={classes.input} />
+                        <form action={"/search/"+text.slice(0,text.length)}>
+
+                        <InputBase placeholder="Search..." className={classes.input} value={text}  onChange={(e)=> search(e.target.value)}/>
+                        </form>
                         <Cancel className={classes.cancel} onClick={() => setOpen(false)} />
                     </div>
     

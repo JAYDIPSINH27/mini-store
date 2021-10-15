@@ -2,7 +2,7 @@
 // @route     localhost:3000/test
 // @access    Private/Public
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import axios from 'axios'
 import Stripe from 'react-stripe-checkout'
 import {clearCart} from "../redux/helpers/cartHelpers";
@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home1 from "../assets/Caro2.jpg"
+import useRazorpay from "react-razorpay";
 
 const useStyles = makeStyles((theme) => ({
     loadingDiv: {
@@ -107,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "none",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor:"#3f51b5",
+      backgroundColor:"#EB9800",
       textAlign: "center",
       border: "2 ",
       fontSize: "20px",
@@ -224,6 +225,40 @@ export const PaymentTest = () => {
         .catch(res=>errorPayment(res))
     }
 
+    const Razorpay = useRazorpay();
+
+    const handlePayment = useCallback(() => {
+      // const order = await createOrder(params);
+  
+      const RazorpayOptions = {
+        key: "rzp_test_bNG0doZIkfeoBb",
+        amount: (cart.amount)*100,
+        currency: "INR",
+        name: "Mini MAll",
+        description: "Purchase Products",
+        image: {Home1},
+        // order_id: order.id,
+        handler: (res) => {
+          console.log(res);
+          toast("Payment Successful")
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+          contact: "9999999999",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3f51b5",
+        },
+      };
+  
+      const rzpay = new Razorpay(RazorpayOptions);
+      rzpay.open();
+      rzpay.on("payment.failed",(res)=>{toast("Payment Failed")})
+    }, [Razorpay]);
 
 
     return(
@@ -263,7 +298,7 @@ export const PaymentTest = () => {
                 image={Home1}
                 description={`Payment by ${user.name}`}
                 panelLabel="Pay Total" // prepended to the amount in the bottom pay button
-                amount={cart.amount} // cents
+                amount={(cart.amount)*100} // cents
                 currency="INR"
                 stripeKey="pk_test_51JNXGXSC9D6J4dbWboIoFAKi8SR1w4Go1pOAiO0iomrtOohP2jfYFX5iyKD6SXBB6O06RWIqfTQSHKDdV6fqiROY00Gh2dCwEs"
                 // locale="in"
@@ -280,6 +315,10 @@ export const PaymentTest = () => {
             </div>
             <div className={classes.Text}>
             <Button className={classes.pay} onClick={()=>{cashOnDelivery()}}>Cash</Button>
+            </div>
+
+            <div className={classes.Text}>
+            <Button className={classes.pay} onClick={()=>{handlePayment()}}>RazorPay</Button>
             </div>
       </Container>
         </>
