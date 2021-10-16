@@ -9,6 +9,7 @@ const ActivationToken = require('../models/ActivationToken');
 const PasswordToken = require('../models/PasswordToken');
 const {urlGoogle,getGoogleEmailFromCode} = require('../utils/googleClient')
 const {deleteImages} = require('../utils/multipleImageOperations')
+const {deleteImage} = require('../utils/singleImageOperations')
 
 const redirectURL = process.env.REDIRECT_URL
 const frontendURL = process.env.FRONTEND_URL
@@ -247,14 +248,15 @@ module.exports = {
                 user.name = req.body.name
             }
             if(req.body.image){
-                await deleteImages([user.image])
+                await deleteImage([user.image])
                 let image = new Image()
                 let response = await image.upload(user._id,req.body.image,'User')
                 if(response){
                     user.image = response
+                    await image.save()
                 }
             }
-            await user.save()
+            await user.populate(userPopulate).save()
             let data = user._doc
             delete data["hashed_password"]
             return res.status(200).json({

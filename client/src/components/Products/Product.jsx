@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Product(props) {
     const classes = useStyles({  })
-    console.log(props.product.stores[0]._id)
     return (
         <Card className={classes.card}>
             <CardActionArea>
@@ -45,7 +44,7 @@ function Product(props) {
                 <Typography variant="body2">{props.product.description} </Typography>
             </CardContent> 
             <CardActions className={classes.action}>
-                <Typography variant="h5" className={classes.price}>₹50.00{/*props.product.price*/}</Typography>
+               
                 <Button size="small" color="primary" className={classes.button} href={"/store/"+props.product.stores[0]._id}>View Product</Button>
             </CardActions>           
         </Card>
