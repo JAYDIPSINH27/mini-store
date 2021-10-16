@@ -214,10 +214,11 @@ module.exports = {
     // @access    Private
 
     getUser : async (req,res) => {
+        let user = await User.findById(req.user._id).populate(userPopulate)
         if(req.user){
             return res.status(200).json({
                 err : false,
-                data : req.user
+                data : user
             })
         }else{
             return res.status(400).json({
@@ -234,7 +235,7 @@ module.exports = {
     updateUser : async (req,res) => {
         try{
         if(req.user){
-            let user = await User.findById(req.user._id)
+            let user = await User.findById(req.user._id).populate(userPopulate)
             if(!user){
                 return res.status(400).json({
                     err : true,
@@ -248,7 +249,7 @@ module.exports = {
                 user.name = req.body.name
             }
             if(req.body.image){
-                await deleteImage([user.image])
+                await deleteImage([user.image.public_id])
                 let image = new Image()
                 let response = await image.upload(user._id,req.body.image,'User')
                 if(response){
