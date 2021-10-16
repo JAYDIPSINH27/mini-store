@@ -15,6 +15,7 @@ import { getUser } from "../../redux/helpers/authHelpers";
 import { setAuthDetails } from "../../redux/helpers/authHelpers";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import IconButton from "@material-ui/core/IconButton";
+import { ToastContainer, toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,7 +85,7 @@ const ProfileEdit = () => {
     e.preventDefault();
     if (!previewSource) return;
     editUser.addresses[0] = address;
-    console.log(editUser);
+    // console.log(editUser);
     await axios
       .patch(
         "http://localhost:4000/api/v1/auth/user",
@@ -102,6 +103,7 @@ const ProfileEdit = () => {
         } else {
           console.log(res.data);
           setAuthDetails({ token: user.jwtToken, data: res.data.data });
+          toast("Details updated Successfully")
         }
       })
       .catch((err) => {
@@ -113,6 +115,7 @@ const ProfileEdit = () => {
   return (
     <div className={classes.root}>
       <Container>
+      <ToastContainer />
         <form method="PATCH" onSubmit={updateUser}>
           <div>
                 <Avatar

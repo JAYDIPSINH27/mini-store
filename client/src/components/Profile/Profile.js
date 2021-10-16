@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "100px",
   },
   body : {
-    height : "100%",
+    height : "100vh",
     width : "100%",
     backgroundColor: "#dbdbdb",
   },
