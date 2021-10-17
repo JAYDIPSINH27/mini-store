@@ -4,6 +4,7 @@
 
 import React from 'react'
 import styled from "styled-components"
+import { Link} from "react-router-dom";
 
 const Container=styled.div`
     flex:1;
@@ -59,6 +60,7 @@ const Button=styled.a`
     &:hover{
             text-decoration:none;
             color:black;
+            opacity:0.9;
         }
 `
 
@@ -69,7 +71,9 @@ const CategoryItem = ({item}) => {
             <Image src={item.image.url} />
             <Info>
                 <Title>{item.name}</Title>
-                <Button href="/products">View More</Button>
+                <Link to="/products" style={{textDecoration:"none",color:"white"}}>
+                <Button>View More</Button>
+                </Link>
             </Info>    
         </Container>
     )

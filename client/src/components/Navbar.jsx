@@ -111,10 +111,10 @@ function Navbar() {
             <AppBar position="fixed">
                 <Toolbar className={classes.toolbar} >
                     <Typography variant="h6" className={classes.logoLg}>
-                       <a href="/" className={classes.a}> Mini Mall</a>
+                       <Link to="/" className={classes.a}> Mini Mall</Link>
                     </Typography>
                     <Typography variant="h6" className={classes.logoSm}>
-                    <a href="/" className={classes.a}>Mall</a>
+                    <Link to="/" className={classes.a}>Mall</Link>
                     </Typography>
                     
                     <div className={classes.search} >
@@ -132,16 +132,16 @@ function Navbar() {
                             <Mail />
                         </Badge> */}
                         <Badge color="secondary" className={classes.badge}>
-                            <a href="/stores" className={classes.a} >
+                            <Link to="/stores" className={classes.a} >
                             <Storefront/>
-                            </a>
+                            </Link>
                         </Badge>
                         
                         {/* <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}> */}
                         <Badge badgeContent={cart} color="secondary" className={classes.badge}>
-                        <a href="/cart" className={classes.a} >
+                        <Link to="/cart" className={classes.a} >
                             <ShoppingCartOutlined />
-                        </a> 
+                        </Link> 
                         </Badge>
                         <Badge color="secondary" className={classes.badge}>
                             <ExitToApp onClick={clearCookie}  className={classes.a}/>
@@ -163,10 +163,10 @@ function Navbar() {
             <AppBar position="fixed">
                 <Toolbar className={classes.toolbar} >
                     <Typography variant="h6" className={classes.logoLg}>
-                    <a href="/" className={classes.a}> Mini Mall</a>
+                    <Link to="/" className={classes.a}> Mini Mall</Link>
                     </Typography>
                     <Typography variant="h6" className={classes.logoSm}>
-                    <a href="/" className={classes.a}>Mall</a>
+                    <Link to="/" className={classes.a}>Mall</Link>
                     </Typography>
                     
                     <div className={classes.search} >

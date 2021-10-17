@@ -6,7 +6,7 @@ import { Container, makeStyles, Typography } from '@material-ui/core';
 import { ViewList, ExitToApp, Home, Storefront,} from '@material-ui/icons';
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory,Link} from "react-router-dom";
 import { getUser,logOut } from '../redux/helpers/authHelpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -81,31 +81,31 @@ function Leftbar() {
     return (
         <Container className={classes.container}>
             <div className={classes.item}> 
-                <a href="/" className={classes.a}>   
+                <Link to="/" className={classes.a}>   
                 <Home className={classes.icon}/>
                 <span className={classes.text}>Home Page</span>
-                </a>
+                </Link>
             </div>
         
             <div className={classes.item}> 
-            <a href="/products" className={classes.a}>
+            <Link to="/products" className={classes.a}>
                 <ViewList className={classes.icon}/>
                 <span className={classes.text}>Products</span>
-            </a>  
+            </Link>  
             </div>
             
             <div className={classes.item}> 
-                <a href="/stores" className={classes.a}>
+                <Link to="/stores" className={classes.a}>
                 <Storefront className={classes.icon}/>
                 <span className={classes.text}>Stores</span>
-                </a>
+                </Link>
             </div>
             {
                 user.jwtToken !== "" ? <div className={classes.item}>
-                <a onClick={clearCookie} className={classes.a}> 
+                <Link onClick={clearCookie} className={classes.a}> 
                 <ExitToApp className={classes.icon}/>
                 <span className={classes.text}>Logout</span>
-                </a>
+                </Link>
             </div> : null
             }
 
