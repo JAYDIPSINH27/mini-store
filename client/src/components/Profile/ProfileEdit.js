@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Button, TextField } from "@material-ui/core";
 import {
@@ -16,6 +16,8 @@ import { setAuthDetails } from "../../redux/helpers/authHelpers";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import IconButton from "@material-ui/core/IconButton";
 import { ToastContainer, toast } from "react-toastify";
+import logo from "../../assets/shopping.gif";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,11 +64,31 @@ const ProfileEdit = () => {
     landmark: "",
     city: "",
     state: "",
-    pincode: 0,
+    pincode: null,
   });
+  const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/v1/auth/user", {
+        headers: {
+          Authorization: `Bearer ${user.jwtToken}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data.data);
+        setLoading(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [fileInput, setFileInput] = useState("");
-  const [previewSource, setPreviewSource] = useState(user.user.image.url);
+  const [previewSource, setPreviewSource] = useState('');
+  const history = useHistory();
 
   const imageFile = (e) => {
     const file = e.target.files[0];
@@ -89,7 +111,12 @@ const ProfileEdit = () => {
     await axios
       .patch(
         "http://localhost:4000/api/v1/auth/user",
-        { user: editUser, addresses : [address], image : previewSource},
+        {
+          user: editUser,
+          name: editUser.name,
+          addresses: [address],
+          image: previewSource,
+        },
         {
           headers: {
             Authorization: `Bearer ${user.jwtToken}`,
@@ -103,137 +130,155 @@ const ProfileEdit = () => {
         } else {
           console.log(res.data);
           setAuthDetails({ token: user.jwtToken, data: res.data.data });
-          toast("Details updated Successfully")
+          console.log("user : ", user.user);
+          toast("Details updated Successfully");
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log(previewSource)
+  console.log(previewSource);
 
-  return (
-    <div className={classes.root}>
-      <Container>
-      <ToastContainer />
-        <form method="PATCH" onSubmit={updateUser}>
-          <div>
+  if (user.jwtToken !== "") {
+    return (
+      <div className={classes.root}>
+        <Container>
+          <ToastContainer />
+          <form method="PATCH" onSubmit={updateUser}>
+            <div>
+              {loading ? (
                 <Avatar
-              alt="Remy Sharp"
-              src={previewSource}
-              alt="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              className={classes.large}
-            />
-            <div className={classes.imgUpload}>
-              <input
-                accept="image/*"
-                id="icon-button-file"
-                type="file"
-                style={{ display: "none" }}
-                value={fileInput}
-                onChange={imageFile}
-              />
-              <label htmlFor="icon-button-file">
-                <IconButton
-                  color="primary"
-                  variant="contained"
-                  aria-label="upload picture"
-                  component="span"
-                >
-                  <PhotoCamera className={classes.uploadButton} />
-                </IconButton>
-              </label>
+                  alt="Remy Sharp"
+                  src={previewSource || userData.image.url}
+                  alt="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                  className={classes.large}
+                />
+              ) : (
+                <Avatar
+                  alt="Remy Sharp"
+                  src={logo}
+                  alt="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                  className={classes.large}
+                />
+              )}
+              <div className={classes.imgUpload}>
+                <input
+                  accept="image/*"
+                  id="icon-button-file"
+                  type="file"
+                  style={{ display: "none" }}
+                  value={fileInput}
+                  onChange={imageFile}
+                />
+                <label htmlFor="icon-button-file">
+                  <IconButton
+                    color="primary"
+                    variant="contained"
+                    aria-label="upload picture"
+                    component="span"
+                  >
+                    <PhotoCamera className={classes.uploadButton} />
+                  </IconButton>
+                </label>
+              </div>
             </div>
-          </div>
-          <Grid container className={classes.form}>
-            <Grid item lg={6} className={classes.emailField}>
-              <TextField
-                value={editUser.email}
-                variant="outlined"
-                label="Email"
-                disabled
-              />
+            <Grid container className={classes.form}>
+              <Grid item lg={6} className={classes.emailField}>
+                <TextField
+                  value={editUser.email}
+                  variant="outlined"
+                  label="Email"
+                  disabled
+                />
+              </Grid>
+              <Grid item lg={6} className={classes.nameField}>
+                <TextField
+                  value={editUser.name}
+                  variant="outlined"
+                  onChange={(e) => {
+                    setUser({ ...editUser, name: e.target.value });
+                  }}
+                  required
+                  label="User Name"
+                />
+              </Grid>
+              <Grid lg={12}>
+                <Divider />
+              </Grid>
+              <Grid item lg={6} className={classes.emailField}>
+                <TextField
+                  value={address.location}
+                  onChange={(e) => {
+                    setAddress({ ...address, location: e.target.value });
+                  }}
+                  required
+                  variant="outlined"
+                  label="location"
+                />
+              </Grid>
+              <Grid item lg={6} className={classes.nameField}>
+                <TextField
+                  value={address.landmark}
+                  onChange={(e) => {
+                    setAddress({ ...address, landmark: e.target.value });
+                  }}
+                  required
+                  variant="outlined"
+                  label="landmark"
+                />
+              </Grid>
+              <Grid item lg={6} className={classes.emailField}>
+                <TextField
+                  value={address.city}
+                  onChange={(e) => {
+                    setAddress({ ...address, city: e.target.value });
+                  }}
+                  required
+                  variant="outlined"
+                  label="city"
+                />
+              </Grid>
+              <Grid item lg={6} className={classes.nameField}>
+                <TextField
+                  value={address.state}
+                  variant="outlined"
+                  onChange={(e) => {
+                    setAddress({ ...address, state: e.target.value });
+                  }}
+                  required
+                  label="state"
+                />
+              </Grid>
+              <Grid item lg={12} className={classes.field}>
+                <TextField
+                  value={address.pincode}
+                  onChange={(e) => {
+                    setAddress({
+                      ...address,
+                      pincode: parseInt(e.target.value),
+                    });
+                  }}
+                  required
+                  variant="outlined"
+                  label="pincode"
+                />
+              </Grid>
+              <Grid item lg={12} className={classes.field}>
+                <Button type="submit" variant="contained" color="primary">
+                  <SaveIcon />
+                  Save
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item lg={6} className={classes.nameField}>
-              <TextField
-                value={editUser.name}
-                variant="outlined"
-                onChange={(e) => {
-                  setUser({ ...editUser, name: e.target.value });
-                }}
-                required
-                label="User Name"
-              />
-            </Grid>
-            <Grid lg={12}>
-              <Divider />
-            </Grid>
-            <Grid item lg={6} className={classes.emailField}>
-              <TextField
-                value={address.location}
-                onChange={(e) => {
-                  setAddress({ ...address, location: e.target.value });
-                }}
-                required
-                variant="outlined"
-                label="location"
-              />
-            </Grid>
-            <Grid item lg={6} className={classes.nameField}>
-              <TextField
-                value={address.landmark}
-                onChange={(e) => {
-                  setAddress({ ...address, landmark: e.target.value });
-                }}
-                required
-                variant="outlined"
-                label="landmark"
-              />
-            </Grid>
-            <Grid item lg={6} className={classes.emailField}>
-              <TextField
-                value={address.city}
-                onChange={(e) => {
-                  setAddress({ ...address, city: e.target.value });
-                }}
-                required
-                variant="outlined"
-                label="city"
-              />
-            </Grid>
-            <Grid item lg={6} className={classes.nameField}>
-              <TextField
-                value={address.state}
-                variant="outlined"
-                onChange={(e) => {
-                  setAddress({ ...address, state: e.target.value });
-                }}
-                required
-                label="state"
-              />
-            </Grid>
-            <Grid item lg={12} className={classes.field}>
-              <TextField
-                value={address.pincode}
-                onChange={(e) => {
-                  setAddress({ ...address, pincode: parseInt(e.target.value) });
-                }}
-                required
-                variant="outlined"
-                label="pincode"
-              />
-            </Grid>
-            <Grid item lg={12} className={classes.field}>
-              <Button type="submit" variant="contained" color="primary">
-                <SaveIcon />
-                Save
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Container>
-    </div>
-  );
+          </form>
+        </Container>
+      </div>
+    );
+  } else {
+    history.push("/signin");
+  }
+  return 0;
 };
 
 export default ProfileEdit;

@@ -257,7 +257,7 @@ module.exports = {
                     await image.save()
                 }
             }
-            await user.populate(userPopulate).save()
+            await user.save()
             let data = user._doc
             delete data["hashed_password"]
             return res.status(200).json({
