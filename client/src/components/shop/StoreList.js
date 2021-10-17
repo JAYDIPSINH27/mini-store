@@ -19,9 +19,9 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
 const useStyles = makeStyles((theme) => ({
-  loadingDiv :{
-    // border : "2px solid black",
-    width : "100%"
+  loadingDiv: {
+    width: "100%",
+    display: "flex",
   },
   loadingImage: {
     margin: "auto",
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(2),
-}
+  },
 }));
 
 const Stores = (props) => {
@@ -177,16 +177,16 @@ const StoreList = () => {
   useEffect(() => {
     const getStores = async () => {
       await axios
-      .get("http://localhost:4000/api/v1/stores")
-      .then((stores) => {
-        setStores(stores.data.data);
-        setLoading(true);
-        console.log(stores);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
+        .get("http://localhost:4000/api/v1/stores")
+        .then((stores) => {
+          setStores(stores.data.data);
+          setLoading(true);
+          console.log(stores);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
     getStores();
   }, []);
 
@@ -196,11 +196,18 @@ const StoreList = () => {
         <div>
           {loading ? (
             <Stores data={stores} />
-            //<div className={classes.loadingDiv}>
-              //<img src={logo} alt="loading..." width="300px" className={classes.loadingImage}/>
-            //</div>
           ) : (
-            <img src={logo} alt="loading..." width="300px" />
+            //<div className={classes.loadingDiv}>
+            //<img src={logo} alt="loading..." width="300px" className={classes.loadingImage}/>
+            //</div>
+            <div className={classes.loadingDiv}>
+              <img
+                src={logo}
+                alt="loading..."
+                width="300px"
+                className={classes.loadingImage}
+              />
+            </div>
           )}
         </div>
       </Container>

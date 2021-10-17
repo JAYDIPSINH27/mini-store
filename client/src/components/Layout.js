@@ -23,18 +23,20 @@ const Layout = ({children}) => {
     const user = useSelector((state) => state.authReducer);
     const history = useHistory();
     return (
-        <BrowserRouter>
+        //<BrowserRouter>
+        <>
             <Navbar />
             <Grid container>
                 <Grid item sm={2} xs={2}>
-                    {user.admin ? <DashboardLeftbar /> : <Leftbar />}
-                </Grid> 
+                    {user.user.admin ? <DashboardLeftbar /> : <Leftbar />}
+                </Grid>
                 <Grid item sm={10} xs={10}>
                     {children}
-                    <Footer />
                 </Grid>
             </Grid>
-        </BrowserRouter>
+            <Footer />
+        </>
+        //</BrowserRouter>
             
         
     )
