@@ -53,7 +53,18 @@ module.exports = {
         },
         {
             path : 'orders',
-            select : 'paymentId paymentGateway status products reciept_url'
+            select : 'amount date paymentId paymentGateway status reciept_url',
+            populate: {
+                path: 'products',
+                populate:{
+                    path:'productId',
+                    select: 'name images',
+                    populate:{
+                        path:'images',
+                        select:'url'
+                    }
+                }
+            } 
         }
     ],
 
