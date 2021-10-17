@@ -8,6 +8,7 @@ import styled from "styled-components"
 import { slideData } from '../SlideData'
 import { mobile } from './responsive'
 import spinner from '../../assets/spinner.gif'
+import { Link} from "react-router-dom";
 const Container = styled.div`
     padding:5rem 0rem;
     width:100%;
@@ -125,7 +126,9 @@ const Slider = () => {
                 <InfoContainer>
                     <Title>{item.title}</Title>
                     <Desc>{item.desc}</Desc>
-                    <Button href="/stores">Shop Now</Button>
+                    <Link to="/stores" style={{textDecoration:"none",color:"white"}}>
+                    <Button>Shop Now</Button>
+                    </Link>
                 </InfoContainer>
                     </Slide>
 

@@ -4,6 +4,7 @@
 
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, makeStyles, Typography } from '@material-ui/core';
 import React from 'react'
+import { Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -25,6 +26,14 @@ const useStyles = makeStyles((theme) => ({
     button: {
         marginRight: theme.spacing(1),
     },
+    link:{
+        textDecoration:"none",
+        '&hover':{
+            textDecoration:"none",
+            color: theme.palette.common.white,
+            opacity:"0.9"
+        }
+    }
 }))
 
 function Product(props) {
@@ -44,8 +53,9 @@ function Product(props) {
                 <Typography variant="body2">{props.product.description} </Typography>
             </CardContent> 
             <CardActions className={classes.action}>
-               
-                <Button size="small" color="primary" className={classes.button} href={"/store/"+props.product.stores[0]._id}>View Product</Button>
+               <Link to={"/store/"+props.product.stores[0]._id} className={classes.link}>
+                <Button size="small" color="primary" className={classes.button}>View Product</Button>
+                </Link>
             </CardActions>           
         </Card>
     )

@@ -32,9 +32,9 @@ const Layout = ({children}) => {
                 </Grid>
                 <Grid item sm={10} xs={10}>
                     {children}
+                    <Footer />
                 </Grid>
             </Grid>
-            <Footer />
         </>
         //</BrowserRouter>
             
