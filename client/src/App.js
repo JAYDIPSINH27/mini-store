@@ -21,6 +21,7 @@ import DashboardHome from "./components/Dashboard/DashboardHome";
 import ProductList from "./components/Dashboard/ProductList";
 import AddProduct from "./components/Dashboard/AddProduct";
 import StoreDetails from "./components/Dashboard/StoreDetails";
+import Orders from "./components/Orders/OrderPage"
 
 function App() {
   console.log("store : ", store);
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/profile" component={Profile}/>
                 <Route path="/edit/profile" component={ProfileEdit}/>
                 <Route path="/search/:name" component={Search}/>
+                <Route path="/orders" component={Orders}/>
 
                 <Route exact path="/dashboard" component={DashboardHome} />
                 <Route path="/dashboard/product/view" component={ProductList} />

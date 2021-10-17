@@ -19,6 +19,13 @@ const useStyles = makeStyles((theme) => ({
     container: {
         paddingTop: theme.spacing(10),
         paddingBottom: theme.spacing(2),
+    },
+    loadingDiv: {
+      width: "100%",
+      display: "flex",
+    },
+    loadingImage: {
+      margin: "auto",
     }
 }));
 
@@ -36,7 +43,7 @@ const Stores = (props) => {
                     </Grid>
                 )))
                 :
-                ( <img src={logo} alt="loading..." width="300px" />)
+                (<div className={classes.loadingDiv}> <img src={logo} className={classes.loadingImage} alt="loading..." width="300px" /></div>)
                 }
             </Grid>
 

@@ -3,7 +3,7 @@
 // @access    Private
 
 import { Container, makeStyles, Typography } from '@material-ui/core';
-import { ViewList, ExitToApp, Home, Storefront,} from '@material-ui/icons';
+import { ViewList, ExitToApp, Home, Storefront,ShoppingBasket} from '@material-ui/icons';
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { useHistory,Link} from "react-router-dom";
@@ -100,12 +100,18 @@ function Leftbar() {
                 <span className={classes.text}>Stores</span>
                 </Link>
             </div>
+            <div className={classes.item}> 
+                <Link to="/orders" className={classes.a}>
+                <ShoppingBasket className={classes.icon}/>
+                <span className={classes.text}>Orders</span>
+                </Link>
+            </div>
             {
                 user.jwtToken !== "" ? <div className={classes.item}>
-                <Link onClick={clearCookie} className={classes.a}> 
+                <a onClick={clearCookie} className={classes.a}> 
                 <ExitToApp className={classes.icon}/>
                 <span className={classes.text}>Logout</span>
-                </Link>
+                </a>
             </div> : null
             }
 
