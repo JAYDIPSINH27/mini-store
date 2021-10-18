@@ -156,14 +156,14 @@ export const PaymentTest = () => {
 
   const successPayment = (data) => {
     // alert('Payment Successful');
-    toast(data.data.message);
+    toast.success(data.data.message);
     clearCart();
     console.log(data);
   };
 
   const errorPayment = (data) => {
     // alert(data.data.message);
-    toast(data.message);
+    toast.error(data.message);
     console.log(data);
   };
 

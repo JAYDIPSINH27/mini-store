@@ -110,7 +110,7 @@ const Profile = () => {
                 {loading ? (
                   <Avatar
                     alt="Remy Sharp"
-                    src={userData.image.url}
+                    src={userData.image?userData.image.url:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                     alt="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                     className={classes.large}
                   />
@@ -129,7 +129,8 @@ const Profile = () => {
                     {user.user.email}
                   </Typography>
                 </div>
-                <div className={classes.email}>
+                {user.user.addresses[user.user.addresses.length - 1]?
+                (<div className={classes.email}>
                   <LocationOnIcon style={{ marginRight: "10px" }} />
                   <Typography variant="h6" className={classes.cardText}>
                     {
@@ -148,7 +149,17 @@ const Profile = () => {
                         .pincode
                     }
                   </Typography>
+                </div>)
+                :
+                (
+                  <div className={classes.email}>
+                  <LocationOnIcon style={{ marginRight: "10px" }} />
+                  <Typography variant="h6" className={classes.cardText}>
+                    Add your Address
+                  </Typography>
                 </div>
+                )
+                }
                 <div className={classes.editButton}>
                   <Link to="/edit/profile" style={{ width: "100%" }}>
                     <Button variant="contained" color="primary" fullWidth>

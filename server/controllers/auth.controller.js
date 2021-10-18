@@ -249,7 +249,10 @@ module.exports = {
                 user.name = req.body.name
             }
             if(req.body.image){
-                await deleteImage([user.image.public_id])
+                if(user.image){
+
+                    await deleteImage([user.image.public_id])
+                }
                 let image = new Image()
                 let response = await image.upload(user._id,req.body.image,'User')
                 if(response){
