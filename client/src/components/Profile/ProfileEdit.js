@@ -131,11 +131,12 @@ const ProfileEdit = () => {
           console.log(res.data);
           setAuthDetails({ token: user.jwtToken, data: res.data.data });
           console.log("user : ", user.user);
-          toast("Details updated Successfully");
+          toast.success("Details updated Successfully");
         }
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Details not updated");
       });
   };
   console.log(previewSource);
@@ -150,7 +151,7 @@ const ProfileEdit = () => {
               {loading ? (
                 <Avatar
                   alt="Remy Sharp"
-                  src={previewSource || userData.image.url}
+                  src={previewSource || (userData.image?userData.image.url:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")}
                   alt="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                   className={classes.large}
                 />
