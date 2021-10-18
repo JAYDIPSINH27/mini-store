@@ -18,9 +18,14 @@ import { removeFromCart, updateCart } from "../../redux/helpers/cartHelpers";
 import { useSelector } from "react-redux";
 import { Add, Remove } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
-import DeleteIcon from "@material-ui/icons/Delete"
+import DeleteIcon from "@material-ui/icons/Delete";
+import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles((theme) => ({
+  body: {
+    height: "100vh",
+    width: "100%",
+  },
   loadingDiv: {
     // border : "2px solid black",
     width: "100%",
@@ -158,6 +163,7 @@ const Stores = (props) => {
             </Typography>
           </div>
         </Grid>
+        <Divider />
 
         <Grid item>
           <div className={classes.Text}>
@@ -284,13 +290,13 @@ const CartPage = () => {
 
   if (user.jwtToken !== "") {
     return (
-      <>
+      <div className={classes.body}>
         <Container className={classes.container}>
           <div>
               <Stores data={cart} />
           </div>
         </Container>
-      </>
+      </div>
     );
   } else {
     history.push("/signin");

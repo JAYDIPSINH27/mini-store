@@ -18,6 +18,10 @@ import useRazorpay from "react-razorpay";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
+  body: {
+    height: "100vh",
+    width: "100%",
+  },
   loadingDiv: {
     // border : "2px solid black",
     width: "100%",
@@ -262,7 +266,7 @@ export const PaymentTest = () => {
 
   if (userData.jwtToken !== "") {
     return (
-      <>
+      <div className={classes.body}>
         <Grid container>
           <Grid item></Grid>
         </Grid>
@@ -332,7 +336,7 @@ export const PaymentTest = () => {
             </Button>
           </div>
         </Container>
-      </>
+      </div>
     );
   } else {
     history.push("/signin");
