@@ -1,6 +1,7 @@
 const Category = require('../models/Category')
 const Image = require('../models/Image')
 const getError = require('../utils/dbErrorHandler')
+const {deleteImages} = require('../utils/multipleImageOperations')
 
 module.exports = {
 
@@ -50,6 +51,58 @@ module.exports = {
         }
     },
 
+    // @desc      Update Category
+    // @route     PATCH /api/v1/categories/:id
+    // @access    Private
+
+    updateCategory : async(req,res) => {
+        try{
+            if(!req.params.id){
+                return res.status(400).json({
+                    err: true,
+                    msg: "Id was not specified."
+                })
+            }
+            let category = await Category.findById(req.params.id)
+            if(!category._doc){
+                return res.status(400).json({
+                    err: true,
+                    msg: "No such category exists."
+                })
+            }
+            if(req.body.name){
+                category.name = req.body.name
+            }
+            if(req.body.image){
+                if(category.image){
+                    await deleteImages([category.image])
+                }
+                let image = new Image()
+                let response = await image.upload(category._id,req.body.image,'Category')
+                if(response){
+                    category.image = response
+                    await image.save()
+                }
+            }
+            await category.save()
+            await Category.populate(category,{
+                path : 'image',
+                select : 'public_id url'
+            })
+            return res.status(200).json({
+                err : false,
+                msg : "Category updated successfully.",
+                data : category._doc
+            })
+        }catch(error){
+            console.log(error)
+            return res.status(400).json({
+                err: true,
+                msg: "Can not update category."
+            })
+        }
+    },
+
     // @desc      Get Categories
     // @route     GET /api/v1/categories
     // @access    Public
@@ -69,7 +122,6 @@ module.exports = {
         }
     },
     
-
     // @desc      Get Categories by Id
     // @route     GET /api/v1/categories/:id
     // @access    Public

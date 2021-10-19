@@ -142,5 +142,12 @@ module.exports = {
                 msg: "Could not make payment."
             })
         }
+    },
+
+    // @desc      Make Razorpay Payment
+    // @route     POST /api/v1/payment/razorpay
+    // @access    Private
+    makeRazorpayPayment: async(req,res) => {
+        console.log(req,res)
     }
 } 

@@ -9,7 +9,6 @@ const ActivationToken = require('../models/ActivationToken');
 const PasswordToken = require('../models/PasswordToken');
 const {urlGoogle,getGoogleEmailFromCode} = require('../utils/googleClient')
 const {deleteImages} = require('../utils/multipleImageOperations')
-const {deleteImage} = require('../utils/singleImageOperations')
 
 const redirectURL = process.env.REDIRECT_URL
 const frontendURL = process.env.FRONTEND_URL
@@ -235,7 +234,7 @@ module.exports = {
     updateUser : async (req,res) => {
         try{
         if(req.user){
-            let user = await User.findById(req.user._id).populate(userPopulate)
+            let user = await User.findById(req.user._id)
             if(!user){
                 return res.status(400).json({
                     err : true,
@@ -250,8 +249,7 @@ module.exports = {
             }
             if(req.body.image){
                 if(user.image){
-
-                    await deleteImage([user.image.public_id])
+                    await deleteImages([user.image])
                 }
                 let image = new Image()
                 let response = await image.upload(user._id,req.body.image,'User')
@@ -261,6 +259,7 @@ module.exports = {
                 }
             }
             await user.save()
+            await User.populate(user,userPopulate)
             let data = user._doc
             delete data["hashed_password"]
             return res.status(200).json({

@@ -53,18 +53,24 @@ module.exports = {
             const removeFields = ['fields', 'sort', 'page', 'limit']
             removeFields.forEach((param) => delete reqQuery[param])
             
-            let queryStr = JSON.stringify(reqQuery).replace(
-                /\b(gt|gte|lt|lte|in)\b/g,
-                (match) => `$${match}`
-            )
+            const comparisonFields = ['gt','gte','lt','lte','in']
+            for(let key of Object.keys(reqQuery)){
+                if(!comparisonFields.includes(key)){
+                    reqQuery[key] = new RegExp(reqQuery[key],'i')
+                }else{
+                    let temp = reqQuery[key]
+                    delete reqQuery[key]
+                    reqQuery[`$${key}`] = temp
+                }
+            }
 
             let page = req.query.page? Math.max(Number(req.query.page),1) : 1
             let limit = Number(req.query.limit) || 10
             let startIndex = (page - 1) * limit;
             let endIndex = page * limit;
             let total = await model.countDocuments();
-
-            let query = model.find(JSON.parse(queryStr)).skip(startIndex).limit(limit)
+            
+            let query = model.find(reqQuery).skip(startIndex).limit(limit)
 
             if(req.query.fields){
                 let selectStr = req.query.fields.split(',').join(' ');

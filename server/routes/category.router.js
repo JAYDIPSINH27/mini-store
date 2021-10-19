@@ -28,5 +28,9 @@ router.route("/:id")
       ),
       catCtrl.getCategorybyId
    )
+   .patch(
+      passport.authenticate('admin', {session : false}),
+      catCtrl.updateCategory
+   )
 
 module.exports = router 
