@@ -11,8 +11,8 @@ import {useSelector} from "react-redux";
 
 const Login = (props) => {
 
-  const [email, setEmail] = useState("sugarbae051@gmail.com");
-  const [password, setPassword] = useState("hello123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const history = new useHistory();
   const cookies = new Cookies();
   const user = useSelector((state) => state.authReducer)

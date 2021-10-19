@@ -200,6 +200,7 @@ const Stores = (props) => {
                     <div className={classes.imageDiv}>
                       <img
                         src={cart.productId.images[0].url}
+                        alt=" abc"
                         className={classes.storeImage}
                       />
                     </div>
@@ -290,7 +291,7 @@ const CartPage = () => {
 
   if (user.jwtToken !== "") {
     return (
-      <div className={classes.body}>
+      <div>
         <Container className={classes.container}>
           <div>
               <Stores data={cart} />

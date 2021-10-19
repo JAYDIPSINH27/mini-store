@@ -66,6 +66,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(2),
   },
+  sliderDiv:{
+    [theme.breakpoints.down("sm")]: {
+      display:"none",
+      
+  },
+  }
 }));
 
 const Stores = (props) => {
@@ -97,7 +103,7 @@ const Stores = (props) => {
         <Grid item></Grid>
       </Grid>
       <Container>
-        <div>
+        <div className={classes.sliderDiv}>
           <Slider {...settings}>
             {offers.map((store) => {
               return (

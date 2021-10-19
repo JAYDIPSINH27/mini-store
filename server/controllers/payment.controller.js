@@ -44,7 +44,6 @@ module.exports = {
                             paymentId : result.id,
                             paymentGateway : 'card',
                             status: 'paid',
-                            date: new Date(result.created).toString(),
                             email: token.email,
                             userId : user.id,
                             shippingDetails: {
