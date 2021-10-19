@@ -52,7 +52,7 @@ module.exports = {
                             },
                             products: cart.products,
                             amount: cart.amount,
-                            reciept: result.reciept_url
+                            receipt: result.receipt_url
                         })
                         User.findById(user.id)
                         .then(async (user) => {
@@ -148,6 +148,46 @@ module.exports = {
     // @route     POST /api/v1/payment/razorpay
     // @access    Private
     makeRazorpayPayment: async(req,res) => {
-        console.log(req,res)
+        try{
+            const {id,cart,user} = req.body
+            let order = new Order({
+                paymentId:id,
+                paymentGateway : 'razorpay',
+                status: 'paid',
+                email: user.email,
+                userId : user.id,
+                shippingDetails: {
+                    name: user.name,
+                    address: user.address
+                },
+                products: cart.products,
+                amount: cart.amount
+            })
+            User.findById(user.id)
+                .then(async (user) => {
+                    if(user){
+                        user.addOrder(order._id)
+                        await order.save()
+                        await user.save()
+                        return res.status(200).json({
+                            err: false,
+                            data: await Order.populate(order,orderPopulate),
+                            message: 'Payment successfull.'
+                        })
+                    }else{
+                        return res.status(400).json({
+                            err: true,
+                            message: 'Could not make payment.'
+                        })
+                    }
+                })
+        }
+        catch(error){
+            console.log(error)
+            return res.status(400).json({
+                err : true,
+                msg: "Could not make payment."
+            })
+        }
     }
 } 

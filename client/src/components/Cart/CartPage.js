@@ -14,7 +14,7 @@ import { Button } from "@material-ui/core";
 import ReactStars from "react-rating-stars-component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { removeFromCart, updateCart } from "../../redux/helpers/cartHelpers";
+import { removeFromCart, updateCart, clearCart } from "../../redux/helpers/cartHelpers";
 import { useSelector } from "react-redux";
 import { Add, Remove } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
@@ -183,7 +183,14 @@ const Stores = (props) => {
                 href="/payment"
                 
               >
-                PlaceOrder
+                Place Order
+              </Button>
+              <div style={{width : "2rem"}}></div>
+              <Button
+                className={classes.a}
+                onClick={clearCart}
+              >
+                Clear Cart
               </Button>
             
             </div>
@@ -241,7 +248,7 @@ const Stores = (props) => {
                       component="p"
                     >
                       Price:
-                      {cart.price}₹
+                      {cart.price * cart.quantity}₹
                     </Typography>
                   </CardContent>
                   <CardActions>

@@ -7,7 +7,7 @@ const OrderSchema = new mongoose.Schema({
     },
     paymentGateway: {
         type: String,
-        enum: ['card','cash'],
+        enum: ['card','cash','razorpay'],
         required: 'Payment Gateway is required.'
     },
     status:{
@@ -76,7 +76,7 @@ const OrderSchema = new mongoose.Schema({
         min: [0,'Amount cant be less than zero.'],
         required: 'Amount is required.'
     },
-    reciept: {
+    receipt: {
         type: String
     }
 })

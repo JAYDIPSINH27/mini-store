@@ -164,7 +164,7 @@ export const PaymentTest = () => {
   const errorPayment = (data) => {
     // alert(data.data.message);
     toast.error(data.message);
-    console.log(data);
+    console.log(data.responses.data);
   };
 
   const tokenHandler = (token) => {
@@ -239,10 +239,33 @@ export const PaymentTest = () => {
       name: "Mini MAll",
       description: "Purchase Products",
       image: { Home1 },
-      // order_id: order.id,
       handler: (res) => {
         console.log(res);
-        toast("Payment Successful");
+        axios({
+          method: "POST",
+          url: `http://localhost:4000/api/v1/payment/razorpay`,
+          data: {
+            id: res.razorpay_payment_id,
+            cart: {
+              products: products,
+              amount: cart.amount,
+            },
+            user: {
+              id: user._id,
+              email: user.email,
+              name: user.name,
+              address: {
+                location: user.addresses[0].location,
+                landmark: user.addresses[0].location,
+                pincode: user.addresses[0].pincode,
+                city: user.addresses[0].city,
+                state: user.addresses[0].state,
+              },
+            },
+          },
+        })
+          .then((res) => successPayment(res))
+          .catch((res) => errorPayment(res));
       },
       prefill: {
         name: user.name,

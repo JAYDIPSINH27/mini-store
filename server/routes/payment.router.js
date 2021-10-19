@@ -16,4 +16,10 @@ router.route("/cash")
         payCtrl.makeCashPayment
     )
 
+router.route("/razorpay")
+    .post(
+        // passport.authenticate('user', {session : false}),
+        payCtrl.makeRazorpayPayment
+    )
+
 module.exports = router
