@@ -1,9 +1,9 @@
 // @desc      CartPage Component
 // @route     localhost:3000/cart
 // @access    Private
-import React,{useState,useEffect} from "react";
-import axios from 'axios'
-import { makeStyles} from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { makeStyles } from "@material-ui/core";
 import { Container } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
@@ -16,8 +16,8 @@ import { Button } from "@material-ui/core";
 import { removeFromCart, updateCart } from "../../redux/helpers/cartHelpers";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Product from './Product';
-
+import Product from "./Product";
+import {motion} from "framer-motion";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
   fontStyle: {
     // fontFamily: "Noto Serif",
-    justifyContent:"center",
+    justifyContent: "center",
   },
   carosoulDiv: {
     width: "100%",
@@ -73,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
   },
   Title: {
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
@@ -90,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor:"#EB9800",
+    backgroundColor: "#EB9800",
     textAlign: "center",
     border: "2 ",
     fontSize: "20px",
@@ -99,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       textDecoration: "none",
       color: "black",
-      backgroundColor:"lightgreen",
+      backgroundColor: "lightgreen",
     },
     [theme.breakpoints.down("sm")]: {
       color: theme.palette.common.white,
@@ -112,12 +113,14 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     margin: theme.spacing(2),
-},
-carddiv:{
-  display: "flex",
+    boxShadow : "5px 10px 15px grey",
+    borderRadius : "20px"
+  },
+  carddiv: {
+    display: "flex",
     flexWrap: "wrap",
-    justifyContent:"center",
-}
+    justifyContent: "center",
+  },
 }));
 
 const Orders = (props) => {
@@ -137,48 +140,59 @@ const Orders = (props) => {
       updateCart(cart._id, cart.quantity - 1);
     }
   };
-  
+
   return (
     <>
       <Container className={classes.root}>
-        <Grid item xs={12} sm={6} md={4}>
-          <div className={classes.Title}>
-            <Typography
-              className={classes.fontStyle}
-              gutterBottom
-              align="left"
-              variant="h4"
-              component="h4"
-            >
-              My Orders
-            </Typography>
-          </div>
+        <motion.div className={classes.Title} initial={{ x : 0, y : -200 }} animate={{x : 0, y : 0}}>
+          <Typography
+            className={classes.fontStyle}
+            gutterBottom
+            align="center"
+            variant="h4"
+            component="h4"
+          >
+            My Orders
+          </Typography>
+        </motion.div>
+
+        <Grid container>
+          {props.data
+            .slice(0)
+            .reverse()
+            .map((order) => {
+              return (
+                <Grid item xs={12} key={order._id}>
+                  <Divider />
+                  <Card className={classes.card}>
+                    <CardContent>
+                      <Typography variant="h6">Order Details</Typography>
+                      <Typography variant="body2">
+                        Date: {order.date.substring(0, 10)}
+                      </Typography>
+                      <Typography variant="body2">
+                        Total Amount: {order.amount} ₹
+                      </Typography>
+                      <Typography variant="body2">
+                        Payment Method: {order.paymentGateway}{" "}
+                      </Typography>
+                      <Typography variant="body2">
+                        Status: {order.status}{" "}
+                      </Typography>
+                    </CardContent>
+                    <CardContent>
+                      <Typography variant="body1">Products:</Typography>
+                    </CardContent>
+
+                    <Product
+                      data={order.products}
+                      className={classes.carddiv}
+                    />
+                  </Card>
+                </Grid>
+              );
+            })}
         </Grid>
-
-        <Grid item xs={9}>
-          {props.data.slice(0).reverse().map((order)=>{
-            return(
-              <Grid item xs={12}  key={order._id}>
-                <Divider />
-                <Card className={classes.card}>
-                <CardContent>
-                        <Typography variant="h6">Order Details</Typography>
-                        <Typography variant="body2">Date: {order.date.substring(0,10)}</Typography>
-                        <Typography variant="body2">Total Amount: {order.amount} ₹</Typography>
-                        <Typography variant="body2">Payment Method: {order.paymentGateway} </Typography>
-                        <Typography variant="body2">Status: {order.status} </Typography>
-                  </CardContent> 
-                  <CardContent>
-                  <Typography variant="body1">Products:</Typography>
-                  </CardContent> 
-                  
-                  <Product data={order.products} className={classes.carddiv}/>
-                </Card>
-              </Grid>
-            )
-          })}
-          </Grid>
-
       </Container>
     </>
   );
@@ -209,13 +223,13 @@ const OrderPage = () => {
       });
   }, []);
 
-  console.log(userData)
+  console.log(userData);
   if (user.jwtToken !== "") {
     return (
       <>
         <Container className={classes.container}>
           <div>
-              <Orders data={userData.orders} />
+            <Orders data={userData.orders} />
           </div>
         </Container>
       </>
