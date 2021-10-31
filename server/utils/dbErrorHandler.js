@@ -34,7 +34,7 @@ const getError = (err) => {
         }
     }
 
-    return message
+    return message === ''? undefined : message
 }
 
 module.exports = getError
