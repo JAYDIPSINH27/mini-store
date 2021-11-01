@@ -4,6 +4,7 @@ const getError = require('../utils/dbErrorHandler')
 const {uploadImages, deleteImages} = require('../utils/multipleImageOperations')
 const { deleteStorefromProducts } = require('../utils/relationOperations')
 const {storePopulate} = require('../utils/populateObjects')
+const User = require('../models/User')
 
 module.exports = {
 
@@ -32,6 +33,9 @@ module.exports = {
                 }
                 try{
                     await store.save()
+					let user = await User.findById(req.user._id)
+					user.addStore(store._id)
+					await user.save()
                     return res.status(201).json({
                         err: false,
                         data : await Store.populate(store,storePopulate),
@@ -63,6 +67,77 @@ module.exports = {
             })
         }
     },
+
+	// @desc      Create Product and Add to Store
+    // @route     POST /api/v1/stores/:id/products
+    // @access    Private
+
+	createProductandAddtoStore : async(req,res) => {
+		try{
+            if(!req.params.id){
+                return res.status(400).json({
+                    err: true,
+                    msg: "Id was not specified."
+                })
+            }
+			Store.findById(req.params.id)
+            .then(async (store) => {
+                if(store){
+					const product = new Product({
+						name : req.body.name,
+						description : req.body.description || "",
+						category : req.body.category,
+						store : [],
+					})
+					uploadImages(product._id,"Product",req.body.images)
+					.then(async (data) => {
+						let err_images = []
+						for(let i in data){
+							if(data[i]){
+								product.addImage(data[i])
+							}else{
+								err_images.push(Number(i))
+							}
+						}
+						try{
+							product.addStore(req.params.id)
+                            store.addProduct({
+                                productId : product._id,
+                                ...req.body.product
+                            })
+                            await product.save()
+                            await store.save()
+                            return res.status(200).json({
+                                err: false,
+                                data : await Store.populate(store,storePopulate),
+                                message: 'Product added successfully.'
+                            })
+						}
+						catch(error){
+							deleteImages(product.images).then(() => {
+								return res.status(400).json({
+									err: true,
+									msg: getError(error)
+								})
+							})
+						}
+					})
+					.catch(() => {
+						return res.status(400).json({
+							err: true,
+							msg: "Could not upload images. Try again"
+						})
+					})
+				}
+			})
+		}catch(error){
+            console.log(error)
+            return res.status(500).json({
+                err: true,
+                msg: "Could not add product."
+            })
+        }
+	},
 
     // @desc      Add Product to Store
     // @route     POST /api/v1/stores/:id/products/:productId
@@ -562,7 +637,7 @@ module.exports = {
             }
             let updateFields = {                    
                 name: req.body.name,
-                description: req.body.name,
+                description: req.body.description,
                 rating: req.body.rating
             }
             for (const [key, value] of Object.entries(updateFields)) {

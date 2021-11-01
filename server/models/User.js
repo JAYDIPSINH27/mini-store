@@ -60,6 +60,12 @@ const UserSchema = mongoose.Schema({
             ref : 'Order'
         }
     ],
+	stores : [
+		{
+			type : mongoose.Schema.Types.ObjectId,
+            ref : 'Store'
+		}
+	],
     createdAt: {
         type: Date,
         default: Date.now()
@@ -106,7 +112,15 @@ UserSchema.methods = {
     },
     addOrder : function(id){
         this.orders.push(id)
-    }
+    },
+	hasStore : function(id){
+		return this.stores.find(e => e.toString() === id.toString())
+	},
+	addStore : function(id){
+		if(!this.hasStore(id)){
+            this.stores.push(id)
+        }
+	}
 }
 
 module.exports = mongoose.model('User',UserSchema)
