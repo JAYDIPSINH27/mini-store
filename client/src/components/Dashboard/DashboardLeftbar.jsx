@@ -1,7 +1,9 @@
 import React from 'react'
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import { ViewList, ExitToApp, Home, Storefront,} from '@material-ui/icons';
-import { Link, BrowserRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useHistory,Link} from "react-router-dom";
+import { getUser,logOut } from '../../redux/helpers/authHelpers';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -38,15 +40,41 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down("sm")]: {
             display: "none",
         }
-    }
+    },
+    a:{
+        textDecoration:"none",
+
+        color: "#555",
+        '&:hover': {
+            textDecoration:"none",
+            color: "#555",
+            opacity:"0.9"
+        },
+        [theme.breakpoints.down("sm")]: {
+            color: theme.palette.common.white,
+            '&:hover': {
+                textDecoration:"none",
+                color: theme.palette.common.white,
+                opacity:"0.9"
+            },
+        }
+    },
 }))
 
 function DashBoardLeftbar() {
     const classes = useStyles({  })
+    const history = useHistory();
+    const user = useSelector((state) => state.authReducer); 
+
+    const clearCookie = () => {
+        logOut()
+        history.push('/')
+    }
+
     return (
         <>
             <Container className={classes.container}>
-                <Link to="/dashboard">
+                <Link to="/dashboard" className={classes.a}>
                     <div className={classes.item}> 
                         <Home className={classes.icon}/>
                         <Typography className={classes.text}>
@@ -55,7 +83,7 @@ function DashBoardLeftbar() {
                     </div>
                 </Link>
             
-                <Link to="/dashboard/product/view">
+                <Link to="/dashboard/product/view" className={classes.a}>
                     <div className={classes.item}> 
                         <ViewList className={classes.icon}/>
                         <Typography className={classes.text}>
@@ -64,7 +92,7 @@ function DashBoardLeftbar() {
                     </div>
                 </Link>
 
-                <Link to="/dashboard/store/details">
+                <Link to="/dashboard/store/details" className={classes.a}>
                     <div className={classes.item}> 
                         <Storefront className={classes.icon}/>
                         <Typography className={classes.text}>
@@ -73,12 +101,14 @@ function DashBoardLeftbar() {
                     </div>
                 </Link>
                 
-                <div className={classes.item}> 
-                    <ExitToApp className={classes.icon}/>
-                    <Typography className={classes.text}>
-                        Logout
-                    </Typography>
-                </div>
+                {
+                user.jwtToken !== "" ? <div className={classes.item}>
+                <a onClick={clearCookie} className={classes.a}> 
+                <ExitToApp className={classes.icon}/>
+                <span className={classes.text}>Logout</span>
+                </a>
+             </div> : null
+            }
             
             </Container>
          </>
