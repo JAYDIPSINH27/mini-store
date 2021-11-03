@@ -1,6 +1,9 @@
-import Home1 from '../assets/Home1.jpg'
-import Home2 from '../assets/Home2.jpg'
-import Home3 from '../assets/Home3.jpg'
+// import Home1 from '../assets/Home1.jpg'
+import Home1 from '../assets/9704-ecommerce.gif'
+// import Home2 from '../assets/Home2.jpg'
+import Home2 from '../assets/53902-online-shopping-and-delivery.gif'
+// import Home3 from '../assets/Home3.jpg'
+import Home3 from '../assets/77169-buy-and-sell-online.gif'
 
 export const slideData=[
     {

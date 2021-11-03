@@ -10,7 +10,7 @@ import { mobile } from './responsive'
 import spinner from '../../assets/spinner.gif'
 import { Link} from "react-router-dom";
 const Container = styled.div`
-    padding:5rem 0rem;
+    padding:2rem 0rem;
     width:100%;
     height:100vh;
     display:flex;

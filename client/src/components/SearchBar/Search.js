@@ -13,6 +13,7 @@ import { useHistory } from "react-router-dom";
 import Product from '../Products/Product'
 import axios from 'axios'
 import logo from "../../assets/shopping.gif";
+import NoSearch from "../../assets/Nosearch.jpg";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,11 +34,9 @@ const Stores = (props) => {
     const classes = useStyles({  })
     return (
         <Container className={classes.container}>
-          
             <Grid container spacing={4}>
               {props.loading?
-                (props.data.map((productValue) => (
-    
+                (props.data.map((productValue) =>(
                     <Grid item sm={12} md={6} lg={4} key={productValue.id}> 
                         <Product product={productValue}/>
                     </Grid>
