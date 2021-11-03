@@ -1,7 +1,7 @@
 // @desc      CartPage Component
 // @route     localhost:3000/cart
 // @access    Private
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { makeStyles, alpha } from "@material-ui/core";
 import { Container } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
@@ -20,6 +20,9 @@ import { Add, Remove } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Divider from "@material-ui/core/Divider";
+
+import {Table, TableBody, TableCell,TableContainer, TableHead, TableRow,  Paper} from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme) => ({
   body: {
@@ -78,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    marginTop: "4rem",
+    marginTop: "2rem",
     marginBottom: "1rem",
     display: "flex",
   },
@@ -86,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    marginTop: "1rem",
+    marginTop: "2.5rem",
     marginBottom: "1rem",
     display: "flex",
   },
@@ -94,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor:"#EB9800",
+    backgroundColor:"#f44336",
     textAlign: "center",
     border: "2 ",
     fontSize: "20px",
@@ -102,8 +105,8 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     "&:hover": {
       textDecoration: "none",
-      color: "black",
-      backgroundColor:"lightgreen",
+      color: "white",
+      backgroundColor:"#ba000d",
     },
     [theme.breakpoints.down("sm")]: {
       color: theme.palette.common.white,
@@ -114,6 +117,31 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  removeButton: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    }
+  },
+  productName: {
+    minHeight: "4.5rem",
+  },
+  productsContainer: {
+    marginTop: '2rem',
+  },
+  totalText: {
+    fontWeight: 'bold',
+    fontSize: '1.3rem',
+    
+  },
+  billTable: {
+    marginTop: '2rem',
+    paddingLeft: '20%',
+    paddingRight: '20%',
+    [theme.breakpoints.down("sm")]: {
+      paddingLeft: '0',
+      paddingRight: '0',
+    }
+  }
 }));
 
 const Stores = (props) => {
@@ -128,7 +156,8 @@ const Stores = (props) => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  console.log(props.data);
+  // console.log(props.data);
+  const [rows, setRows] = useState([]);
 
   const remove = (productId) => {
     removeFromCart(productId);
@@ -144,6 +173,19 @@ const Stores = (props) => {
       updateCart(cart._id, cart.quantity - 1);
     }
   };
+
+  useEffect(() => {
+    const res = [];
+    props.data.cart.map((cart) => {
+      res.push({
+        name: cart.productId.name,
+        quantity: cart.quantity,
+        rate: cart.price,
+        amount: (cart.price * cart.quantity)
+      })
+    });
+    setRows(res);
+  }, [remove, addOne, removeOne]);
 
   return (
     <>
@@ -165,38 +207,7 @@ const Stores = (props) => {
         </Grid>
         <Divider />
 
-        <Grid item>
-          <div className={classes.Text}>
-            <Typography
-              className={classes.fontStyle}
-              gutterBottom
-              variant="h4"
-              component="h4"
-            >
-              Total Amount :{props.data.amount}₹
-            </Typography>
-            </div>
-            <div className={classes.Text}>
-            
-              <Button
-                className={classes.a}
-                href="/payment"
-                
-              >
-                Place Order
-              </Button>
-              <div style={{width : "2rem"}}></div>
-              <Button
-                className={classes.a}
-                onClick={clearCart}
-              >
-                Clear Cart
-              </Button>
-            
-            </div>
-        </Grid>
-
-        <Grid container spacing={5}>
+        <Grid container spacing={5} className={classes.productsContainer}>
           {props.data.cart.map((cart) => {
             return (
               // <h1>{cart.id}</h1>
@@ -214,7 +225,7 @@ const Stores = (props) => {
                   </CardActionArea>
                   <CardContent>
                     <Grid container className={classes.ratingDiv}>
-                      <Grid item lg={6} md={6}>
+                      <Grid item lg={6} md={6} className={classes.productName}>
                         <Typography
                           className={classes.fontStyle}
                           gutterBottom
@@ -238,7 +249,7 @@ const Stores = (props) => {
                       color="textSecondary"
                       component="p"
                     >
-                      Quantity:
+                      Quantity :&nbsp;
                       {cart.quantity}
                     </Typography>
 
@@ -247,8 +258,17 @@ const Stores = (props) => {
                       color="textSecondary"
                       component="p"
                     >
-                      Price:
-                      {cart.price * cart.quantity}₹
+                      Rate :&nbsp;
+                      {cart.price}&nbsp;₹
+                    </Typography>
+
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Amount :&nbsp;
+                      {cart.price * cart.quantity}&nbsp;₹
                     </Typography>
                   </CardContent>
                   <CardActions>
@@ -276,15 +296,98 @@ const Stores = (props) => {
                       color="primary"
                       variant="contained"
                     >
-                    <DeleteIcon/>
-                      Remove
-                    </Button>
+                        <DeleteIcon/>
+                      <div className={classes.removeButton}>
+                          Remove
+                      </div>
+
+                      </Button>
                   </CardActions>
                 </Card>
               </Grid>
             );
           })}
         </Grid>
+
+        <Grid item>
+          <div className={classes.Title}>
+            <Typography
+              className={classes.fontStyle}
+              gutterBottom
+              variant="h5"
+              component="h5"
+            >
+              Order Details
+            </Typography>
+          </div>
+        </Grid>
+
+        <Grid item className={classes.billTable}>
+          <TableContainer component={Paper} >
+            <Table  aria-label="Bill">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Product Name</TableCell>
+                  <TableCell align="right">Quantity</TableCell>
+                  <TableCell align="right">Rate</TableCell>
+                  <TableCell align="right">Amount</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="right">{row.quantity}</TableCell>
+                    <TableCell align="right">{row.rate}</TableCell>
+                    <TableCell align="right">{row.amount}</TableCell>
+                    
+                  </TableRow>
+                ))}
+                <TableRow>
+                  <TableCell rowSpan={1} />
+                  <TableCell colSpan={2} align="right" className={classes.totalText}> Total Amount (₹) </TableCell>
+                  <TableCell align="right" className={classes.totalText}>{props.data.amount}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {/* <div className={classes.Text}>
+            <Typography
+              className={classes.fontStyle}
+              gutterBottom
+              variant="h4"
+              component="h4"
+            >
+              Total Amount :{props.data.amount}₹
+            </Typography>
+            </div> */}
+            <div className={classes.Text}>
+            
+              <Button
+                className={classes.a}
+                href="/payment"
+                
+              >
+                Place Order
+              </Button>
+              <div style={{width : "2rem"}}></div>
+              <Button
+                className={classes.a}
+                onClick={clearCart}
+              >
+                Clear Cart
+              </Button>
+            
+            </div>
+        </Grid>
+
+        
       </Container>
     </>
   );
