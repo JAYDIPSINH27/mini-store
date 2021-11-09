@@ -132,13 +132,13 @@ const ShopList = () => {
           user.user && user.user.admin === true ? loading ? (
           <>
             <Button
-              href="/dashboard/product/add"
+              href="/dashboard/store/add"
               variant="outlined"
               color="primary"
               size="small"
               className={classes.addButton}
             >
-              Add a Product
+              Add Store
             </Button>
 
             <div style={{ height: 530, width: "100%" }}>
