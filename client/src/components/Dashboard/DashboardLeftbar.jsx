@@ -92,7 +92,7 @@ function DashBoardLeftbar() {
                     </div>
                 </Link>
 
-                <Link to="/dashboard/store/details" className={classes.a}>
+                <Link to="/dashboard/store/view" className={classes.a}>
                     <div className={classes.item}> 
                         <Storefront className={classes.icon}/>
                         <Typography className={classes.text}>

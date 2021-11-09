@@ -22,6 +22,8 @@ import ProductList from "./components/Dashboard/ProductList";
 import AddProduct from "./components/Dashboard/AddProduct";
 import StoreDetails from "./components/Dashboard/StoreDetails";
 import Orders from "./components/Orders/OrderPage"
+import AddStore from "./components/Dashboard/AddStore";
+import ShopList from "./components/Dashboard/ShopList";
 
 function App() {
   console.log("store : ", store);
@@ -53,7 +55,8 @@ function App() {
                 <Route exact path="/dashboard" component={DashboardHome} />
                 <Route path="/dashboard/product/view" component={ProductList} />
                 <Route path="/dashboard/product/add" component={AddProduct} />
-                <Route path="/dashboard/store/details" component={StoreDetails} />
+                <Route path="/dashboard/store/view" component={ShopList} />
+                <Route path="/dashboard/store/add" component={AddStore}/>
               </Switch>
             </Layout>
           </Switch>
