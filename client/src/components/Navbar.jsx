@@ -4,7 +4,7 @@
 
 import React, { useEffect,useState } from 'react'
 import {AppBar, Badge, InputBase, makeStyles, Toolbar, Typography,Button } from '@material-ui/core'
-import {Cancel, LocalMall, Mail,  Person,PersonOutline, Search,ExitToApp,Storefront,ShoppingCartOutlined} from '@material-ui/icons'
+import {Cancel, LocalMall, Mail,  Person,PersonOutline, Search,ExitToApp,Storefront,ShoppingCartOutlined,DashboardOutlined} from '@material-ui/icons'
 import { alpha } from '@material-ui/core'
 import { Link, useHistory } from "react-router-dom";
 import { getUser,logOut } from '../redux/helpers/authHelpers';
@@ -105,58 +105,106 @@ function Navbar() {
     const search=(q)=>{
         setText(q)
     }
-
     if (authUser.jwtToken !== "") {
-        return (
-            <AppBar position="fixed">
-                <Toolbar className={classes.toolbar} >
-                    <Typography variant="h6" className={classes.logoLg}>
-                       <Link to="/" className={classes.a}> Mini Mall</Link>
-                    </Typography>
-                    <Typography variant="h6" className={classes.logoSm}>
-                    <Link to="/" className={classes.a}>Mall</Link>
-                    </Typography>
-                    
-                    <div className={classes.search} >
-                        <Search />
-                        <form action={"/search/"+text.slice(0,text.length)}>
+        if(!authUser.user.admin){
 
-                        <InputBase placeholder="Search..." className={classes.input} value={text}  onChange={(e)=> search(e.target.value)}/>
-                        </form>
-                        <Cancel className={classes.cancel} onClick={() => setOpen(false)} />
-                    </div>
-    
-                    <div className={classes.icons} >
-                        <Search className={classes.searchButton} onClick={() => setOpen(true)}/>
-                        {/* <Badge badgeContent={4} color="secondary" className={classes.badge}>
-                            <Mail />
-                        </Badge> */}
-                        <Badge color="secondary" className={classes.badge}>
-                            <Link to="/stores" className={classes.a} >
-                            <Storefront/>
-                            </Link>
-                        </Badge>
+            return (
+                <AppBar position="fixed">
+                    <Toolbar className={classes.toolbar} >
+                        <Typography variant="h6" className={classes.logoLg}>
+                           <Link to="/" className={classes.a}> Mini Mall</Link>
+                        </Typography>
+                        <Typography variant="h6" className={classes.logoSm}>
+                        <Link to="/" className={classes.a}>Mall</Link>
+                        </Typography>
                         
-                        {/* <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}> */}
-                        <Badge badgeContent={cart} color="secondary" className={classes.badge}>
-                        <Link to="/cart" className={classes.a} >
-                            <ShoppingCartOutlined />
-                        </Link> 
-                        </Badge>
-                        <Badge color="secondary" className={classes.badge}>
-                            <ExitToApp onClick={clearCookie}  className={classes.a}/>
-                        </Badge>
-                        <Badge color="secondary" className={classes.badge}>
-                            <Link to="/profile">
-                            <PersonOutline className={classes.a}/>
-                            </Link>
-                            <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
-                        </Badge>
-                    </div>
-                  
-                </Toolbar>
-            </AppBar>
-        )
+                        <div className={classes.search} >
+                            <Search />
+                            <form action={"/search/"+text.slice(0,text.length)}>
+    
+                            <InputBase placeholder="Search..." className={classes.input} value={text}  onChange={(e)=> search(e.target.value)}/>
+                            </form>
+                            <Cancel className={classes.cancel} onClick={() => setOpen(false)} />
+                        </div>
+        
+                        <div className={classes.icons} >
+                            <Search className={classes.searchButton} onClick={() => setOpen(true)}/>
+                            {/* <Badge badgeContent={4} color="secondary" className={classes.badge}>
+                                <Mail />
+                            </Badge> */}
+                            <Badge color="secondary" className={classes.badge}>
+                                <Link to="/stores" className={classes.a} >
+                                <Storefront/>
+                                </Link>
+                            </Badge>
+                            
+                            {/* <Badge badgeContent={getCartLength()} color="secondary" className={classes.badge}> */}
+                            <Badge badgeContent={cart} color="secondary" className={classes.badge}>
+                            <Link to="/cart" className={classes.a} >
+                                <ShoppingCartOutlined />
+                            </Link> 
+                            </Badge>
+                            <Badge color="secondary" className={classes.badge}>
+                                <ExitToApp onClick={clearCookie}  className={classes.a}/>
+                            </Badge>
+                            <Badge color="secondary" className={classes.badge}>
+                                <Link to="/profile">
+                                <PersonOutline className={classes.a}/>
+                                </Link>
+                                <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
+                            </Badge>
+                        </div>
+                      
+                    </Toolbar>
+                </AppBar>
+            )
+        }
+        else{
+            return (
+                <AppBar position="fixed">
+                    <Toolbar className={classes.toolbar} >
+                        <Typography variant="h6" className={classes.logoLg}>
+                           <Link to="/" className={classes.a}> Mini Mall</Link>
+                        </Typography>
+                        <Typography variant="h6" className={classes.logoSm}>
+                        <Link to="/" className={classes.a}>Mall</Link>
+                        </Typography>
+                        
+                        <div className={classes.search} >
+                            <Search />
+                            <form action={"/search/"+text.slice(0,text.length)}>
+    
+                            <InputBase placeholder="Search..." className={classes.input} value={text}  onChange={(e)=> search(e.target.value)}/>
+                            </form>
+                            <Cancel className={classes.cancel} onClick={() => setOpen(false)} />
+                        </div>
+        
+                        <div className={classes.icons} >
+                            <Search className={classes.searchButton} onClick={() => setOpen(true)}/>
+                            {/* <Badge badgeContent={4} color="secondary" className={classes.badge}>
+                                <Mail />
+                            </Badge> */}
+                            <Badge color="secondary" className={classes.badge}>
+                                <Link to="/dashboard" className={classes.a} >
+                                <DashboardOutlined/>
+                                </Link>
+                            </Badge>
+                            
+                            <Badge color="secondary" className={classes.badge}>
+                                <ExitToApp onClick={clearCookie}  className={classes.a}/>
+                            </Badge>
+                            <Badge color="secondary" className={classes.badge}>
+                                <Link to="/profile">
+                                <PersonOutline className={classes.a}/>
+                                </Link>
+                                <h6 style={{alignItems:"center"}}>{getUser().name}</h6>
+                            </Badge>
+                        </div>
+                      
+                    </Toolbar>
+                </AppBar>
+            )
+        }
     }
     else{
         return (
