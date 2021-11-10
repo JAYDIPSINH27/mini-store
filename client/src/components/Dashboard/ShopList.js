@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, makeStyles } from "@material-ui/core";
+import { Button, Container, makeStyles,Typography,Divider } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import { Delete, Edit } from "@material-ui/icons";
 import { useState } from "react";
@@ -131,6 +131,9 @@ const ShopList = () => {
         {
           user.user && user.user.admin === true ? loading ? (
           <>
+
+          <Typography variant="h4">Store Details</Typography>
+          <Divider />
             <Button
               href="/dashboard/store/add"
               variant="outlined"
