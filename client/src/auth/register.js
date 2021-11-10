@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -7,14 +7,25 @@ import "../css/register.css";
 import loginImage from "../assets/login.svg";
 import { useHistory } from "react-router-dom";
 import {useSelector} from "react-redux";
+import queryString from 'query-string';
 
-const Register = () => {
+const Register = (props) => {
+
   const history = useHistory();
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
+  const [active,setActive] = useState(false);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const user = useSelector((state) => state.authReducer)
+
+  useEffect(() => {
+	let queryObj = queryString.parse(props.location.search)
+    if(queryObj.email){
+		setEmail(queryObj.email)
+		setActive(true)
+    }
+  },[])
 
   function showPassword() {
     var x = document.getElementById("password");
@@ -41,6 +52,7 @@ const Register = () => {
           name,
           email,
           password,
+		  active
         },
       })
         .then((res) => res.data)
@@ -53,7 +65,7 @@ const Register = () => {
     }
   };
 
-  if (user.jwtToken == "") {
+  if (user.jwtToken === "") {
     return (
       <>
         <div>
@@ -80,6 +92,7 @@ const Register = () => {
                       }}
                       value={email}
                       required
+					  {...(active ? {readOnly : true} : {})}
                     />
                   </div>
                   <div className="form-group">

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Image = require('../models/Image');
 const { userPopulate } = require('../utils/populateObjects');
-const {sendWelcomeEmail,sendRequestPasswordEmail,sendResetPasswordEmail} = require('../utils/sendEmail')
+const {sendWelcomeEmail,sendRequestPasswordEmail,sendResetPasswordEmail, sendActivationEmail} = require('../utils/sendEmail')
 const getError = require('../utils/dbErrorHandler');
 const { createToken } = require('../utils/createTokens');
 const ActivationToken = require('../models/ActivationToken');
@@ -33,6 +33,9 @@ module.exports = {
         if(req.body.admin){
             user.admin = true
         }
+		if(req.body.active){
+            user.active = true
+        }
         if(req.body.image){
             image = new Image()
             let response = await image.upload(user._id,req.body.image,'User')
@@ -46,29 +49,40 @@ module.exports = {
                 await image.save()
             }
             const {token,hash} = createToken()
-            const activateToken = new ActivationToken({
-                user : user.email,
-                token : hash
-            })
-            await activateToken.save()
-            let link = `${redirectURL}/activation?user=${user.email}&token=${token}`
-            let resp = await sendWelcomeEmail({
-                user : req.body.name,
-                email : req.body.email
-            },link)
-            if(resp){
-                return res.status(201).json({
-                    err: false,
-                    msg: "Successfully signed up and verification email queued."
-                })
-            }else{
-                await user.deleteOne()
-                await activateToken.deleteOne()
-                return res.status(400).json({
-                    err: false,
-                    msg: "Could not send verification mail."
-                })
-            }
+			if(!user.active){
+				const activateToken = new ActivationToken({
+					user : user.email,
+					token : hash
+				})
+				await activateToken.save()
+				let link = `${redirectURL}/activation?user=${user.email}&token=${token}`
+				let resp = await sendWelcomeEmail({
+					user : req.body.name,
+					email : req.body.email
+				},link)
+				if(resp){
+					return res.status(201).json({
+						err: false,
+						msg: "Successfully signed up and verification email queued."
+					})
+				}else{
+					await user.deleteOne()
+					await activateToken.deleteOne()
+					return res.status(400).json({
+						err: false,
+						msg: "Could not send verification mail."
+					})
+				}
+			}else{
+				await sendActivationEmail({
+					user : req.body.name,
+					email : req.body.email
+				})
+				return res.status(201).json({
+					err: false,
+					msg: "Successfully signed up and verified."
+				})
+			}
         }
         catch(err){
             console.log(err)
@@ -213,7 +227,9 @@ module.exports = {
     // @access    Private
 
     getUser : async (req,res) => {
-        let user = await User.findById(req.user._id).populate(userPopulate)
+        let user = await User.findById(req.user._id)
+			.select('-hashed_password')
+			.populate(userPopulate)
         if(req.user){
             return res.status(200).json({
                 err : false,
@@ -412,11 +428,11 @@ module.exports = {
             .then(user => {
                 if(user){
                     const token = jwt.sign({id : user.email},jwtSecret)
-                    let url = `${frontendURL}/signin?token=${encodeURIComponent(token)}}`
-                    return  res.redirect(url)
+                    let url = `${frontendURL}/signin?token=${encodeURIComponent(token)}`
+					res.redirect(url)
                 }else{
-                    let url = `${frontendURL}/signin?error=${encodeURIComponent('User doesnt exist')}`
-                    return  res.redirect(url)
+                    let url = `${frontendURL}/signup?email=${encodeURIComponent(email)}`
+					res.redirect(url)
                 }
             })
         }

@@ -6,6 +6,7 @@ import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined,Storefront
 import React from 'react'
 import styled from 'styled-components'
 import { Link} from "react-router-dom";
+import noImage from '../../assets/noImage.png'
 
 const Info=styled.div`
     opacity:0;
@@ -79,7 +80,7 @@ const HomeProduct = ({item}) => {
     return (
         <Container>
             <Circle />
-            <Image src={item.images[0].url} />
+            <Image src={item.images.length !== 0 ? item.images[0].url : noImage} />
             <Info>
             <Link to={"/store/"+item.stores[0]._id} style={{textDecoration:"none",color:"light blue"}}>
                 <Icon>

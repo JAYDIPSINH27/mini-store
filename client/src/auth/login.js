@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import loginImage from '../assets/login.svg';
 import queryString from 'query-string';
-import {setAuthDetails} from '../redux/helpers/authHelpers'
+import {setAuthDetails,setJWTToken,setUser} from '../redux/helpers/authHelpers'
 import {useSelector} from "react-redux";
 
 const Login = (props) => {
@@ -27,17 +27,28 @@ const Login = (props) => {
   }
 
   useEffect(() => {
-    let queryObj = queryString.parse(props.location.search)
-    if(queryObj.activation){
-      toast.success("Activation successful.");
-    }else if(queryObj.reset){
-      toast.success("Password Reset Successful.");
-    }else if(queryObj.error){
-      toast.error(queryObj.error);
-    }else if(queryObj.token){
-      cookies.set('jwt', queryObj.token , { path: '/' })
-      history.push("/");
-    }
+		let asyncFunction = async () => {
+			let queryObj = queryString.parse(props.location.search)
+    		if(queryObj.activation){
+      			toast.success("Activation successful.");
+    		}else if(queryObj.reset){
+      			toast.success("Password Reset Successful.");
+    		}else if(queryObj.error){
+      			toast.error(queryObj.error);
+    		}else if(queryObj.token){
+      			setJWTToken(queryObj.token)
+				const {data} = await axios({
+					method : "GET",
+					url : 'http://localhost:4000/api/v1/auth/user',
+					headers : {
+						Authorization: `Bearer ${queryObj.token}`
+					}
+				})
+				setUser(data.data)
+     	 		history.push("/");
+    		}
+	}
+	asyncFunction()
   },[])
 
   const submitButton = async (event) => {
