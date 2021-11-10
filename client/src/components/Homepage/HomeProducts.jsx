@@ -65,6 +65,7 @@ const HomeProducts = () => {
             url: "http://localhost:4000/api/v1/products",
           })
           .then((res) => {
+			console.log(res.data)
             setProducts(res.data.data)
             setLoading(true)
           })

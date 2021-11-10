@@ -13,6 +13,7 @@ import Carousel from './Carousel'
 import { Grid, makeStyles } from '@material-ui/core'
 import HomeProducts from './HomeProducts'
 import {useSelector} from "react-redux";
+import { getAuthDetails } from '../../redux/helpers/authHelpers'
 
 
 const UseStyles = makeStyles((theme) => ({
@@ -32,7 +33,7 @@ const UseStyles = makeStyles((theme) => ({
 const HomePage = () => {
     const user = useSelector((state) => state.authReducer)
     useEffect(() => {
-        console.log(user);
+		console.log(getAuthDetails())
     }, [])
 
     const classes = UseStyles({  })

@@ -18,6 +18,16 @@ export const saveAuthDetails = () => {
     saveState('authState',getAuthDetails())
 }
 
+export const setJWTToken = (token) => {
+	store.dispatch(actions.setJWT(token))
+	saveAuthDetails()
+}
+
+export const setUser = (user) => {
+	store.dispatch(actions.setUser(user))
+	saveAuthDetails()
+}
+
 export const setAuthDetails = (data) => {
     store.dispatch(actions.setJWT(data.token))
     store.dispatch(actions.setUser(data.data))

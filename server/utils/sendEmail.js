@@ -16,6 +16,13 @@ const welcomeTemplate = (name,link) => (
     <p>Enjoy your stay here.</p>`
 )
 
+const activationTemplate = (name) => (
+    `<h3>Welcome ${name.toUpperCase()}</h3>
+    <p>We are glad to have you at Mini-Store.</p>
+	<p>Your account has already been activated. You can now login.</p>
+    <p>Enjoy your stay here.</p>`
+)
+
 const resetPasswordTemplate = (name) => (
     `<h3>Hi ${name.toUpperCase()}</h3>
     <p>Your password has been successfully reset.</p>
@@ -62,6 +69,15 @@ const sendWelcomeEmail = async (recipient,link) => {
     return false
 }
 
+const sendActivationEmail = async (recipient) => {
+    let resp = await sendEmail(recipient,'Successful Registration at Mini-Store',activationTemplate(recipient.user))
+    console.log(resp);
+    if(resp){
+        return true
+    }
+    return false
+}
+
 const sendRequestPasswordEmail = async (recipient,link) => {
     let resp = await sendEmail(recipient,'Request for password change at Mini-Store',requestPasswordTemplate(recipient.user,link))
     if(resp){
@@ -78,4 +94,4 @@ const sendResetPasswordEmail = async (recipient) => {
     return false
 }
 
-module.exports = {sendWelcomeEmail,sendRequestPasswordEmail,sendResetPasswordEmail}
+module.exports = {sendWelcomeEmail,sendActivationEmail,sendRequestPasswordEmail,sendResetPasswordEmail}
