@@ -66,7 +66,11 @@ module.exports = {
                 }
             } 
         },
-        
+        {
+            path:'stores',
+            select:'name description addresses rating products '
+        }
+
     ],
 
     orderPopulate : [
