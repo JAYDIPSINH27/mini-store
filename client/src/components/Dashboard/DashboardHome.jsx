@@ -16,10 +16,20 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: theme.spacing(10),
         paddingBottom: theme.spacing(2),
     },
-    box:{
+    box1:{
+        boxShadow : "1px 3px 3px grey",
+        borderRadius : "20px",
+        height: "200px",
+        width: "400px",
+        
+    },
+    box2:{
         boxShadow : "1px 3px 3px grey",
         borderRadius : "20px",
         
+    },
+    chart:{
+      
     },
     text: {
       display: "flex",
@@ -92,6 +102,9 @@ function DashboardHome() {
 
   const productnum=()=>{
     var count=0;
+    user.user.stores.map((product)=>{
+      count+=product.products.length
+    })
     
     return count;
 
@@ -111,7 +124,7 @@ function DashboardHome() {
             <Grid item xs={12} sm={6} md={4}>
 
             <Box
-                className={classes.box}
+                className={classes.box1}
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -124,7 +137,7 @@ function DashboardHome() {
             <Grid item xs={12} sm={6} md={4}>
 
             <Box
-                className={classes.box}
+                className={classes.box1}
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -137,12 +150,12 @@ function DashboardHome() {
             <Grid item xs={12} sm={6} md={4}>
 
             <Box
-                className={classes.box}
+                className={classes.box1}
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
             >  
-                <DateTime />
+                <Typography variant="h6" className={classes.text}>Total Stores:{user.user.stores.length}</Typography>
             </Box>
             
             </Grid>
@@ -155,7 +168,7 @@ function DashboardHome() {
 
             <Grid item xs={12} sm={6} md={4}> 
             <Box
-                className={classes.box}
+                className={classes.box2}
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
