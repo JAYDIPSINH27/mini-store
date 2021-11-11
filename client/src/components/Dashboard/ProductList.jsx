@@ -97,19 +97,19 @@ function ProductList() {
     {
       field: "name",
       headerName: "Product Name",
-      width: 200,
+      width: 190,
       editable: true,
     },
     {
       field: "category",
       headerName: "Category",
-      width: 100,
+      width: 150,
       editable: true
     },
     {
       field: "description",
       headerName: "Description",
-      width: 500,
+      width: 460,
       editable: true,
     },
     {

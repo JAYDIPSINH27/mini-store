@@ -58,6 +58,7 @@ const Register = (props) => {
         .then((res) => res.data)
         .then((data) => {
           toast.success("Registered Successfully");
+          history.push("/");
         })
         .catch((err) => {
           toast.error(err.response.data.msg);
