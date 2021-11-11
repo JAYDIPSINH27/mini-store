@@ -31,6 +31,16 @@ const UseStyles = makeStyles((theme) => ({
   editIcon: {
     verticalAlign: "middle",
     marginLeft: "12px",
+    
+  },
+  editbutton: {
+    textDecoration: "none",
+    color: "#000",
+    '&:hover': {
+        textDecoration:"none",
+        color: "#555",
+        opacity:"0.9"
+    },
   },
   addButton: {
     display: "flex",
@@ -127,8 +137,8 @@ const ShopList = () => {
             <Button onClick={deleteProduct}>
               <Delete className={classes.deleteIcon} />
             </Button>
-            <Link to={`/dashboard/store/edit/${params.row._id}`} id={params.row._id}>
-            <Edit className={classes.editIcon} />
+            <Link to={`/dashboard/store/edit/${params.row._id}`} id={params.row._id} className={classes.editbutton}>
+              <Edit className={classes.editIcon} />
             </Link>
           </div>
         );

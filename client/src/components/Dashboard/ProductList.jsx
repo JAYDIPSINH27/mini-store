@@ -46,7 +46,16 @@ const UseStyles = makeStyles((theme) => ({
   topButtons: {
     marginTop: "10px",
     marginBottom: "10px",
-  }
+  },
+  editbutton: {
+    textDecoration: "none",
+    color: "#000",
+    '&:hover': {
+        textDecoration:"none",
+        color: "#555",
+        opacity:"0.9"
+    },
+  },
 }));
 
 function ProductList() {
@@ -168,7 +177,7 @@ function ProductList() {
               	<Delete className={classes.deleteIcon} />
             </Button>
 			{/* <Button onClick={updateProduct}> */}
-      <Link to={`/dashboard/product/edit/${params.row.id}`} id={params.row.id}>
+      <Link to={`/dashboard/product/edit/${params.row.id}`} id={params.row.id} className={classes.editbutton}>
 				<Edit className={classes.editIcon} />
       </Link>
             {/* </Button> */}

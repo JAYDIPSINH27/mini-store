@@ -4,12 +4,21 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import logo from "../../assets/shopping.gif";
 import unAuth from "../../assets/401.png";
-import { Chart } from 'react-charts'
 import DateTime from './DateTime'
-import store from '../../redux/store';
+// import store from '../../redux/store';
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend
+} from "recharts";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -46,80 +55,52 @@ const useStyles = makeStyles((theme) => ({
 
 
 function DashboardHome() {
-    const classes = useStyles({  })
+  const classes = useStyles({  })
 
-    const [stores, setStores] = useState([]);
-    const [products, setProducts] = useState([]);
+  const [stores, setStores] = useState([]);
+  // const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authReducer);
-  const history = useHistory();
+  // const history = useHistory();
   const [userData, setUserData] = useState({});
 
-  useEffect(() => {
+
+  useEffect( () => {
     axios
-      .get("http://localhost:4000/api/v1/stores?limit=10000")
-      .then((res) => {
-        console.log("default :", res.data.data);
-        setStores(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-      axios
-      .get("http://localhost:4000/api/v1/auth/user", {
-        headers: {
-          Authorization: `Bearer ${user.jwtToken}`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setUserData(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
+    .get("http://localhost:4000/api/v1/auth/user", {
+      headers: {
+        Authorization: `Bearer ${user.jwtToken}`,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      setUserData(res.data.data);
+      
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    
+      
   }, []);
-
-  
 
   setTimeout(() => {
     setLoading(true);
   }, 1500);
-
- 
-  const data = React.useMemo(
-    () => [
-      {
-        label: 'Series 1',
-        data: [[0, 1], [1, 2], [2, 4], [3, 2], [4, 7]]
-      },
-      {
-        label: 'Series 2',
-        data: [[0, 3], [1, 1], [2, 5], [3, 6], [4, 4]]
-      }
-    ]
-  )
- 
-  const axes = React.useMemo(
-    () => [
-      { primary: true, type: 'linear', position: 'bottom' },
-      { type: 'linear', position: 'left' }
-    ],
-    []
-  )
-  console.log(userData)
-
+  
   const productnum=()=>{
     var count=0;
     userData.stores.map((store)=>{
       count+=store.products.length
-    })
-    
+    }) 
     return count;
-
   }
+
+  const stocks = [
+    {
+      name: ''
+    }
+  ]
 
     return (
         <Container className={classes.container}>
@@ -173,23 +154,33 @@ function DashboardHome() {
             
             </Grid>
 
-            
-
             <Grid container spacing={5}>
 
-            <Grid item xs={12} sm={6} md={4}> 
-            <Box
-                className={classes.box3}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height={400} width={500}
-            >
+              <Grid item xs={12} sm={6} md={4}> 
+                {
+                  <BarChart
+                    width={500}
+                    height={300}
+                    data={stocks}
+                    margin={{
+                      top: 5,
+                      right: 10,
+                      left: 10,
+                      bottom: 5
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="Product Name" />
+                    <YAxis dataKey="Quantity" />
+                    <Tooltip />
+                    <Legend />
+                    
+                    <Bar dataKey="quantity" fill="#82ca9d" />
+                  </BarChart>
+                }
                 
-                <Chart data={data} axes={axes} tooltip  />
-
-            </Box>
-            </Grid>
+           
+              </Grid>
             </Grid>
             </>
 

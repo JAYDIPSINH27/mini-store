@@ -267,7 +267,7 @@ console.log(userData)
                 </Grid>
                 <Grid item lg={6} className={classes.emailField}>
                   <TextField
-                    defaultValue={store.addresses[(store.addresses.length)-1].location}
+                    value={store.addresses[(store.addresses.length)-1].location}
                     onChange={(e) => {
                       setLocation(e.target.value);
                     }}
@@ -278,7 +278,7 @@ console.log(userData)
                 </Grid>
                 <Grid item lg={6} className={classes.nameField}>
                   <TextField
-                    defaultValue={store.addresses[(store.addresses.length)-1].landmark}
+                    value={store.addresses[(store.addresses.length)-1].landmark}
                     onChange={(e) => {
                       setLandmark(e.target.value);
                     }}
@@ -289,7 +289,7 @@ console.log(userData)
                 </Grid>
                 <Grid item lg={6} className={classes.emailField}>
                   <TextField
-                    defaultValue={store.addresses[(store.addresses.length)-1].city}
+                    value={store.addresses[(store.addresses.length)-1].city}
                     onChange={(e) => {
                       setCity(e.target.value);
                     }}
@@ -300,7 +300,7 @@ console.log(userData)
                 </Grid>
                 <Grid item lg={6} className={classes.nameField}>
                   <TextField
-                    defaultValue={store.addresses[(store.addresses.length)-1].state}
+                    value={store.addresses[(store.addresses.length)-1].state}
                     variant="outlined"
                     onChange={(e) => {
                       setState(e.target.value);
@@ -311,7 +311,7 @@ console.log(userData)
                 </Grid>
                 <Grid item lg={12} className={classes.field}>
                   <TextField
-                    defaultValue={store.addresses[(store.addresses.length)-1].pincode}
+                    value={store.addresses[(store.addresses.length)-1].pincode}
                     onChange={(e) => {
                       setPincode(parseInt(e.target.value));
                     }}
