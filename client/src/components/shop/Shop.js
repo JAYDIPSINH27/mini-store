@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
     width: "100%",
-    height: "100%",
+    height: "300px",
     borderRadius: "20px",
     // boxShadow: "5px 10px 15px grey",
   },
@@ -117,7 +117,7 @@ const Shop = () => {
                 md={6}
                 lg={5}
               >
-                <Container>
+                <Container >
                   {/* <img
                     src={store.images[0].url}
                     alt="Image not found"

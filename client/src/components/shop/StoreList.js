@@ -54,8 +54,15 @@ const useStyles = makeStyles((theme) => ({
   ratingDiv: {
     justifyContent: "space-between",
   },
+  productName: {
+    height: "4rem",
+  
+  },
   fontStyle: {
     fontFamily: "Noto Serif",
+  },
+  description: {
+    height : "2rem",
   },
   carosoulDiv: {
     width: "100%",
@@ -129,7 +136,7 @@ const Stores = (props) => {
                   </CardActionArea>
                   <CardContent>
                     <Grid container className={classes.ratingDiv}>
-                      <Grid item lg={6} md={6}>
+                      <Grid item lg={6} md={6} className={classes.productName}>
                         <Typography
                           className={classes.fontStyle}
                           gutterBottom
@@ -152,8 +159,9 @@ const Stores = (props) => {
                       variant="body2"
                       color="textSecondary"
                       component="p"
+                      className = {classes.description}
                     >
-                      {store.description}
+                      {store.description.length > 80 ? store.description.substr(0,80)+"..." : store.description}
                     </Typography>
                   </CardContent>
                   <CardActions>
