@@ -100,7 +100,7 @@ const ShopList = () => {
       width: 120,
       renderCell: (params) => {
         const deleteProduct = async () => {
-          const sure = window.confirm("This record will be deleted permently.");
+          const sure = window.confirm("This record will be deleted permanently.");
           if (sure) {
             await axios
               .delete(

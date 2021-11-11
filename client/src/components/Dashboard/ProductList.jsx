@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, makeStyles,Typography,Divider } from "@material-ui/core";
+import { Button, Container, makeStyles,Typography,Divider, FormControl, InputLabel, Select, MenuItem, Grid } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import { Delete, Edit } from "@material-ui/icons";
 import { useState } from "react";
@@ -31,26 +31,40 @@ const UseStyles = makeStyles((theme) => ({
     marginLeft: "12px",
   },
   addButton: {
-    display: "flex",
-    marginLeft: "85%",
+    // display: "flex",
+    marginLeft: "83%", 
+    marginRight: "0%",
     margin: "15px",
     padding: "5px",
   },
+  storeName: {
+    // display: "flex",
+    padding: "5px",
+    width: "50%",
+  },
+  topButtons: {
+    marginTop: "10px",
+    marginBottom: "10px",
+  }
 }));
 
 function ProductList() {
   const classes = UseStyles({});
   const [products, setProducts] = useState([]);
+  const [storeName, setStoreName] = useState();
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authReducer);
   const history = useHistory();
   const [userData, setUserData] = useState({});
   useEffect(() => {
+    console.log(user.user.stores);
+    
     axios
-      .get("http://localhost:4000/api/v1/products?limit=10000")
+      .get(`http://localhost:4000/api/v1/products/stores/:${user.user.stores[0]}`)
       .then((res) => {
         console.log("default :", res.data.data);
         setProducts(res.data.data);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -71,20 +85,38 @@ function ProductList() {
       });
   }, []);
 
-  setTimeout(() => {
-    products.map((product) => {
-      product.id = Math.random();
-      delete product.images;
-      // delete product.category;
-      delete product.stores;
-    });
-    console.log("products : ", products);
-  }, 500);
+  function deleteNotUsedFields(){
+    
+    setTimeout(() => {
+      products.map((product) => {
+        
+        console.log(product.stores);
+      });
+        // products.filter((product) => product.stores.includes(storeName))
+    }, 500);
+
+    setTimeout(() => {
+      products.map((product) => {
+        product.id = Math.random();
+        delete product.images;
+        // delete product.category;
+        delete product.stores;
+      });
+      console.log("products : ", products);
+    }, 500);
+  }
+
+  deleteNotUsedFields();
 
   setTimeout(() => {
     setLoading(true);
   }, 1500);
 
+
+  function getProducts(){
+    
+    deleteNotUsedFields();
+  }
   const columns = [
     {
       field: "_id",
@@ -118,25 +150,25 @@ function ProductList() {
       width: 120,
       renderCell: (params) => {
         const deleteProduct = async () => {
-          // const sure = window.confirm("This record will be deleted permently.");
-          // if (sure) {
-          //   await axios
-          //     .delete(
-          //       `http://localhost:4000/api/v1/products/${params.row._id}`,
-          //       {
-          //         headers: {
-          //           Authorization: `Bearer ${user.jwtToken}`,
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       console.log(res.data);
-          //       window.location.reload(false);
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //     });
-          // }
+          const sure = window.confirm("This record will be deleted permanently.");
+          if (sure) {
+            await axios
+              .delete(
+                `http://localhost:4000/api/v1/products/${params.row._id}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${user.jwtToken}`,
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res.data);
+                window.location.reload(false);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
         };
 
         return (
@@ -160,15 +192,47 @@ function ProductList() {
             
             <Typography variant="h4">Product Details</Typography>
             <Divider />
-            <Button
-              href="/dashboard/product/add"
-              variant="outlined"
-              color="primary"
-              size="small"
-              className={classes.addButton}
-            >
-              Add a Product
-            </Button>
+            <Grid container className={classes.topButtons}>
+              <Grid item lg={2} className={classes.storeName}>
+                <FormControl fullWidth>
+                  <InputLabel id="store-id">Store Name</InputLabel>
+                  <Select
+                    required
+                    labelId="storename-id"
+                    value={storeName}
+                    label="Store Name"
+                    size="small"
+                    onChange={(e) => {
+                      setStoreName(e.target.value);
+                      getProducts();
+                    }}
+                    
+                    variant="outlined"
+                  >
+                    {userData.stores.map((store)=>{
+                      return(
+                        <MenuItem value={store._id}>{store.name}</MenuItem>
+                      )
+                    })}
+                    
+                  </Select>
+                </FormControl>
+              </Grid>
+              
+              <Grid item lg={10}>
+                  <Button
+                  href="/dashboard/product/add"
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  className={classes.addButton}
+                >
+                  Add a Product
+                </Button>
+              </Grid>
+            </Grid>
+            
+            
 
             <div style={{ height: 530, width: "100%" }}>
               <DataGrid

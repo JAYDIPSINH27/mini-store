@@ -20,6 +20,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import unAuth from "../../assets/401.png";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -78,6 +79,7 @@ const AddStore = () => {
   const [fileInput, setFileInput] = useState("");
   const [previewSource, setPreviewSource] = useState("");
   const [loading, setLoading] = useState(false);
+  const history = new useHistory();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -171,6 +173,7 @@ const AddStore = () => {
           toast.error("Product Not Created.");
         } else {
           toast.success("Product Created Successfully");
+          history.push("/dashboard/product/view");
         }
       })
       .catch((err) => {
