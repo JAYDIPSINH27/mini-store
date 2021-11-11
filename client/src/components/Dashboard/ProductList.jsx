@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import logo from "../../assets/shopping.gif";
 import unAuth from "../../assets/401.png";
 
@@ -98,19 +99,19 @@ function ProductList() {
       field: "name",
       headerName: "Product Name",
       width: 190,
-      editable: true,
+      editable: false,
     },
     {
       field: "category",
       headerName: "Category",
       width: 150,
-      editable: true
+      editable: false
     },
     {
       field: "description",
       headerName: "Description",
       width: 460,
-      editable: true,
+      editable: false,
     },
     {
       field: "action",
@@ -166,9 +167,11 @@ function ProductList() {
             <Button onClick={deleteProduct}>
               	<Delete className={classes.deleteIcon} />
             </Button>
-			<Button onClick={updateProduct}>
+			{/* <Button onClick={updateProduct}> */}
+      <Link to={`/dashboard/product/edit/${params.row.id}`} id={params.row.id}>
 				<Edit className={classes.editIcon} />
-            </Button>
+      </Link>
+            {/* </Button> */}
           </div>
         );
       },

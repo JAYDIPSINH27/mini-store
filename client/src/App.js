@@ -20,6 +20,8 @@ import Search from "./components/SearchBar/Search"
 import DashboardHome from "./components/Dashboard/DashboardHome";
 import ProductList from "./components/Dashboard/ProductList";
 import AddProduct from "./components/Dashboard/AddProduct";
+import EditProduct from "./components/Dashboard/EditProduct";
+import EditStore from "./components/Dashboard/EditStore";
 import StoreDetails from "./components/Dashboard/StoreDetails";
 import Orders from "./components/Orders/OrderPage"
 import AddStore from "./components/Dashboard/AddStore";
@@ -55,8 +57,10 @@ function App() {
                 <Route exact path="/dashboard" component={DashboardHome} />
                 <Route path="/dashboard/product/view" component={ProductList} />
                 <Route path="/dashboard/product/add" component={AddProduct} />
+                <Route path="/dashboard/product/edit/:id" component={EditProduct} />
                 <Route path="/dashboard/store/view" component={ShopList} />
                 <Route path="/dashboard/store/add" component={AddStore}/>
+                <Route path="/dashboard/store/edit/:id" component={EditStore}/>
               </Switch>
             </Layout>
           </Switch>
