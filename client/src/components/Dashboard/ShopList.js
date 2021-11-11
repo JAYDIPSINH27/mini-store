@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import logo from "../../assets/shopping.gif";
 import unAuth from "../../assets/401.png";
+// import { deleteProduct } from "../../../../server/controllers/product.controller";
 
 const UseStyles = makeStyles((theme) => ({
   container: {
@@ -46,16 +47,6 @@ const ShopList = () => {
   const history = useHistory();
   const [userData, setUserData] = useState({});
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/api/v1/stores?limit=10000")
-      .then((res) => {
-        console.log("default :", res.data.data);
-        setStores(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
       axios
       .get("http://localhost:4000/api/v1/auth/user", {
         headers: {
@@ -63,12 +54,15 @@ const ShopList = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.data);
+        
         setUserData(res.data.data);
+        setStores(res.data.data.stores);
       })
       .catch((err) => {
         console.log(err);
       });
+
   }, []);
 
   setTimeout(() => {
@@ -106,25 +100,25 @@ const ShopList = () => {
       width: 120,
       renderCell: (params) => {
         const deleteProduct = async () => {
-          // const sure = window.confirm("This record will be deleted permently.");
-          // if (sure) {
-          //   await axios
-          //     .delete(
-          //       `http://localhost:4000/api/v1/products/${params.row._id}`,
-          //       {
-          //         headers: {
-          //           Authorization: `Bearer ${user.jwtToken}`,
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       console.log(res.data);
-          //       window.location.reload(false);
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //     });
-          // }
+          const sure = window.confirm("This record will be deleted permently.");
+          if (sure) {
+            await axios
+              .delete(
+                `http://localhost:4000/api/v1/stores/${params.row._id}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${user.jwtToken}`,
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res.data);
+                window.location.reload(false);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
         };
 
         return (

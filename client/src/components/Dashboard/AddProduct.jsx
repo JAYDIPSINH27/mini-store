@@ -83,6 +83,7 @@ const AddStore = () => {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState(0);
   const [category, setCategory] = useState([]);
+  const [userData, setUserData] = useState({});
   const [category1, setCategory1] = useState();
   const [price, setPrice] = useState();
   const [discount, setDiscount] = useState();
@@ -104,17 +105,42 @@ const AddStore = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/api/v1/categories")
+    setTimeout(() => {
+      axios
+      .get("http://localhost:4000/api/v1/auth/user", {
+        headers: {
+          Authorization: `Bearer ${user.jwtToken}`,
+        },
+      })
       .then((res) => {
-        console.log("default :", res.data.data);
-        setCategory(res.data.data);
+        console.log(res.data.data);
+        setUserData(res.data.data);
+
       })
       .catch((err) => {
         console.log(err);
       });
 
+      axios
+        .get("http://localhost:4000/api/v1/categories")
+        .then((res) => {
+          console.log("default :", res.data.data);
+          setCategory(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    }, 0);
+
   }, []);
+
+  
+    // userData.stores.map((store) => {
+    //   console.log(store.name);
+    // })
+    // console.log("user : ", userData.stores);
+  
 
   const createShop = (e) => {
     e.preventDefault();
@@ -221,7 +247,7 @@ const AddStore = () => {
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    variant="outlined"
+                    variant="filled"
                   />
                 </Grid>
                 <Grid item lg={6} className={classes.nameField}>
@@ -237,7 +263,7 @@ const AddStore = () => {
                     }}
                     multiline
                     maxRows={4}
-                    variant="outlined"
+                    variant="filled"
                   />
                 </Grid>
                 <Grid lg={12}>
@@ -246,7 +272,7 @@ const AddStore = () => {
 
                 <Grid item lg={12} className={classes.field}>
 
-                <Grid item lg={6} className={classes.field}>
+                <Grid item lg={5} className={classes.field}>
                   <FormControl fullWidth>
                     <InputLabel id="category-id">Category *</InputLabel>
                     <Select
@@ -257,7 +283,7 @@ const AddStore = () => {
                       onChange={(e) => {
                         setCategory1(e.target.value);
                       }}
-                      // variant="outlined"
+                      variant="filled"
                     >
                       {category.map((categor)=>{
                         return(
@@ -273,7 +299,7 @@ const AddStore = () => {
 
                 <Grid item lg={12} className={classes.field}>
 
-                <Grid item lg={6} className={classes.field}>
+                <Grid item lg={5} className={classes.field}>
                   <FormControl fullWidth>
                     <InputLabel id="store-id">Store *</InputLabel>
                     <Select
@@ -284,7 +310,7 @@ const AddStore = () => {
                       onChange={(e) => {
                         setStore(e.target.value);
                       }}
-                      // variant="outlined"
+                      variant="filled"
                     >
                       {user.user.stores.map((store)=>{
                         return(
@@ -307,7 +333,7 @@ const AddStore = () => {
                       setPrice(e.target.value);
                     }}
                     required
-                    variant="outlined"
+                    variant="filled"
                     label="Price"
                   />
                 </Grid>
@@ -318,7 +344,7 @@ const AddStore = () => {
                       setQuantity(e.target.value);
                     }}
                     required
-                    variant="outlined"
+                    variant="filled"
                     label="Quantity"
                   />
                 </Grid>
@@ -329,7 +355,7 @@ const AddStore = () => {
                       setDiscount(e.target.value);
                     }}
                     required
-                    variant="outlined"
+                    variant="filled"
                     label="Discount"
                   />
                 </Grid>

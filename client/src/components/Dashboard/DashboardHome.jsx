@@ -17,19 +17,25 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
     },
     box1:{
-        boxShadow : "1px 3px 3px grey",
-        borderRadius : "20px",
-        height: "200px",
-        width: "400px",
-        
+      boxShadow : "1px 3px 3px grey",
+      borderRadius : "20px",
+      height: "120px",
+      width: "400px",
+      
     },
     box2:{
         boxShadow : "1px 3px 3px grey",
         borderRadius : "20px",
-        
+        height: "120px",
+    },
+    box3:{
+      boxShadow : "1px 3px 3px grey",
+      borderRadius : "20px",
+      padding: "10px",
     },
     chart:{
-      
+      display: "flex",
+      margin: "10px",
     },
     text: {
       display: "flex",
@@ -107,8 +113,8 @@ function DashboardHome() {
 
   const productnum=()=>{
     var count=0;
-    userData.stores.map((product)=>{
-      count+=product.products.length
+    userData.stores.map((store)=>{
+      count+=store.products.length
     })
     
     return count;
@@ -142,7 +148,7 @@ function DashboardHome() {
             <Grid item xs={12} sm={6} md={4}>
 
             <Box
-                className={classes.box1}
+                className={classes.box2}
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -155,7 +161,7 @@ function DashboardHome() {
             <Grid item xs={12} sm={6} md={4}>
 
             <Box
-                className={classes.box1}
+                className={classes.box2}
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -173,7 +179,7 @@ function DashboardHome() {
 
             <Grid item xs={12} sm={6} md={4}> 
             <Box
-                className={classes.box2}
+                className={classes.box3}
                 display="flex"
                 justifyContent="center"
                 alignItems="center"

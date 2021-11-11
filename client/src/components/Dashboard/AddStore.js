@@ -129,7 +129,12 @@ const AddStore = () => {
           toast.error("Store Not Created.");
         } else {
           toast.success("Store Created Successfully");
+          
         }
+      })
+      .then((res) => {
+        res.redirect('/dashboard/store/view');
+        window.location = "/dashboard/store/view"
       })
       .catch((err) => {
         console.log(err);
