@@ -47,6 +47,7 @@ function DashboardHome() {
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authReducer);
   const history = useHistory();
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     axios
@@ -60,10 +61,14 @@ function DashboardHome() {
       });
 
       axios
-      .get("http://localhost:4000/api/v1/products?limit=10000")
+      .get("http://localhost:4000/api/v1/auth/user", {
+        headers: {
+          Authorization: `Bearer ${user.jwtToken}`,
+        },
+      })
       .then((res) => {
-        console.log("default :", res.data.data);
-        setProducts(res.data.data);
+        console.log(res.data);
+        setUserData(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -98,11 +103,11 @@ function DashboardHome() {
     ],
     []
   )
-    console.log(user)
+  console.log(userData)
 
   const productnum=()=>{
     var count=0;
-    user.user.stores.map((product)=>{
+    userData.stores.map((product)=>{
       count+=product.products.length
     })
     
@@ -155,7 +160,7 @@ function DashboardHome() {
                 justifyContent="center"
                 alignItems="center"
             >  
-                <Typography variant="h6" className={classes.text}>Total Stores:{user.user.stores.length}</Typography>
+                <Typography variant="h6" className={classes.text}>Total Stores:{userData.stores.length}</Typography>
             </Box>
             
             </Grid>

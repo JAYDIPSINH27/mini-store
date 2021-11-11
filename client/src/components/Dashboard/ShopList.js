@@ -44,13 +44,27 @@ const ShopList = () => {
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authReducer);
   const history = useHistory();
-
+  const [userData, setUserData] = useState({});
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/v1/stores?limit=10000")
       .then((res) => {
         console.log("default :", res.data.data);
         setStores(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      axios
+      .get("http://localhost:4000/api/v1/auth/user", {
+        headers: {
+          Authorization: `Bearer ${user.jwtToken}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data.data);
       })
       .catch((err) => {
         console.log(err);
