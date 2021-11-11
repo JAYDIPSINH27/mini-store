@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import logo from "../../assets/shopping.gif";
 import unAuth from "../../assets/401.png";
+import { Link } from "react-router-dom";
 // import { deleteProduct } from "../../../../server/controllers/product.controller";
 
 const UseStyles = makeStyles((theme) => ({
@@ -86,13 +87,13 @@ const ShopList = () => {
       field: "name",
       headerName: "Store Name",
       width: 200,
-      editable: true,
+      editable: false,
     },
     {
       field: "description",
       headerName: "Description",
       width: 300,
-      editable: true,
+      editable: false,
     },
     {
       field: "action",
@@ -126,7 +127,9 @@ const ShopList = () => {
             <Button onClick={deleteProduct}>
               <Delete className={classes.deleteIcon} />
             </Button>
+            <Link to={`/dashboard/store/edit/${params.row._id}`} id={params.row._id}>
             <Edit className={classes.editIcon} />
+            </Link>
           </div>
         );
       },
