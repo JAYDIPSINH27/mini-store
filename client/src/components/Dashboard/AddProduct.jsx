@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
+  FormControl,
+  Select,
+  MenuItem,
   makeStyles,
   Avatar,
   TextField,
   Button,
   Grid,
   Divider,
+  InputLabel
 } from "@material-ui/core";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import IconButton from "@material-ui/core/IconButton";
@@ -77,6 +81,13 @@ const AddStore = () => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [rating, setRating] = useState(0);
+  const [category, setCategory] = useState([]);
+  const [category1, setCategory1] = useState();
+  const [price, setPrice] = useState();
+  const [discount, setDiscount] = useState();
+  const [quantity, setQuantity] = useState();
+  const [store,setStore]=useState([]);
 
   const user = useSelector((state) => state.authReducer);
   const imageFile = (e) => {
@@ -92,22 +103,35 @@ const AddStore = () => {
     };
   };
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/v1/categories")
+      .then((res) => {
+        console.log("default :", res.data.data);
+        setCategory(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+  }, []);
+
   const createShop = (e) => {
     e.preventDefault();
     axios
       .post(
-        `http://localhost:4000/api/v1/stores/${user.user.stores[0]._id}/products`,
+        `http://localhost:4000/api/v1/stores/${store}/products`,
         {
           user: user.user,
           name: name,
           description: description,
-          category:"615e78d422ef380c408f59f4",
+          category: category1,
           images: [previewSource],
-          product:{
-              price:'50',
-              discount:'0',
-              rating:'4',
-              quantity:'10'
+          product: {
+            price: price,
+            discount: discount,
+            rating: rating,
+            quantity: quantity
           }
         },
         {
@@ -173,7 +197,7 @@ const AddStore = () => {
                     </IconButton>
                   </label>
                 </div>
-                {/* <div className={classes.ratingDiv}>
+                <div className={classes.ratingDiv}>
                   <ReactStars
                     size="40"
                     count={5}
@@ -182,12 +206,12 @@ const AddStore = () => {
                       setRating(value);
                     }}
                   />
-                </div> */}
+                </div>
               </div>
               <Grid container className={classes.form}>
                 <Grid item lg={6} className={classes.emailField}>
                   <TextField
-                    label="Store Name"
+                    label="Product Name"
                     autoFocus
                     required
                     value={name}
@@ -219,61 +243,90 @@ const AddStore = () => {
                 <Grid lg={12}>
                   <Divider />
                 </Grid>
-                {/* <Grid item lg={6} className={classes.emailField}>
-                  <TextField
-                    value={location}
-                    onChange={(e) => {
-                      setLocation(e.target.value);
-                    }}
-                    required
-                    variant="outlined"
-                    label="location"
-                  />
-                </Grid>
+
                 <Grid item lg={6} className={classes.nameField}>
-                  <TextField
-                    value={landmark}
-                    onChange={(e) => {
-                      setLandmark(e.target.value);
-                    }}
-                    required
-                    variant="outlined"
-                    label="landmark"
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel id="category-id">Category</InputLabel>
+                    <Select
+                      required
+                      labelId="category-id"
+                      value={category1}
+                      label="Category"
+                      onChange={(e) => {
+                        setCategory1(e.target.value);
+                      }}
+                      variant="outlined"
+                    >
+                      {category.map((categor)=>{
+                        return(
+
+                          <MenuItem value={categor._id}>{categor.name}</MenuItem>
+                        )
+                      })}
+                      
+                    </Select>
+                  </FormControl>
                 </Grid>
+
+                <Grid item lg={6} className={classes.nameField}>
+                  <FormControl fullWidth>
+                    <InputLabel id="store-id">Store</InputLabel>
+                    <Select
+                      required
+                      labelId="store-id"
+                      value={store}
+                      label="Store"
+                      onChange={(e) => {
+                        setStore(e.target.value);
+                      }}
+                      variant="outlined"
+                    >
+                      {user.user.stores.map((store)=>{
+                        return(
+
+                          <MenuItem value={store._id}>{store.name}</MenuItem>
+                        )
+                      })}
+                      
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+
                 <Grid item lg={6} className={classes.emailField}>
                   <TextField
-                    value={city}
+                    value={price}
                     onChange={(e) => {
-                      setCity(e.target.value);
+                      setPrice(e.target.value);
                     }}
                     required
                     variant="outlined"
-                    label="city"
+                    label="Price"
                   />
                 </Grid>
                 <Grid item lg={6} className={classes.nameField}>
                   <TextField
-                    value={state}
-                    variant="outlined"
+                    value={quantity}
                     onChange={(e) => {
-                      setState(e.target.value);
+                      setQuantity(e.target.value);
                     }}
                     required
-                    label="state"
+                    variant="outlined"
+                    label="Quantity"
                   />
                 </Grid>
                 <Grid item lg={12} className={classes.field}>
                   <TextField
-                    value={pincode}
+                    value={discount}
                     onChange={(e) => {
-                      setPincode(parseInt(e.target.value));
+                      setDiscount(e.target.value);
                     }}
                     required
                     variant="outlined"
-                    label="pincode"
+                    label="Discount"
                   />
-                </Grid> */}
+                </Grid>
+
               </Grid>
               <div className={classes.submitButton}>
                 <Button type="submit" variant="contained" color="primary">
