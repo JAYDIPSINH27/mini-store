@@ -51,77 +51,48 @@ const UseStyles = makeStyles((theme) => ({
 function ProductList() {
   const classes = UseStyles({});
   const [products, setProducts] = useState([]);
-  const [storeName, setStoreName] = useState();
+  const [store, setStore] = useState('');
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authReducer);
   const history = useHistory();
   const [userData, setUserData] = useState({});
-  useEffect(() => {
-    console.log(user.user.stores);
-    
-    axios
-      .get(`http://localhost:4000/api/v1/products/stores/:${user.user.stores[0]}`)
-      .then((res) => {
-        console.log("default :", res.data.data);
-        setProducts(res.data.data);
-        
-      })
-      .catch((err) => {
-        console.log(err);
-      });
 
-      axios
-      .get("http://localhost:4000/api/v1/auth/user", {
-        headers: {
-          Authorization: `Bearer ${user.jwtToken}`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setUserData(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  useEffect(() => {
+    if(user.user.stores.length > 0){
+      	getProducts(user.user.stores[0]._id)
+	}else{
+		setLoading(true)
+	}
   }, []);
 
-  function deleteNotUsedFields(){
-    
-    setTimeout(() => {
-      products.map((product) => {
-        
-        console.log(product.stores);
-      });
-        // products.filter((product) => product.stores.includes(storeName))
-    }, 500);
-
-    setTimeout(() => {
-      products.map((product) => {
-        product.id = Math.random();
-        delete product.images;
-        // delete product.category;
-        delete product.stores;
-      });
-      console.log("products : ", products);
-    }, 500);
+  const getProducts = async (storeId) => {
+    setStore(storeId)
+	setLoading(false)
+	await axios.get(`http://localhost:4000/api/v1/stores/${storeId}`)
+	.then((res) => res.data)
+	.then(({data}) => {
+		let products = data.products.map(product => {
+			let temp = {}
+			temp.id = product.productId._id
+			temp.name = product.productId.name
+			temp.description = product.productId.description
+			temp.category = product.productId.category.name
+			console.log(product.productId)
+			return temp
+		})
+	  	setProducts(products);
+	})
+	.catch((err) => {
+	  console.log(err);
+	})
+	setLoading(true)
   }
 
-  deleteNotUsedFields();
-
-  setTimeout(() => {
-    setLoading(true);
-  }, 1500);
-
-
-  function getProducts(){
-    
-    deleteNotUsedFields();
-  }
   const columns = [
     {
-      field: "_id",
+      field: "id",
       headerName: "ID",
-      width: 100,
+      width: 220,
     },
     {
       field: "name",
@@ -132,16 +103,13 @@ function ProductList() {
     {
       field: "category",
       headerName: "Category",
-      width: 200,
-      editable: true,
-      valueGetter: (params) => {
-        return params.row.category.name;
-      },
+      width: 100,
+      editable: true
     },
     {
       field: "description",
       headerName: "Description",
-      width: 300,
+      width: 500,
       editable: true,
     },
     {
@@ -154,7 +122,7 @@ function ProductList() {
           if (sure) {
             await axios
               .delete(
-                `http://localhost:4000/api/v1/products/${params.row._id}`,
+                `http://localhost:4000/api/v1/products/${params.row.id}`,
                 {
                   headers: {
                     Authorization: `Bearer ${user.jwtToken}`,
@@ -171,12 +139,36 @@ function ProductList() {
           }
         };
 
+		const updateProduct = async () => {
+			const sure = window.confirm("This record will be updated.");
+			if (sure) {
+			  await axios
+				.patch(
+				  `http://localhost:4000/api/v1/products/${params.row.id}`,
+				  {
+					headers: {
+					  Authorization: `Bearer ${user.jwtToken}`,
+					},
+				  }
+				)
+				.then((res) => {
+				  console.log(res.data);
+				  window.location.reload(false);
+				})
+				.catch((err) => {
+				  console.log(err);
+				});
+			}
+		};
+
         return (
           <div className={classes.icons}>
             <Button onClick={deleteProduct}>
-              <Delete className={classes.deleteIcon} />
+              	<Delete className={classes.deleteIcon} />
             </Button>
-            <Edit className={classes.editIcon} />
+			<Button onClick={updateProduct}>
+				<Edit className={classes.editIcon} />
+            </Button>
           </div>
         );
       },
@@ -199,17 +191,15 @@ function ProductList() {
                   <Select
                     required
                     labelId="storename-id"
-                    value={storeName}
+                    value={store}
                     label="Store Name"
                     size="small"
                     onChange={(e) => {
-                      setStoreName(e.target.value);
-                      getProducts();
+                      getProducts(e.target.value);
                     }}
-                    
                     variant="outlined"
                   >
-                    {userData.stores.map((store)=>{
+                    {user.user.stores.map((store)=>{
                       return(
                         <MenuItem value={store._id}>{store.name}</MenuItem>
                       )
@@ -231,8 +221,6 @@ function ProductList() {
                 </Button>
               </Grid>
             </Grid>
-            
-            
 
             <div style={{ height: 530, width: "100%" }}>
               <DataGrid
