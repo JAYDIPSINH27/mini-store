@@ -244,9 +244,11 @@ const AddStore = () => {
                   <Divider />
                 </Grid>
 
-                <Grid item lg={6} className={classes.nameField}>
+                <Grid item lg={12} className={classes.field}>
+
+                <Grid item lg={6} className={classes.field}>
                   <FormControl fullWidth>
-                    <InputLabel id="category-id">Category</InputLabel>
+                    <InputLabel id="category-id">Category *</InputLabel>
                     <Select
                       required
                       labelId="category-id"
@@ -255,7 +257,7 @@ const AddStore = () => {
                       onChange={(e) => {
                         setCategory1(e.target.value);
                       }}
-                      variant="outlined"
+                      // variant="outlined"
                     >
                       {category.map((categor)=>{
                         return(
@@ -267,10 +269,13 @@ const AddStore = () => {
                     </Select>
                   </FormControl>
                 </Grid>
+                </Grid>
 
-                <Grid item lg={6} className={classes.nameField}>
+                <Grid item lg={12} className={classes.field}>
+
+                <Grid item lg={6} className={classes.field}>
                   <FormControl fullWidth>
-                    <InputLabel id="store-id">Store</InputLabel>
+                    <InputLabel id="store-id">Store *</InputLabel>
                     <Select
                       required
                       labelId="store-id"
@@ -279,7 +284,7 @@ const AddStore = () => {
                       onChange={(e) => {
                         setStore(e.target.value);
                       }}
-                      variant="outlined"
+                      // variant="outlined"
                     >
                       {user.user.stores.map((store)=>{
                         return(
@@ -292,6 +297,8 @@ const AddStore = () => {
                   </FormControl>
                 </Grid>
 
+                </Grid>
+                
 
                 <Grid item lg={6} className={classes.emailField}>
                   <TextField
