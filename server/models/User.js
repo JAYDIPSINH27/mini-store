@@ -120,6 +120,11 @@ UserSchema.methods = {
 		if(!this.hasStore(id)){
             this.stores.push(id)
         }
+	},
+	removeStore : function(id){
+		if(this.hasStore(id)){
+            this.stores = this.stores.filter(e => e.toString() !== id.toString())
+        }
 	}
 }
 

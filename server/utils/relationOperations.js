@@ -1,5 +1,6 @@
 const Product = require('../models/Product')
 const Store = require('../models/Store')
+const User = require('../models/User')
 
 module.exports = {
 
@@ -30,6 +31,15 @@ module.exports = {
             }))
         }
         return Promise.all(promises)
-    }
+    },
+
+	deleteStorefromUser : async (userId,storeId) => {
+		User.findById(userId).then(async (user) => {
+			if(user){
+				user.removeStore(storeId)
+				await user.save()
+			}
+		})
+	}
 
 }
