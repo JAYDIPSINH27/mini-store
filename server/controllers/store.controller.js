@@ -2,7 +2,7 @@ const Store = require('../models/Store')
 const Product = require('../models/Product')
 const getError = require('../utils/dbErrorHandler')
 const {uploadImages, deleteImages} = require('../utils/multipleImageOperations')
-const { deleteStorefromProducts } = require('../utils/relationOperations')
+const { deleteStorefromProducts, deleteStorefromUser } = require('../utils/relationOperations')
 const {storePopulate} = require('../utils/populateObjects')
 const User = require('../models/User')
 
@@ -701,6 +701,7 @@ module.exports = {
             .then( async(store) => {
                 if(store){
                     await deleteStorefromProducts(store)
+					await deleteStorefromUser(req.user._id,store._id)
                     await deleteImages(store.images)
                     await store.deleteOne()
                     return res.status(200).json({

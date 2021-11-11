@@ -68,7 +68,18 @@ module.exports = {
         },
         {
             path:'stores',
-            select:'name description addresses rating products '
+            select:'name description addresses rating products',
+			populate: {
+                path: 'products',
+                populate:{
+                    path:'productId',
+                    select: 'name description images',
+                    populate:{
+                        path:'images',
+                        select:'url'
+                    }
+                }
+            } 
         }
 
     ],
