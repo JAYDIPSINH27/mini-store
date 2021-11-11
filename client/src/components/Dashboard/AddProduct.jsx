@@ -77,7 +77,7 @@ const AddStore = () => {
   const classes = useStyles();
   const [fileInput, setFileInput] = useState("");
   const [previewSource, setPreviewSource] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -105,7 +105,6 @@ const AddStore = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
       axios
       .get("http://localhost:4000/api/v1/auth/user", {
         headers: {
@@ -131,10 +130,11 @@ const AddStore = () => {
           console.log(err);
         });
 
-    }, 0);
-
   }, []);
 
+  setTimeout(() => {
+    setLoading(true);
+  }, 1500);
   
     // userData.stores.map((store) => {
     //   console.log(store.name);
@@ -181,7 +181,7 @@ const AddStore = () => {
   return (
     <>
       <Container className={classes.container}>
-        {user.user && user.user.admin === true ? (
+        {user.user && user.user.admin === true ? loading ? (
           <>
             <ToastContainer />
             <form onSubmit={createShop}>
@@ -312,7 +312,7 @@ const AddStore = () => {
                       }}
                       variant="filled"
                     >
-                      {user.user.stores.map((store)=>{
+                      {userData.stores.map((store)=>{
                         return(
 
                           <MenuItem value={store._id}>{store.name}</MenuItem>
@@ -369,15 +369,23 @@ const AddStore = () => {
             </form>
           </>
         ) : (
-          <div className={classes.loadingDiv}>
-            <img
-              src={unAuth}
-              alt="loading..."
-              width="300px"
-              className={classes.loadingImage}
-            />
-          </div>
-        )}
+            <div className={classes.loadingDiv}>
+              <img
+                src={logo}
+                alt="loading..."
+                width="300px"
+                className={classes.loadingImage}
+              />
+            </div>
+          ) : <div className={classes.loadingDiv}>
+              <img
+                src={unAuth}
+                alt="loading..."
+                width="300px"
+                className={classes.loadingImage}
+              />
+            </div>
+          }
       </Container>
     </>
   );
