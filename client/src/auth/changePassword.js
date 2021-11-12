@@ -9,10 +9,12 @@ import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
+import { useSelector } from "react-redux";
 
 const ChangePassword = (props) => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
+  const user = useSelector(state => state.authReducer);
 
   const search = useLocation().search;
   const token = new URLSearchParams(search).get("user");
@@ -58,7 +60,7 @@ const ChangePassword = (props) => {
     }
   };
 
-  if (cookies.get("jwt") !== undefined) {
+  if (user.jwtToken !== '') {
     history.push("/");
   } else {
     return (
