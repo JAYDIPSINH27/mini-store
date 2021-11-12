@@ -142,7 +142,7 @@ function DashboardHome() {
       quantity: 44,
     },
     {
-      name: "Sandwich",
+      name: "Machine",
       quantity: 37,
     }
   ]
