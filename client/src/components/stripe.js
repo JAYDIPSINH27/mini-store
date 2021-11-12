@@ -154,10 +154,13 @@ export const PaymentTest = () => {
     });
   });
 
-  const successPayment = (data) => {
+  const successPayment = async (data) => {
     // alert('Payment Successful');
-    toast.success(data.data.message);
-    clearCart();
+    await toast.success(data.data.message);
+    await clearCart();
+    setTimeout(() => {
+      history.push('/cart');
+    }, 2500);
     console.log(data);
   };
 
