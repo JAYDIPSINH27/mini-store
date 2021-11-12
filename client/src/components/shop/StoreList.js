@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
   },
   productName: {
-    height: "4rem",
+    // height: "4rem",
   
   },
   fontStyle: {
