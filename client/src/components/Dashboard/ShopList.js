@@ -91,24 +91,24 @@ const ShopList = () => {
     {
       field: "_id",
       headerName: "ID",
-      width: 100,
+      width: 220,
     },
     {
       field: "name",
       headerName: "Store Name",
-      width: 200,
+      width: 180,
       editable: false,
     },
     {
       field: "description",
       headerName: "Description",
-      width: 300,
+      width: 520,
       editable: false,
     },
     {
       field: "action",
       headerName: "Action",
-      width: 120,
+      width: 150,
       renderCell: (params) => {
         const deleteProduct = async () => {
           const sure = window.confirm("This record will be deleted permanently.");

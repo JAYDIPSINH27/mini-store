@@ -211,7 +211,7 @@ function ProductList() {
                     }}
                     variant="outlined"
                   >
-                    {user.user.stores.map((store)=>{
+                    {user.user.stores.reverse().map((store)=>{
                       return(
                         <MenuItem value={store._id}>{store.name}</MenuItem>
                       )

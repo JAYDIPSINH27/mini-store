@@ -49,8 +49,17 @@ const useStyles = makeStyles((theme) => ({
     text: {
       display: "flex",
       alignItems:"centre",
-      
-  },
+      textAlign: 'center',
+    },
+    charttext: {
+      display: "flex",
+      alignItems:"centre",
+      textAlign: 'center',
+      marginLeft: "180px",
+    },
+    chartContainer: {
+      marginTop: "30px",
+    }
 }))
 
 
@@ -96,9 +105,45 @@ function DashboardHome() {
     return count;
   }
 
-  const stocks = [
+  const stocks1 = [
     {
-      name: ''
+      name: 'Wireless Earbuds',
+      quantity: 50,
+    },
+    {
+      name: 'mouse',
+      quantity: 40,
+    },
+    {
+      name: 'Sony Speaker',
+      quantity: 100,
+    },
+    {
+      name: 'surface laptop',
+      quantity: 46,
+    }
+  ]
+
+  const stocks2 = [
+    {
+      name: 'T-shirt',
+      quantity: 20,
+    },
+    {
+      name: "Sandle",
+      quantity: 45,
+    },
+    {
+      name: "Topwear",
+      quantity: 44,
+    },
+    {
+      name: "Handbag",
+      quantity: 44,
+    },
+    {
+      name: "Sandwich",
+      quantity: 37,
     }
   ]
 
@@ -154,31 +199,61 @@ function DashboardHome() {
             
             </Grid>
 
-            <Grid container spacing={5}>
+            <Grid container spacing={5} className={classes.chartContainer}>
 
-              <Grid item xs={12} sm={6} md={4}> 
+              <Grid item xs={12} sm={6} lg={6}> 
                 {
                   <BarChart
-                    width={500}
+                    width={600}
                     height={300}
-                    data={stocks}
+                    data={stocks1}
                     margin={{
                       top: 5,
-                      right: 10,
-                      left: 10,
-                      bottom: 5
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
                     }}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="Product Name" />
-                    <YAxis dataKey="Quantity" />
+                    <XAxis dataKey="name" />
+                    <YAxis/>
                     <Tooltip />
                     <Legend />
                     
                     <Bar dataKey="quantity" fill="#82ca9d" />
                   </BarChart>
                 }
-                
+                <Typography variant="h6" className={classes.charttext}>
+                    M-Mart Store's Stock
+                </Typography>
+           
+              </Grid>
+
+              <Grid item xs={12} sm={6} lg={6}> 
+                {
+                  <BarChart
+                    width={600}
+                    height={300}
+                    data={stocks2}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis/>
+                    <Tooltip />
+                    <Legend />
+                    
+                    <Bar dataKey="quantity" fill="#8884d8" />
+                  </BarChart>
+                }
+                <Typography variant="h6" className={classes.charttext}>
+                  V-Mart Store's Stock
+                </Typography>
            
               </Grid>
             </Grid>
