@@ -166,7 +166,7 @@ const Stores = (props) => {
                   </CardContent>
                   <CardActions>
                     <Button
-                      href={`/store/${store._id}`}
+                      href={`/#/store/${store._id}`}
                       size="small"
                       color="primary"
                     >
@@ -191,7 +191,7 @@ const StoreList = () => {
   useEffect(() => {
     const getStores = async () => {
       await axios
-        .get("http://localhost:4000/api/v1/stores")
+        .get("https://ministore-backend.herokuapp.com/api/v1/stores")
         .then((stores) => {
           setStores(stores.data.data);
           setLoading(true);

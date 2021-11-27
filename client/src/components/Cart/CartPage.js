@@ -371,7 +371,7 @@ const Stores = (props) => {
             
               <Button
                 className={classes.a}
-                href="/payment"
+                href="/#/payment"
                 
               >
                 Place Order

@@ -170,7 +170,7 @@ export const PaymentTest = () => {
   const tokenHandler = (token) => {
     axios({
       method: "POST",
-      url: `http://localhost:4000/api/v1/payment/stripe`,
+      url: `https://ministore-backend.herokuapp.com/api/v1/payment/stripe`,
       data: {
         token,
         cart: {
@@ -201,7 +201,7 @@ export const PaymentTest = () => {
   const cashOnDelivery = () => {
     axios({
       method: "POST",
-      url: `http://localhost:4000/api/v1/payment/cash`,
+      url: `https://ministore-backend.herokuapp.com/api/v1/payment/cash`,
       data: {
         cart: {
           products: products,
@@ -243,7 +243,7 @@ export const PaymentTest = () => {
         console.log(res);
         axios({
           method: "POST",
-          url: `http://localhost:4000/api/v1/payment/razorpay`,
+          url: `https://ministore-backend.herokuapp.com/api/v1/payment/razorpay`,
           data: {
             id: res.razorpay_payment_id,
             cart: {

@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import Register from "./auth/register";
 import Login from "./auth/login";
 import Home from "./Screens/Home";
@@ -20,7 +20,6 @@ import Search from "./components/SearchBar/Search"
 import DashboardHome from "./components/Dashboard/DashboardHome";
 import ProductList from "./components/Dashboard/ProductList";
 import AddProduct from "./components/Dashboard/AddProduct";
-import StoreDetails from "./components/Dashboard/StoreDetails";
 import Orders from "./components/Orders/OrderPage"
 import AddStore from "./components/Dashboard/AddStore";
 import ShopList from "./components/Dashboard/ShopList";
@@ -30,7 +29,7 @@ function App() {
   return (
     <Provider store={store}>
       <div className="App">
-        <BrowserRouter>
+        <HashRouter>
           <Switch>
             <Route exact path="/" component={HomePage} />
             {/* <Route path="/payment" component={PaymentTest} /> */}
@@ -60,7 +59,7 @@ function App() {
               </Switch>
             </Layout>
           </Switch>
-        </BrowserRouter>
+        </HashRouter>
       </div>
     </Provider>
   );

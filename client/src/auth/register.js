@@ -43,7 +43,7 @@ const Register = (props) => {
     } else {
       await axios({
         method: "POST",
-        url: "http://localhost:4000/api/v1/auth/registration",
+        url: "https://ministore-backend.herokuapp.com/api/v1/auth/registration",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

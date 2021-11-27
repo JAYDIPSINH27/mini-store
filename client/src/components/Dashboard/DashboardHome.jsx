@@ -57,7 +57,7 @@ function DashboardHome() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/v1/stores?limit=10000")
+      .get("https://ministore-backend.herokuapp.com/api/v1/stores?limit=10000")
       .then((res) => {
         console.log("default :", res.data.data);
         setStores(res.data.data);
@@ -67,7 +67,7 @@ function DashboardHome() {
       });
 
       axios
-      .get("http://localhost:4000/api/v1/auth/user", {
+      .get("https://ministore-backend.herokuapp.com/api/v1/auth/user", {
         headers: {
           Authorization: `Bearer ${user.jwtToken}`,
         },

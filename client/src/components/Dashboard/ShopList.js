@@ -48,7 +48,7 @@ const ShopList = () => {
   const [userData, setUserData] = useState({});
   useEffect(() => {
       axios
-      .get("http://localhost:4000/api/v1/auth/user", {
+      .get("https://ministore-backend.herokuapp.com/api/v1/auth/user", {
         headers: {
           Authorization: `Bearer ${user.jwtToken}`,
         },
@@ -104,7 +104,7 @@ const ShopList = () => {
           if (sure) {
             await axios
               .delete(
-                `http://localhost:4000/api/v1/stores/${params.row._id}`,
+                `https://ministore-backend.herokuapp.com/api/v1/stores/${params.row._id}`,
                 {
                   headers: {
                     Authorization: `Bearer ${user.jwtToken}`,

@@ -122,7 +122,7 @@ function ProductList() {
           if (sure) {
             await axios
               .delete(
-                `http://localhost:4000/api/v1/products/${params.row.id}`,
+                `https://ministore-backend.herokuapp.com/api/v1/products/${params.row.id}`,
                 {
                   headers: {
                     Authorization: `Bearer ${user.jwtToken}`,
@@ -144,7 +144,7 @@ function ProductList() {
 			if (sure) {
 			  await axios
 				.patch(
-				  `http://localhost:4000/api/v1/products/${params.row.id}`,
+				  `https://ministore-backend.herokuapp.com/api/v1/products/${params.row.id}`,
 				  {
 					headers: {
 					  Authorization: `Bearer ${user.jwtToken}`,

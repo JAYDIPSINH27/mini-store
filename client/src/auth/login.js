@@ -39,7 +39,7 @@ const Login = (props) => {
       			setJWTToken(queryObj.token)
 				const {data} = await axios({
 					method : "GET",
-					url : 'http://localhost:4000/api/v1/auth/user',
+					url : 'https://ministore-backend.herokuapp.com/api/v1/auth/user',
 					headers : {
 						Authorization: `Bearer ${queryObj.token}`
 					}
@@ -55,7 +55,7 @@ const Login = (props) => {
     event.preventDefault();
     await axios({
       method : "POST",
-      url : 'http://localhost:4000/api/v1/auth/login',
+      url : 'https://ministore-backend.herokuapp.com/api/v1/auth/login',
       headers : {
         'Content-Type' : 'application/json',
         'Accept' : 'application/json'
@@ -155,7 +155,7 @@ const Login = (props) => {
                 </p>
               </div>
               <div className='text-center'>
-                <a href="http://localhost:4000/api/v1/auth/google"> Login with Google </a>
+                <a href="https://ministore-backend.herokuapp.com/api/v1/auth/google"> Login with Google </a>
               </div>
             </div>
           </div>

@@ -71,7 +71,7 @@ const ProfileEdit = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/v1/auth/user", {
+      .get("https://ministore-backend.herokuapp.com/api/v1/auth/user", {
         headers: {
           Authorization: `Bearer ${user.jwtToken}`,
         },
@@ -110,7 +110,7 @@ const ProfileEdit = () => {
     // console.log(editUser);
     await axios
       .patch(
-        "http://localhost:4000/api/v1/auth/user",
+        "https://ministore-backend.herokuapp.com/api/v1/auth/user",
         {
           user: editUser,
           name: editUser.name,

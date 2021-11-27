@@ -84,7 +84,7 @@ const Shop = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/v1/stores/${id}`)
+      .get(`https://ministore-backend.herokuapp.com/api/v1/stores/${id}`)
       .then((store) => {
         setStore({
           images: store.data.data.images,

@@ -18,7 +18,7 @@ const ForgotPassword = () => {
     event.preventDefault();
     await axios({
       method : "POST",
-      url : 'http://localhost:4000/api/v1/auth/user/password',
+      url : 'https://ministore-backend.herokuapp.com/api/v1/auth/user/password',
       headers : {
         'Content-Type' : 'application/json',
         'Accept' : 'application/json'

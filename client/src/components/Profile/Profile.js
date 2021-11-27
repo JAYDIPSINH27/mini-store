@@ -85,7 +85,7 @@ const Profile = () => {
   const history = useHistory();
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/v1/auth/user", {
+      .get("https://ministore-backend.herokuapp.com/api/v1/auth/user", {
         headers: {
           Authorization: `Bearer ${user.jwtToken}`,
         },

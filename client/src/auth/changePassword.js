@@ -37,7 +37,7 @@ const ChangePassword = (props) => {
       const {user,token} = queryString.parse(props.location.search)
       await axios({
         method : "PATCH",
-        url : 'http://localhost:4000/api/v1/auth/user/password',
+        url : 'https://ministore-backend.herokuapp.com/api/v1/auth/user/password',
         headers : {
           'Content-Type' : 'application/json',
           'Accept' : 'application/json'

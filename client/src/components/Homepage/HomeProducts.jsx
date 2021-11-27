@@ -62,7 +62,7 @@ const HomeProducts = () => {
         const getProducts = async ()=>{
           await axios({
             method: "GET",
-            url: "http://localhost:4000/api/v1/products",
+            url: "https://ministore-backend.herokuapp.com/api/v1/products",
           })
           .then((res) => {
 			console.log(res.data)

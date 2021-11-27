@@ -103,7 +103,7 @@ const AddStore = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:4000/api/v1/stores",
+        "https://ministore-backend.herokuapp.com/api/v1/stores",
         {
           user: user.user,
           name: name,

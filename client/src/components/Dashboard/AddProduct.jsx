@@ -108,7 +108,7 @@ const AddStore = () => {
 
   useEffect(() => {
       axios
-      .get("http://localhost:4000/api/v1/auth/user", {
+      .get("https://ministore-backend.herokuapp.com/api/v1/auth/user", {
         headers: {
           Authorization: `Bearer ${user.jwtToken}`,
         },
@@ -123,7 +123,7 @@ const AddStore = () => {
       });
 
       axios
-        .get("http://localhost:4000/api/v1/categories")
+        .get("https://ministore-backend.herokuapp.com/api/v1/categories")
         .then((res) => {
           console.log("default :", res.data.data);
           setCategory(res.data.data);
@@ -148,7 +148,7 @@ const AddStore = () => {
     e.preventDefault();
     axios
       .post(
-        `http://localhost:4000/api/v1/stores/${store}/products`,
+        `https://ministore-backend.herokuapp.com/api/v1/stores/${store}/products`,
         {
           user: user.user,
           name: name,

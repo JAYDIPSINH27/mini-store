@@ -225,8 +225,8 @@ function Navbar() {
     
                     <div className={classes.icons} >
                     <Search className={classes.searchButton} onClick={() => setOpen(true)}/>
-                    <Button href="/signup" variant="outlined"  className={classes.button}>SIGN UP</Button>
-                    <Button href="/signin"  variant="outlined"  className={classes.button}>SIGN IN</Button>
+                    <Button href="/#/signup" variant="outlined"  className={classes.button}>SIGN UP</Button>
+                    <Button href="/#/signin"  variant="outlined"  className={classes.button}>SIGN IN</Button>
                     
                     </div>
                   

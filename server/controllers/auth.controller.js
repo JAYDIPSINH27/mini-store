@@ -55,7 +55,7 @@ module.exports = {
 					token : hash
 				})
 				await activateToken.save()
-				let link = `${redirectURL}/activation?user=${user.email}&token=${token}`
+				let link = `${redirectURL}/#/activation?user=${user.email}&token=${token}`
 				let resp = await sendWelcomeEmail({
 					user : req.body.name,
 					email : req.body.email
@@ -152,14 +152,14 @@ module.exports = {
     activateUser : async(req,res) => {
         try{
             if(!req.query.user){
-                res.redirect(`${frontendURL}/signin?activation=false`)
+                res.redirect(`${frontendURL}/#/signin?activation=false`)
                 // res.status(400).json({
                 //     err: true,
                 //     msg: "User Email not specified."
                 // })
             }
             if(!req.query.token){
-                res.redirect(`${frontendURL}/signin?activation=false`)
+                res.redirect(`${frontendURL}/#/signin?activation=false`)
                 // res.status(400).json({
                 //     err: true,
                 //     msg: "Token not specified."
@@ -174,14 +174,14 @@ module.exports = {
                             user.active = true
                             await user.save()
                             await token.deleteOne()
-                            res.redirect(`${frontendURL}/signin?activation=true`)
+                            res.redirect(`${frontendURL}/#/signin?activation=true`)
                             // res.status(200).json({
                             //     err: false,
                             //     msg: "Activation SuccessfulL."
                             // })
                         }else{
                             await token.deleteOne()
-                            res.redirect(`${frontendURL}/signin?activation=false`)
+                            res.redirect(`${frontendURL}/#/signin?activation=false`)
                             // return res.status(404).json({
                             //     err: true,
                             //     msg: "User doesnt exist."
@@ -190,14 +190,14 @@ module.exports = {
                     })
                     .catch(error => {
                         console.log(error)
-                        res.redirect(`${frontendURL}/signin?activation=false`)
+                        res.redirect(`${frontendURL}/#/signin?activation=false`)
                         // return res.status(400).json({
                         //     err: true,
                         //     msg: "Activation Failed."
                         // })
                     })
                 }else{
-                    res.redirect(`${frontendURL}/signin?activation=false`)
+                    res.redirect(`${frontendURL}/#/signin?activation=false`)
                     // return res.status(404).json({
                     //     err: true,
                     //     msg: "Activation Failed. Token is invalid."
@@ -205,7 +205,7 @@ module.exports = {
                 }
             })
             .catch(() => {
-                res.redirect(`${frontendURL}/signin?activation=false`)
+                res.redirect(`${frontendURL}/#/signin?activation=false`)
                 // console.log(err)
                 // return res.status(400).json({
                 //     err: true,
@@ -214,7 +214,7 @@ module.exports = {
             })
         }
         catch(error){
-            res.redirect(`${frontendURL}/signin?activation=false`)
+            res.redirect(`${frontendURL}/#/signin?activation=false`)
             // return res.status(400).json({
             //     err: true,
             //     msg: "Activation Failed."
@@ -312,7 +312,7 @@ module.exports = {
                         token : hash
                     })
                     await passwordToken.save()
-                    let link = `${frontendURL}/change-password?user=${user.email}&token=${token}`
+                    let link = `${frontendURL}/#/change-password?user=${user.email}&token=${token}`
                     let resp = await sendRequestPasswordEmail({
                         user : user.name,
                         email : user.email
@@ -428,16 +428,16 @@ module.exports = {
             .then(user => {
                 if(user){
                     const token = jwt.sign({id : user.email},jwtSecret)
-                    let url = `${frontendURL}/signin?token=${encodeURIComponent(token)}`
+                    let url = `${frontendURL}/#/signin?token=${encodeURIComponent(token)}`
 					res.redirect(url)
                 }else{
-                    let url = `${frontendURL}/signup?email=${encodeURIComponent(email)}`
+                    let url = `${frontendURL}/#/signup?email=${encodeURIComponent(email)}`
 					res.redirect(url)
                 }
             })
         }
         catch(err){
-            let url = `${frontendURL}/signin?error=${encodeURIComponent('Could not login')}`
+            let url = `${frontendURL}/#/signin?error=${encodeURIComponent('Could not login')}`
             return  res.redirect(url)
         }
     }
