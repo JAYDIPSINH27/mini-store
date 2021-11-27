@@ -141,6 +141,11 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: '0',
       paddingRight: '0',
     }
+  },
+  emptyCart: {
+    height: '400px',
+    textAlign: "center",
+    paddingTop: "180px",
   }
 }));
 
@@ -403,10 +408,21 @@ const CartPage = () => {
     return (
       <div>
         <Container className={classes.container}>
+        {cart.amount === 0 
+        ?
+          <h3
+            className={classes.emptyCart}
+            >
+            Cart is Empty ! 
+          </h3>  
+        :
           <div>
               <Stores data={cart} />
           </div>
+        }
         </Container>
+        
+        
       </div>
     );
   } else {

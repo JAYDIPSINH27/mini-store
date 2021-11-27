@@ -638,7 +638,7 @@ module.exports = {
             let updateFields = {                    
                 name: req.body.name,
                 description: req.body.description,
-                rating: req.body.rating
+                rating: req.body.rating,
             }
             for (const [key, value] of Object.entries(updateFields)) {
                 if (!value) {

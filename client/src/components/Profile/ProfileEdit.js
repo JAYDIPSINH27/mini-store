@@ -60,12 +60,13 @@ const ProfileEdit = () => {
   const user = useSelector((state) => state.authReducer);
   const [editUser, setUser] = useState({ ...getUser() });
   const [address, setAddress] = useState({
-    location: "",
-    landmark: "",
-    city: "",
-    state: "",
-    pincode: null,
+    location: user.user.addresses>0 ? user.user.addresses[(user.user.addresses.length)-1].location : '',
+    landmark: user.user.addresses>0 ? user.user.addresses[(user.user.addresses.length)-1].landmark : '',
+    city: user.user.addresses>0 ? user.user.addresses[(user.user.addresses.length)-1].city : '',
+    state: user.user.addresses>0 ?  user.user.addresses[(user.user.addresses.length)-1].state : '',
+    pincode: user.user.addresses>0 ? user.user.addresses[(user.user.addresses.length)-1].pincode : null,
   });
+  console.log(user)
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({});
 
@@ -132,6 +133,7 @@ const ProfileEdit = () => {
           setAuthDetails({ token: user.jwtToken, data: res.data.data });
           console.log("user : ", user.user);
           toast.success("Details updated Successfully");
+          history.push("/profile");
         }
       })
       .catch((err) => {

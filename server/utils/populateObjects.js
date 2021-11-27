@@ -73,7 +73,7 @@ module.exports = {
                 path: 'products',
                 populate:{
                     path:'productId',
-                    select: 'name description images',
+                    select: 'name description category images',
                     populate:{
                         path:'images',
                         select:'url'

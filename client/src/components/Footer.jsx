@@ -2,10 +2,25 @@
 // @route     Used in all Routes
 // @access    Private
 
+import { makeStyles } from '@material-ui/core'
 import { Facebook, Instagram, MailOutline, Phone, Room, Twitter } from '@material-ui/icons'
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { mobile } from './Homepage/responsive'
+
+const UseStyles = makeStyles((theme) => ({
+    usefulLinks: {
+        textDecoration:"none",
+
+        color: "#555",
+        '&:hover': {
+            textDecoration:"none",
+            color: "#555",
+            opacity:"0.9"
+        },
+    },
+  }));
 
 const Container=styled.div`
     display:flex;
@@ -85,14 +100,25 @@ const Payment=styled.img`
     width:50%;
 `
 
+const userfulLinks=styled.span`
+    textDecoration: none;
+    color: #555;
+    &:hover: {
+        textDecoration:none;
+        color: #555;
+        opacity:0.9;
+    };
+`
+
 const Footer = () => {
+    const classes = UseStyles({});
     return (
         <Container>
             <Left>
                 <Logo>Mini Mall</Logo>
                 <Desc>
                 MiniMall provide online e-commerce service for seller and customer.
-                It is a website application for all store which sell and manage their inventory.
+                It is a web application for all store which sell and manage their inventory.
                 </Desc>
                 <SocialContainer>
                     <SocialIcon color="3B5999">
@@ -113,12 +139,12 @@ const Footer = () => {
             <Center>
                     <Title>Useful Links</Title>
                     <List>
-                        <ListItem>Home</ListItem>
-                        <ListItem>Account</ListItem>
-                        <ListItem>Cart</ListItem>
-                        <ListItem>Shops</ListItem>
-                        <ListItem>Products</ListItem>
-                        <ListItem>Terms</ListItem>
+                        <ListItem><Link to="/" className={classes.usefulLinks}> Home </Link></ListItem>
+                        <ListItem><Link to="/profile" className={classes.usefulLinks}>Account</Link></ListItem>
+                        <ListItem><Link to="/cart" className={classes.usefulLinks}>Cart</Link></ListItem>
+                        <ListItem><Link to="/stores" className={classes.usefulLinks}>Shops</Link></ListItem>
+                        <ListItem><Link to="/products" className={classes.usefulLinks}>Products</Link></ListItem>
+                        {/* <ListItem><Link to="/" className={classes.usefulLinks}>Terms</Link></ListItem> */}
                     </List>
 
             </Center>

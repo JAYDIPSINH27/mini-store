@@ -54,8 +54,10 @@ function App() {
                 <Route exact path="/dashboard" component={DashboardHome} />
                 <Route path="/dashboard/product/view" component={ProductList} />
                 <Route path="/dashboard/product/add" component={AddProduct} />
+                <Route path="/dashboard/product/edit/:id" component={EditProduct} />
                 <Route path="/dashboard/store/view" component={ShopList} />
                 <Route path="/dashboard/store/add" component={AddStore}/>
+                <Route path="/dashboard/store/edit/:id" component={EditStore}/>
               </Switch>
             </Layout>
           </Switch>

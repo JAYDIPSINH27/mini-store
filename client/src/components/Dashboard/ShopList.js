@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import logo from "../../assets/shopping.gif";
 import unAuth from "../../assets/401.png";
+import { Link } from "react-router-dom";
 // import { deleteProduct } from "../../../../server/controllers/product.controller";
 
 const UseStyles = makeStyles((theme) => ({
@@ -30,6 +31,16 @@ const UseStyles = makeStyles((theme) => ({
   editIcon: {
     verticalAlign: "middle",
     marginLeft: "12px",
+    
+  },
+  editbutton: {
+    textDecoration: "none",
+    color: "#000",
+    '&:hover': {
+        textDecoration:"none",
+        color: "#555",
+        opacity:"0.9"
+    },
   },
   addButton: {
     display: "flex",
@@ -80,24 +91,24 @@ const ShopList = () => {
     {
       field: "_id",
       headerName: "ID",
-      width: 100,
+      width: 220,
     },
     {
       field: "name",
       headerName: "Store Name",
-      width: 200,
-      editable: true,
+      width: 180,
+      editable: false,
     },
     {
       field: "description",
       headerName: "Description",
-      width: 300,
-      editable: true,
+      width: 520,
+      editable: false,
     },
     {
       field: "action",
       headerName: "Action",
-      width: 120,
+      width: 150,
       renderCell: (params) => {
         const deleteProduct = async () => {
           const sure = window.confirm("This record will be deleted permanently.");
@@ -126,7 +137,9 @@ const ShopList = () => {
             <Button onClick={deleteProduct}>
               <Delete className={classes.deleteIcon} />
             </Button>
-            <Edit className={classes.editIcon} />
+            <Link to={`/dashboard/store/edit/${params.row._id}`} id={params.row._id} className={classes.editbutton}>
+              <Edit className={classes.editIcon} />
+            </Link>
           </div>
         );
       },

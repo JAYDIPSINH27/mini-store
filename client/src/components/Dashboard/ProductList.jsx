@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import logo from "../../assets/shopping.gif";
 import unAuth from "../../assets/401.png";
 
@@ -45,7 +46,16 @@ const UseStyles = makeStyles((theme) => ({
   topButtons: {
     marginTop: "10px",
     marginBottom: "10px",
-  }
+  },
+  editbutton: {
+    textDecoration: "none",
+    color: "#000",
+    '&:hover': {
+        textDecoration:"none",
+        color: "#555",
+        opacity:"0.9"
+    },
+  },
 }));
 
 function ProductList() {
@@ -97,20 +107,20 @@ function ProductList() {
     {
       field: "name",
       headerName: "Product Name",
-      width: 200,
-      editable: true,
+      width: 190,
+      editable: false,
     },
     {
       field: "category",
       headerName: "Category",
-      width: 100,
-      editable: true
+      width: 150,
+      editable: false
     },
     {
       field: "description",
       headerName: "Description",
-      width: 500,
-      editable: true,
+      width: 460,
+      editable: false,
     },
     {
       field: "action",
@@ -166,9 +176,11 @@ function ProductList() {
             <Button onClick={deleteProduct}>
               	<Delete className={classes.deleteIcon} />
             </Button>
-			<Button onClick={updateProduct}>
+			{/* <Button onClick={updateProduct}> */}
+      <Link to={`/dashboard/product/edit/${params.row.id}`} id={params.row.id} className={classes.editbutton}>
 				<Edit className={classes.editIcon} />
-            </Button>
+      </Link>
+            {/* </Button> */}
           </div>
         );
       },
@@ -199,7 +211,7 @@ function ProductList() {
                     }}
                     variant="outlined"
                   >
-                    {user.user.stores.map((store)=>{
+                    {user.user.stores.reverse().map((store)=>{
                       return(
                         <MenuItem value={store._id}>{store.name}</MenuItem>
                       )

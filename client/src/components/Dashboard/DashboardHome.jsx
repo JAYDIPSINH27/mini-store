@@ -4,12 +4,21 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import logo from "../../assets/shopping.gif";
 import unAuth from "../../assets/401.png";
-import { Chart } from 'react-charts'
 import DateTime from './DateTime'
-import store from '../../redux/store';
+// import store from '../../redux/store';
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend
+} from "recharts";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -40,19 +49,28 @@ const useStyles = makeStyles((theme) => ({
     text: {
       display: "flex",
       alignItems:"centre",
-      
-  },
+      textAlign: 'center',
+    },
+    charttext: {
+      display: "flex",
+      alignItems:"centre",
+      textAlign: 'center',
+      marginLeft: "180px",
+    },
+    chartContainer: {
+      marginTop: "30px",
+    }
 }))
 
 
 function DashboardHome() {
-    const classes = useStyles({  })
+  const classes = useStyles({  })
 
-    const [stores, setStores] = useState([]);
-    const [products, setProducts] = useState([]);
+  const [stores, setStores] = useState([]);
+  // const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authReducer);
-  const history = useHistory();
+  // const history = useHistory();
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
@@ -79,47 +97,80 @@ function DashboardHome() {
       .catch((err) => {
         console.log(err);
       });
+	})
 
+  useEffect( () => {
+    axios
+    .get("http://localhost:4000/api/v1/auth/user", {
+      headers: {
+        Authorization: `Bearer ${user.jwtToken}`,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      setUserData(res.data.data);
+      
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    
+      
   }, []);
-
-  
 
   setTimeout(() => {
     setLoading(true);
   }, 1500);
-
- 
-  const data = React.useMemo(
-    () => [
-      {
-        label: 'Series 1',
-        data: [[0, 1], [1, 2], [2, 4], [3, 2], [4, 7]]
-      },
-      {
-        label: 'Series 2',
-        data: [[0, 3], [1, 1], [2, 5], [3, 6], [4, 4]]
-      }
-    ]
-  )
- 
-  const axes = React.useMemo(
-    () => [
-      { primary: true, type: 'linear', position: 'bottom' },
-      { type: 'linear', position: 'left' }
-    ],
-    []
-  )
-  console.log(userData)
-
+  
   const productnum=()=>{
     var count=0;
     userData.stores.map((store)=>{
       count+=store.products.length
-    })
-    
+    }) 
     return count;
-
   }
+
+  const stocks1 = [
+    {
+      name: 'Wireless Earbuds',
+      quantity: 50,
+    },
+    {
+      name: 'mouse',
+      quantity: 40,
+    },
+    {
+      name: 'Sony Speaker',
+      quantity: 100,
+    },
+    {
+      name: 'surface laptop',
+      quantity: 46,
+    }
+  ]
+
+  const stocks2 = [
+    {
+      name: 'T-shirt',
+      quantity: 20,
+    },
+    {
+      name: "Sandle",
+      quantity: 45,
+    },
+    {
+      name: "Topwear",
+      quantity: 44,
+    },
+    {
+      name: "Handbag",
+      quantity: 44,
+    },
+    {
+      name: "Machine",
+      quantity: 37,
+    }
+  ]
 
     return (
         <Container className={classes.container}>
@@ -173,23 +224,63 @@ function DashboardHome() {
             
             </Grid>
 
-            
+            <Grid container spacing={5} className={classes.chartContainer}>
 
-            <Grid container spacing={5}>
+              <Grid item xs={12} sm={6} lg={6}> 
+                {
+                  <BarChart
+                    width={600}
+                    height={300}
+                    data={stocks1}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis/>
+                    <Tooltip />
+                    <Legend />
+                    
+                    <Bar dataKey="quantity" fill="#82ca9d" />
+                  </BarChart>
+                }
+                <Typography variant="h6" className={classes.charttext}>
+                    M-Mart Store's Stock
+                </Typography>
+           
+              </Grid>
 
-            <Grid item xs={12} sm={6} md={4}> 
-            <Box
-                className={classes.box3}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height={400} width={500}
-            >
-                
-                <Chart data={data} axes={axes} tooltip  />
-
-            </Box>
-            </Grid>
+              <Grid item xs={12} sm={6} lg={6}> 
+                {
+                  <BarChart
+                    width={600}
+                    height={300}
+                    data={stocks2}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis/>
+                    <Tooltip />
+                    <Legend />
+                    
+                    <Bar dataKey="quantity" fill="#8884d8" />
+                  </BarChart>
+                }
+                <Typography variant="h6" className={classes.charttext}>
+                  V-Mart Store's Stock
+                </Typography>
+           
+              </Grid>
             </Grid>
             </>
 

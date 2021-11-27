@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Container,
   makeStyles,
@@ -70,8 +70,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddStore = () => {
-  const classes = useStyles();
+const AddStore = (props) => {
+    const storeId=props.match.params.id
+    const classes = useStyles();
   const [fileInput, setFileInput] = useState("");
   const [previewSource, setPreviewSource] = useState("");
   const [loading, setLoading] = useState(false);
@@ -85,6 +86,8 @@ const AddStore = () => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [pincode, setPincode] = useState();
+  const [store,setStore]=useState([]);
+  const [userData, setUserData] = useState({});
   const user = useSelector((state) => state.authReducer);
   const imageFile = (e) => {
     const file = e.target.files[0];
@@ -99,11 +102,34 @@ const AddStore = () => {
     };
   };
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:4000/api/v1/stores/${storeId}`)
+      .then((store) => {
+        setStore({
+          images: store.data.data.images,
+          description: store.data.data.description,
+          name: store.data.data.name,
+          products: store.data.data.products,
+          addresses: store.data.data.addresses,
+          rating: store.data.data.rating,
+          _id: store.data.data._id,
+        });
+        setLoading(true);
+        console.log(store.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+}, []);
+
+console.log(userData)
   const createShop = (e) => {
     e.preventDefault();
     axios
-      .post(
-        "https://ministore-backend.herokuapp.com/api/v1/stores",
+      .patch(
+        `http://localhost:4000/api/v1/stores/${storeId}`,
         {
           user: user.user,
           name: name,
@@ -142,6 +168,7 @@ const AddStore = () => {
         console.log(err);
       });
   };
+
   setTimeout(() => {
     setLoading(true);
   }, 1500);
@@ -149,7 +176,7 @@ const AddStore = () => {
   return (
     <>
       <Container className={classes.container}>
-        {user.user && user.user.admin === true ?loading? (
+        {user.user && user.user.admin === true ? loading?(
           <>
             <ToastContainer />
             <form onSubmit={createShop}>
@@ -157,7 +184,7 @@ const AddStore = () => {
                 {loading ? (
                   <Avatar
                     alt="Remy Sharp"
-                    src={previewSource} //add || with exixsting store image like profile edit
+                    src={previewSource || (store.images[0]?store.images[0].url:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")}
                     alt="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                     variant="rounded"
                     className={classes.large}
@@ -171,7 +198,7 @@ const AddStore = () => {
                     className={classes.large}
                   />
                 )}
-                <div className={classes.imgUpload}>
+                {/* <div className={classes.imgUpload}>
                   <input
                     accept="image/*"
                     id="icon-button-file"
@@ -190,12 +217,13 @@ const AddStore = () => {
                       <PhotoCamera className={classes.uploadButton} />
                     </IconButton>
                   </label>
-                </div>
+                </div> */}
                 <div className={classes.ratingDiv}>
                   <ReactStars
                     size="40"
                     count={5}
                     edit={true}
+                    value={store.rating}
                     onChange={(value) => {
                       setRating(value);
                     }}
@@ -208,7 +236,7 @@ const AddStore = () => {
                     label="Store Name"
                     autoFocus
                     required
-                    value={name}
+                    defaultValue={store.name}
                     onChange={(e) => {
                       setName(e.target.value);
                     }}
@@ -222,7 +250,7 @@ const AddStore = () => {
                   <TextField
                     label="Description"
                     required
-                    value={description}
+                    defaultValue={store.description}
                     onChange={(e) => {
                       setDescription(e.target.value);
                     }}
@@ -239,7 +267,7 @@ const AddStore = () => {
                 </Grid>
                 <Grid item lg={6} className={classes.emailField}>
                   <TextField
-                    value={location}
+                    value={store.addresses[(store.addresses.length)-1].location}
                     onChange={(e) => {
                       setLocation(e.target.value);
                     }}
@@ -250,7 +278,7 @@ const AddStore = () => {
                 </Grid>
                 <Grid item lg={6} className={classes.nameField}>
                   <TextField
-                    value={landmark}
+                    value={store.addresses[(store.addresses.length)-1].landmark}
                     onChange={(e) => {
                       setLandmark(e.target.value);
                     }}
@@ -261,7 +289,7 @@ const AddStore = () => {
                 </Grid>
                 <Grid item lg={6} className={classes.emailField}>
                   <TextField
-                    value={city}
+                    value={store.addresses[(store.addresses.length)-1].city}
                     onChange={(e) => {
                       setCity(e.target.value);
                     }}
@@ -272,7 +300,7 @@ const AddStore = () => {
                 </Grid>
                 <Grid item lg={6} className={classes.nameField}>
                   <TextField
-                    value={state}
+                    value={store.addresses[(store.addresses.length)-1].state}
                     variant="outlined"
                     onChange={(e) => {
                       setState(e.target.value);
@@ -283,7 +311,7 @@ const AddStore = () => {
                 </Grid>
                 <Grid item lg={12} className={classes.field}>
                   <TextField
-                    value={pincode}
+                    value={store.addresses[(store.addresses.length)-1].pincode}
                     onChange={(e) => {
                       setPincode(parseInt(e.target.value));
                     }}
@@ -300,10 +328,9 @@ const AddStore = () => {
               </div>
             </form>
           </>
-        )
-        :
+        ):
         (
-          <div className={classes.loadingDiv}>
+            <div className={classes.loadingDiv}>
             <img
               src={logo}
               alt="loading..."
@@ -311,7 +338,8 @@ const AddStore = () => {
               className={classes.loadingImage}
             />
           </div>
-        ) : (
+        )
+         : (
           <div className={classes.loadingDiv}>
             <img
               src={unAuth}

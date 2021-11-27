@@ -6,14 +6,14 @@ import "../css/forgotPassword.css";
 import Cookies from "universal-cookie";
 import { useHistory } from "react-router-dom";
 import forgotImage from "../assets/forgot.png";
-
+import { useSelector } from "react-redux";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState(null);
 
   const history = new useHistory();
   const cookies = new Cookies();
-
+  const user = useSelector(state => state.authReducer)
   const submitButton = async (event) => {
     event.preventDefault();
     await axios({
@@ -36,7 +36,7 @@ const ForgotPassword = () => {
     });
   };
 
-  if (cookies.get("jwt") !== undefined) {
+  if (user.jwtToken !== '') {
     history.push("/");
   } else {
     return (
